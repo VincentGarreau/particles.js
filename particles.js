@@ -1,3 +1,8 @@
+/* -----------------------------------------------
+/* Author : Vincent Garreau  - vincentgarreau.com 
+/* Github : https://github.com/VincentGarreau/particles.js
+/* ----------------------------------------------- */
+
 function launchParticlesJS(the_id, params){
 
 	/* particles.js variables */
@@ -196,7 +201,7 @@ window.requestAnimFrame = (function(){
 })();
 
 function hexToRgb(hex){
-	// By Tim Down - http://stackoverflow.com/a/5624139/3493650
+    // By Tim Down - http://stackoverflow.com/a/5624139/3493650
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, function(m, r, g, b) {
@@ -214,9 +219,7 @@ function hexToRgb(hex){
 /* --- LAUNCH --- */
 
 window.particlesJS = function(the_id, params){
-	if(!params.id){
-		params.id = 'particles-js';
-	}
+	if(!the_id){ the_id = 'particles-js'; }
 	/* create canvas element */
 	var canvas_el = document.createElement('canvas');
 	canvas_el.style.width = "100%";
