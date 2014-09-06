@@ -6,7 +6,7 @@
 function launchParticlesJS(the_id, params){
 
 	/* particles.js variables */
-	window.pJS = {
+	pJS = {
 		canvas: {
 			el: document.querySelector('#'+the_id+' > canvas'),
 			w: document.querySelector('#'+the_id+' > canvas').offsetWidth,
