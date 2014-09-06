@@ -11,11 +11,11 @@ function launchParticlesJS(the_id, params){
 			el: document.querySelector('#'+the_id+' > canvas'),
 			w: document.querySelector('#'+the_id+' > canvas').offsetWidth,
 			h: document.querySelector('#'+the_id+' > canvas').offsetHeight,
-			color_hex_bg: '#15414e',
+			color_hex_bg: '#111',
 			opacity: 1
 		},
 		particles: {
-			color_hex: '#ffffff',
+			color_hex: '#fff',
 			opacity: 1,
 			size: 2.5,
 			nb: 200,
@@ -220,11 +220,15 @@ function hexToRgb(hex){
 
 window.particlesJS = function(the_id, params){
 	if(!the_id){ the_id = 'particles-js'; }
+	
 	/* create canvas element */
 	var canvas_el = document.createElement('canvas');
+	/* set size canvas */
 	canvas_el.style.width = "100%";
 	canvas_el.style.height = "100%";
+	/* append canvas */
 	var canvas = document.getElementById(the_id).appendChild(canvas_el);
+
 	/* launch particle.js */
 	if(canvas != null){
 		launchParticlesJS(the_id, params);
