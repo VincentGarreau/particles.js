@@ -4,7 +4,12 @@
 
 Load particles.js and config the particles :
 
-**my-app.js**
+**index.html**
+```html
+<div id="particles-js"></div>
+```
+
+**app.js**
 ```javascript
 particlesJS('particles-js', {
 	canvas: {
