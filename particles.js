@@ -21,7 +21,7 @@ function launchParticlesJS(the_id, params){
 			nb: 200,
 			array: [],
 			anim: {
-				speed: 1
+			    speed: 1
 			}
 		},
 		retina_detect: true,

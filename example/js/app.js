@@ -11,7 +11,7 @@ particlesJS('particles-js', {
 		opacity: 1
 	},
 	particles: {
-		color_hex: '#fff',
+	    color_hex: '#fff',
 		opacity: 1,
 		size: 2.5,
 		nb: 200,
