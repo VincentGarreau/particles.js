@@ -18,6 +18,7 @@ function launchParticlesJS(the_id, params){
 			color_hex: '#fff',
 			opacity: 1,
 			size: 2.5,
+			size_random: true,
 			nb: 200,
 			array: [],
 			anim: {
@@ -36,6 +37,7 @@ function launchParticlesJS(the_id, params){
 		pJS.particles.color_hex = params.particles.color_hex;
 		pJS.particles.opacity = params.particles.opacity;
 		pJS.particles.size = params.particles.size;
+		pJS.particles.size_random = params.particles.size_random;
 		pJS.particles.nb = params.particles.nb;
 		pJS.particles.anim.speed = params.particles.anim.speed;
 		pJS.retina_detect = params.retina_detect;
@@ -100,9 +102,17 @@ function launchParticlesJS(the_id, params){
 
 		/* size */
 		if(pJS.retina){
-			this.radius = Math.random() * pJS.particles.size * 2;	
+			if(pJS.particles.size_random){
+				this.radius = Math.random() * pJS.particles.size * 2;	
+			}else{
+				this.radius = pJS.particles.size * 2;	
+			}
 		}else{
-			this.radius = Math.random() * pJS.particles.size * 1;	
+			if(pJS.particles.size_random){
+				this.radius = Math.random() * pJS.particles.size * 1;	
+			}else{
+				this.radius = pJS.particles.size * 1;	
+			}
 		}
 		
 		/* color */
