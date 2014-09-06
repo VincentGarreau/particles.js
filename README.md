@@ -31,5 +31,5 @@ particlesJS('particles-js', {
 ```
 
 ### Live Demo
-[View particles.js demo](http://vincentgarreau.com/particles.js/demo/)
+<a href="http://vincentgarreau.com/particles.js/demo/" target="_blank">View particles.js demo</a>
 <!--<img src="http://cl.ly/XPlB/particles-2.gif">-->
