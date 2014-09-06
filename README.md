@@ -23,4 +23,4 @@ particlesJS('particles-js', {
 	retina_detect: true
 });
 ```
-<img src="http://cl.ly/XPlB/particles-2.gif" width="800">
+<img src="http://cl.ly/XPlB/particles-2.gif">
