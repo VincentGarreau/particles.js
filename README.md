@@ -1,3 +1,3 @@
 ## particles.js
 
-### Creating particles with a lightweight JavaScript library.
+### A lightweight JavaScript library for creating particles.
