@@ -29,5 +29,7 @@ particlesJS('particles-js', {
 	retina_detect: true
 });
 ```
-[View demo](http://vincentgarreau.com/particles.js/demo/)
+
+### Live Demo
+[View particles.js demo](http://vincentgarreau.com/particles.js/demo/)
 <!--<img src="http://cl.ly/XPlB/particles-2.gif">-->
