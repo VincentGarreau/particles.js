@@ -25,6 +25,7 @@ particlesJS('particles-js', {
 			speed: 2
 		}
 	},
+	/* Retina Display Support */
 	retina_detect: true
 });
 ```
