@@ -7,7 +7,7 @@
 
 function launchParticlesJS(tag_id, params){
 
-	/* particles.js variables */
+	/* particles.js default variables */
 	pJS = {
 		canvas: {
 			el: document.querySelector('#'+tag_id+' > canvas'),
