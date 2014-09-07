@@ -26,17 +26,24 @@ function launchParticlesJS(tag_id, params){
 				distance: 100,
 				color: '#fff',
 				opacity: 1,
-				width: 1
+				width: 1,
+				condensed_mode: {
+					enable: true,
+					rotateX: 65000,
+					rotateY: 65000
+				}
 			},
 			anim: {
-				enable: false,
+				enable: true,
 			    speed: 1
 			},
 			array: []
 		},
 		retina_detect: true,
 		interactivity: {},
-		fn: {}
+		fn: {
+			vendors:{}
+		}
 	};
 
 	/* params settings */
@@ -54,8 +61,15 @@ function launchParticlesJS(tag_id, params){
 				if(params.particles.line_linked.color) pJS.particles.line_linked.color = params.particles.line_linked.color;
 				if(params.particles.line_linked.opacity) pJS.particles.line_linked.opacity = params.particles.line_linked.opacity;
 				if(params.particles.line_linked.width) pJS.particles.line_linked.width = params.particles.line_linked.width;
+				if(params.particles.line_linked.condensed_mode){
+					if(params.particles.line_linked.condensed_mode.enable == false) pJS.particles.line_linked.condensed_mode.enable = params.particles.line_linked.condensed_mode.enable;
+					//if(params.particles.line_linked.condensed_mode.acceleration == false) pJS.particles.line_linked.condensed_mode.acceleration = params.particles.line_linked.condensed_mode.acceleration;
+					if(params.particles.line_linked.condensed_mode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = params.particles.line_linked.condensed_mode.rotateX;
+					if(params.particles.line_linked.condensed_mode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = params.particles.line_linked.condensed_mode.rotateY;
+				}
 			}
 			if(params.particles.anim){
+				if(params.particles.anim.enable == false) pJS.particles.anim.enable = params.particles.anim.enable;
 				if(params.particles.anim.speed) pJS.particles.anim.speed = params.particles.anim.speed;
 			}
 		}
@@ -197,8 +211,10 @@ function launchParticlesJS(tag_id, params){
 				var p2 = pJS.particles.array[j];
 				//distanceParticleMouse(p, p2);
 				if(pJS.particles.line_linked.enable){
-					distanceParticles(p, p2);
+					//distanceParticles(p, p2);
+					pJS.fn.vendors.distanceParticles(p,p2);
 				}
+				//acceleration(p, p2);
 			}
 		}
 	};
@@ -219,6 +235,43 @@ function launchParticlesJS(tag_id, params){
 	};
 
 
+	/* ---------- VENDORS functions ------------ */
+
+	pJS.fn.vendors.distanceParticles = function(p1, p2) {
+
+		var dx = p1.x - p2.x,
+			dy = p1.y - p2.y,
+			dist = Math.sqrt(dx*dx + dy*dy);
+		
+		/* Check distance between particle and mouse mos */
+		if(dist <= pJS.particles.line_linked.distance) {
+			
+			/* draw the line */
+			var color_line = pJS.particles.line_linked.color_rgb_line;
+			pJS.canvas.ctx.beginPath();
+			pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist/pJS.particles.line_linked.distance) +')';
+			pJS.canvas.ctx.moveTo(p1.x, p1.y);
+			pJS.canvas.ctx.lineTo(p2.x, p2.y);
+			pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
+			pJS.canvas.ctx.stroke();
+			pJS.canvas.ctx.closePath();
+
+			/* condensed particles */
+			if(pJS.particles.line_linked.condensed_mode.enable){
+				var dx = p1.x - p2.x;
+					dy = p1.y - p2.y;
+				var ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
+					ay = dy/(pJS.particles.line_linked.condensed_mode.rotateY*1000);
+				// p1.vx -= ax;
+				// p1.vy -= ay;
+				p2.vx += ax;
+				p2.vy += ay; 
+			}
+
+		}
+	}
+
+
 	/* --------- LAUNCH ----------- */
 
 	function launchParticles(){
@@ -228,14 +281,20 @@ function launchParticlesJS(tag_id, params){
 		pJS.fn.particlesCreate();
 		pJS.fn.particlesDraw();
 	};
-	launchParticles();
 
 
 	function launchAnimation(){
 		pJS.fn.particlesDraw();
 		requestAnimFrame(launchAnimation);
 	};
-	launchAnimation();
+
+	
+	launchParticles();
+
+	if(pJS.particles.anim.enable){
+		launchAnimation();
+	}
+
 
 };
 
@@ -251,35 +310,6 @@ window.requestAnimFrame = (function(){
 			window.setTimeout(callback, 1000 / 60);
 		  };
 })();
-
-function distanceParticles(p1, p2) {
-
-	var dist,
-		dx = p1.x - p2.x;
-		dy = p1.y - p2.y;
-	dist = Math.sqrt(dx*dx + dy*dy);
-	
-	/* Check distance between particle and mouse mos */
-	if(dist <= pJS.particles.line_linked.distance) {
-		// Draw the line
-		var color_line = pJS.particles.line_linked.color_rgb_line;
-		pJS.canvas.ctx.beginPath();
-		pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist/pJS.particles.line_linked.distance) +')';
-		pJS.canvas.ctx.moveTo(p1.x, p1.y);
-		pJS.canvas.ctx.lineTo(p2.x, p2.y);
-		pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
-		pJS.canvas.ctx.stroke();
-		pJS.canvas.ctx.closePath();
-
-		// Acceleration
-		/* var ax = dx/65000,
-			ay = dy/65000;
-		p1.vx -= ax;
-		p1.vy -= ay;
-		p2.vx += ax;
-		p2.vy += ay; */
-	}
-}
 
 function hexToRgb(hex){
     // By Tim Down - http://stackoverflow.com/a/5624139/3493650
