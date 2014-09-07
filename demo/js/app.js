@@ -4,7 +4,7 @@
 /* config dom id */
 //particlesJS('dom-id');
 
-/* config dom id + config particles params */
+/* config dom id (optional) + config particles params */
 particlesJS('particles-js', {
 	canvas: {
 		color_hex_bg: '#15414e',
