@@ -13,7 +13,11 @@ Load particles.js and configure the particles:
 
 **app.js**
 ```javascript
-// particlesJS('dom-id', params);
+/* -----------------------------------------------
+/* particlesJS('dom-id', params);
+/* @dom-id : string, optional
+/* @params: object, optional
+/* ----------------------------------------------- */
 
 particlesJS('particles-js', {
 	canvas: {
