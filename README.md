@@ -20,7 +20,7 @@ Load particles.js and configure the particles:
 particlesJS('particles-js', {
 	particles: {
 	    color: '#fff',
-	    shape: 'circle',
+	    shape: 'circle', // "circle", "edge" or "triangle"
 		opacity: 0.5,
 		size: 2,
 		size_random: true,
@@ -49,6 +49,7 @@ particlesJS('particles-js', {
 		},
 		mode: 'grab'
 	},
+	/* Retina Display Support */
 	retina_detect: false
 });
 ```
