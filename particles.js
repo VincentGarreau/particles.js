@@ -133,12 +133,21 @@ function launchParticlesJS(tag_id, params){
 
 			/* repaint canvas */
 			pJS.fn.canvasPaint();
+			if(!pJS.particles.anim.enable){
+				pJS.fn.particlesRemove();
+				pJS.fn.canvasRemove();
+				launchParticles();
+			}
 		}
 	};
 
 	pJS.fn.canvasPaint = function(){
 		pJS.canvas.ctx.fillRect(0, 0, pJS.canvas.w, pJS.canvas.h);
 	};
+
+	pJS.fn.canvasRemove = function(){
+		pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
+	}
 
 
 	/* --------- PARTICLES functions ----------- */
@@ -262,6 +271,10 @@ function launchParticlesJS(tag_id, params){
 		}
 		
 	};
+
+	pJS.fn.particlesRemove = function(){
+		pJS.particles.array = [];
+	}
 
 
 	/* ---------- VENDORS functions ------------ */
