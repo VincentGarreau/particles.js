@@ -16,6 +16,7 @@ function launchParticlesJS(tag_id, params){
 		},
 		particles: {
 			color_hex: '#fff',
+			shape: 'circle',
 			opacity: 1,
 			size: 2.5,
 			size_random: true,
@@ -34,6 +35,7 @@ function launchParticlesJS(tag_id, params){
 	if(params){
 		if(params.particles){
 			if(params.particles.color_hex) pJS.particles.color_hex = params.particles.color_hex;
+			if(params.particles.shape) pJS.particles.shape = params.particles.shape;
 			if(params.particles.opacity) pJS.particles.opacity = params.particles.opacity;
 			if(params.particles.size) pJS.particles.size = params.particles.size;
 			if(params.particles.size_random == false) pJS.particles.size_random = params.particles.size_random;
@@ -128,7 +130,24 @@ function launchParticlesJS(tag_id, params){
 		this.draw = function(){
 			pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
 			pJS.canvas.ctx.beginPath();
-			pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+
+			switch(pJS.particles.shape){
+				case 'circle':
+					pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+				break;
+
+				case 'edge':
+					pJS.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
+				break;
+
+				case 'triangle':
+					pJS.canvas.ctx.moveTo(this.x,this.y);
+					pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius*2);
+					pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius*2);
+					pJS.canvas.ctx.closePath();
+				break;
+			}
+			
 			pJS.canvas.ctx.fill();
 		}
 
