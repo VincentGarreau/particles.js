@@ -7,6 +7,8 @@ Load particles.js and configure the particles:
 **index.html**
 ```html
 <div id="particles-js"></div>
+
+<script src="particles.js"></script>
 ```
 
 **app.js**
