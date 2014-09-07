@@ -2,7 +2,7 @@
 
 ### A lightweight JavaScript library for creating particles.
 
-Load particles.js and config the particles:
+Load particles.js and configure the particles:
 
 **index.html**
 ```html
