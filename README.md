@@ -20,29 +20,35 @@ Load particles.js and configure the particles:
 particlesJS('particles-js', {
 	particles: {
 	    color: '#fff',
-	    shape: 'circle', // 'circle', 'edge' or 'rectangle' 
-		opacity: 1,
-		size: 2.5,
+	    shape: 'circle',
+		opacity: 0.5,
+		size: 2,
 		size_random: true,
 		nb: 200,
 		line_linked: {
-			enable: true,
-			distance: 200,
+			enable_auto: true,
+			distance: 250,
 			color: '#fff',
-			opacity: 1,
-			width: 0.5,
+			opacity: 0.5,
+			width: 1,
 			condensed_mode: {
-				enable: false,
-				rotateX: 100,
-				rotateY: 100
+				enable: true,
+				rotateX: 600,
+				rotateY: 600
 			}
 		},
 		anim: {
 			enable: true,
-			speed: 1
+			speed: 2
 		}
 	},
-	// Retina Display Support
+	interactivity: {
+		enable: false,
+		mouse: {
+			distance: 250
+		},
+		mode: 'grab'
+	},
 	retina_detect: false
 });
 ```
