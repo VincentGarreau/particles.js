@@ -18,10 +18,6 @@ Load particles.js and configure the particles:
 /* @params: set the params [object, optional, default values : check particles.js] */
 
 particlesJS('particles-js', {
-	canvas: {
-		color_hex_bg: '#15414e',
-		opacity: 1
-	},
 	particles: {
 	    color_hex: '#fff',
 		opacity: 1,
