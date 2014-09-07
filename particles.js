@@ -101,7 +101,6 @@ function launchParticlesJS(dom_id, params){
 
 	/* --------- PARTICLES functions ----------- */
 
-
 	pJS.fn.particle = function(color, opacity){
 
 		/* position */
@@ -142,7 +141,6 @@ function launchParticlesJS(dom_id, params){
 		}
 
 	};
-
 
 	pJS.fn.particlesCreate = function(){
 		for(var i = 0; i < pJS.particles.nb; i++) {
@@ -191,7 +189,6 @@ function launchParticlesJS(dom_id, params){
 		pJS.fn.particlesCreate();
 		pJS.fn.particlesDraw();
 	};
-
 	launchParticles();
 
 
@@ -199,9 +196,7 @@ function launchParticlesJS(dom_id, params){
 		pJS.fn.particlesDraw();
 		requestAnimFrame(launchAnimation);
 	};
-
 	launchAnimation();
-
 
 };
 
