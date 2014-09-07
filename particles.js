@@ -5,14 +5,14 @@
 /* How to use? : Check the GitHub README
 /* ----------------------------------------------- */
 
-function launchParticlesJS(the_id, params){
+function launchParticlesJS(dom_id, params){
 
 	/* particles.js variables */
 	pJS = {
 		canvas: {
-			el: document.querySelector('#'+the_id+' > canvas'),
-			w: document.querySelector('#'+the_id+' > canvas').offsetWidth,
-			h: document.querySelector('#'+the_id+' > canvas').offsetHeight,
+			el: document.querySelector('#'+dom_id+' > canvas'),
+			w: document.querySelector('#'+dom_id+' > canvas').offsetWidth,
+			h: document.querySelector('#'+dom_id+' > canvas').offsetHeight,
 			color_hex_bg: '#111',
 			opacity: 1
 		},
