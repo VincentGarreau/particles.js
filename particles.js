@@ -169,7 +169,7 @@ function launchParticlesJS(the_id, params){
 			p.draw('rgba('+p.color.r+','+p.color.g+','+p.color.b+','+p.opacity+')');
 		}
 
-		/* move particle */
+		/* move particles */
 		pJS.fn.particlesAnimate();
 	};
 
