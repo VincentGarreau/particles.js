@@ -32,15 +32,15 @@ function launchParticlesJS(the_id, params){
 
 	/* params settings */
 	if(params){
-		pJS.canvas.color_hex_bg = params.canvas.color_hex_bg;
-		pJS.canvas.opacity = params.canvas.opacity;
-		pJS.particles.color_hex = params.particles.color_hex;
-		pJS.particles.opacity = params.particles.opacity;
-		pJS.particles.size = params.particles.size;
-		pJS.particles.size_random = params.particles.size_random;
-		pJS.particles.nb = params.particles.nb;
-		pJS.particles.anim.speed = params.particles.anim.speed;
-		pJS.retina_detect = params.retina_detect;
+		if(params.canvas.color_hex_bg) pJS.canvas.color_hex_bg = params.canvas.color_hex_bg;
+		if(params.canvas.opacity) pJS.canvas.opacity = params.canvas.opacity;
+		if(params.particles.color_hex) pJS.particles.color_hex = params.particles.color_hex;
+		if(params.particles.opacity) pJS.particles.opacity = params.particles.opacity;
+		if(params.particles.size) pJS.particles.size = params.particles.size;
+		if(params.particles.size_random) pJS.particles.size_random = params.particles.size_random;
+		if(params.particles.nb) pJS.particles.nb = params.particles.nb;
+		if(params.particles.anim.speed) pJS.particles.anim.speed = params.particles.anim.speed;
+		if(params.particles.retina_detect) pJS.retina_detect = params.retina_detect;
 	}
 
 	/* convert hex colors to rgb */
