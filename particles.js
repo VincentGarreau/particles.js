@@ -5,14 +5,14 @@
 /* How to use? : Check the GitHub README
 /* ----------------------------------------------- */
 
-function launchParticlesJS(dom_id, params){
+function launchParticlesJS(tag_id, params){
 
 	/* particles.js variables */
 	pJS = {
 		canvas: {
-			el: document.querySelector('#'+dom_id+' > canvas'),
-			w: document.querySelector('#'+dom_id+' > canvas').offsetWidth,
-			h: document.querySelector('#'+dom_id+' > canvas').offsetHeight,
+			el: document.querySelector('#'+tag_id+' > canvas'),
+			w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
+			h: document.querySelector('#'+tag_id+' > canvas').offsetHeight,
 			color_hex_bg: '#111',
 			opacity: 1
 		},
@@ -231,17 +231,17 @@ function hexToRgb(hex){
 
 /* --- LAUNCH --- */
 
-window.particlesJS = function(dom_id, params){
+window.particlesJS = function(tag_id, params){
 
 	/* no string id? so it's object params, and set the id with default id */
-	if(typeof(dom_id) != 'string'){
-		params = dom_id;
-		dom_id = 'particles-js';
+	if(typeof(tag_id) != 'string'){
+		params = tag_id;
+		tag_id = 'particles-js';
 	}
 
 	/* no id? set the id to default id */
-	if(!dom_id){
-		dom_id = 'particles-js';
+	if(!tag_id){
+		tag_id = 'particles-js';
 	}
 	
 	/* create canvas element */
@@ -252,11 +252,11 @@ window.particlesJS = function(dom_id, params){
 	canvas_el.style.height = "100%";
 
 	/* append canvas */
-	var canvas = document.getElementById(dom_id).appendChild(canvas_el);
+	var canvas = document.getElementById(tag_id).appendChild(canvas_el);
 
 	/* launch particle.js */
 	if(canvas != null){
-		launchParticlesJS(dom_id, params);
+		launchParticlesJS(tag_id, params);
 	}
 
 };
