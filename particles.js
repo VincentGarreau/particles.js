@@ -22,7 +22,7 @@ function launchParticlesJS(tag_id, params){
 			size_random: true,
 			nb: 200,
 			line_linked: {
-				enable: true,
+				enable_auto: true,
 				distance: 100,
 				color: '#fff',
 				opacity: 1,
@@ -39,10 +39,18 @@ function launchParticlesJS(tag_id, params){
 			},
 			array: []
 		},
-		retina_detect: true,
-		interactivity: {},
+		interactivity: {
+			enable: true,
+			mouse: {
+				distance: 100
+			},
+			mode: 'grab'
+		},
+		retina_detect: false,
 		fn: {
-			vendors:{}
+			vendors:{
+				interactivity: {}
+			}
 		}
 	};
 
@@ -56,7 +64,7 @@ function launchParticlesJS(tag_id, params){
 			if(params.particles.size_random == false) pJS.particles.size_random = params.particles.size_random;
 			if(params.particles.nb) pJS.particles.nb = params.particles.nb;
 			if(params.particles.line_linked){
-				if(params.particles.line_linked.enable == false) pJS.particles.line_linked.enable = params.particles.line_linked.enable;
+				if(params.particles.line_linked.enable_auto == false) pJS.particles.line_linked.enable_auto = params.particles.line_linked.enable_auto;
 				if(params.particles.line_linked.distance) pJS.particles.line_linked.distance = params.particles.line_linked.distance;
 				if(params.particles.line_linked.color) pJS.particles.line_linked.color = params.particles.line_linked.color;
 				if(params.particles.line_linked.opacity) pJS.particles.line_linked.opacity = params.particles.line_linked.opacity;
@@ -73,7 +81,14 @@ function launchParticlesJS(tag_id, params){
 				if(params.particles.anim.speed) pJS.particles.anim.speed = params.particles.anim.speed;
 			}
 		}
-		if(params.retina_detect == false) pJS.retina_detect = params.retina_detect;
+		if(params.interactivity){
+			if(params.interactivity.enable == false) pJS.interactivity.enable = params.interactivity.enable;
+			if(params.interactivity.mouse){
+				if(params.interactivity.mouse.distance) pJS.interactivity.mouse.distance = params.interactivity.mouse.distance;
+				if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
+			}
+		}
+		pJS.retina_detect = params.retina_detect;
 	}
 
 	/* convert hex colors to rgb */
@@ -89,6 +104,7 @@ function launchParticlesJS(tag_id, params){
 			pJS.particles.anim.speed = pJS.particles.anim.speed*2; 
 			pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
 			pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
+			pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2; 
 		}
 	};
 
@@ -155,8 +171,8 @@ function launchParticlesJS(tag_id, params){
 		this.opacity = opacity;
 
 		/* animation - velocity for speed */
-		this.vx = -.5 + Math.random() * 1;
-		this.vy = -.5 + Math.random() * 1;
+		this.vx = -.5 + Math.random();
+		this.vy = -.5 + Math.random();
 
 		/* draw function */
 		this.draw = function(){
@@ -197,10 +213,10 @@ function launchParticlesJS(tag_id, params){
 			var p = pJS.particles.array[i];
 
 			/* move the particle */
-			p.x += p.vx * pJS.particles.anim.speed;
-			p.y += p.vy * pJS.particles.anim.speed;
+			p.x += p.vx * (pJS.particles.anim.speed/2);
+			p.y += p.vy * (pJS.particles.anim.speed/2);
 
-			/* change particle position if it is out of window */
+			/* change particle position if it is out of canvas */
 			if(p.x + p.radius > pJS.canvas.w) p.x = p.radius;
 			else if(p.x - p.radius < 0) p.x = pJS.canvas.w - p.radius;
 			if(p.y + p.radius > pJS.canvas.h) p.y = p.radius;
@@ -209,12 +225,25 @@ function launchParticlesJS(tag_id, params){
 			/* Check distance between each particle and mouse position */
 			for(var j = i + 1; j < pJS.particles.array.length; j++){
 				var p2 = pJS.particles.array[j];
-				//distanceParticleMouse(p, p2);
-				if(pJS.particles.line_linked.enable){
-					//distanceParticles(p, p2);
+
+				/* link particles if enable */
+				if(pJS.particles.line_linked.enable_auto){
 					pJS.fn.vendors.distanceParticles(p,p2);
 				}
-				//acceleration(p, p2);
+
+				/* set interactivity if enable */
+				if(pJS.interactivity.enable){
+
+					/* interactivity mode */
+					switch(pJS.interactivity.mode){
+						case 'grab':
+							pJS.fn.vendors.interactivity.grabParticles(p,p2);
+						break;
+					}
+
+				}
+				
+
 			}
 		}
 	};
@@ -237,7 +266,7 @@ function launchParticlesJS(tag_id, params){
 
 	/* ---------- VENDORS functions ------------ */
 
-	pJS.fn.vendors.distanceParticles = function(p1, p2) {
+	pJS.fn.vendors.distanceParticles = function(p1, p2){
 
 		var dx = p1.x - p2.x,
 			dy = p1.y - p2.y,
@@ -271,6 +300,47 @@ function launchParticlesJS(tag_id, params){
 		}
 	}
 
+	pJS.fn.vendors.interactivity.listeners = function(){
+		pJS.canvas.el.onmousemove = function(e){
+			if(pJS.retina){
+				pJS.interactivity.mouse.pos_x = e.pageX*2;
+				pJS.interactivity.mouse.pos_y = e.pageY*2;
+			}else{
+				pJS.interactivity.mouse.pos_x = e.pageX;
+				pJS.interactivity.mouse.pos_y = e.pageY;
+			}
+			pJS.interactivity.status = 'mousemove';
+		}
+		pJS.canvas.el.onmouseleave = function(e){
+			pJS.interactivity.mouse.pos_x = 0;
+			pJS.interactivity.mouse.pos_y = 0;
+			pJS.interactivity.status = 'mouseleave';
+		}
+	}
+
+	pJS.fn.vendors.interactivity.grabParticles = function(p1, p2){
+		var dx = p1.x - p2.x,
+			dy = p1.y - p2.y,
+			dist = Math.sqrt(dx*dx + dy*dy);
+
+		var dx_mouse = p1.x - pJS.interactivity.mouse.pos_x,
+			dy_mouse = p1.y - pJS.interactivity.mouse.pos_y,
+			dist_mouse = Math.sqrt(dx_mouse*dx_mouse + dy_mouse*dy_mouse);
+
+		/* Check distace between 2 particles + Check distance between 1 particle and mouse position */
+		if(dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status == 'mousemove'){
+			/* Draw the line */
+			var color_line = pJS.particles.line_linked.color_rgb_line;
+			pJS.canvas.ctx.beginPath();
+			pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist_mouse/pJS.interactivity.mouse.distance) +')';
+			pJS.canvas.ctx.moveTo(p1.x, p1.y);
+			pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x, pJS.interactivity.mouse.pos_y);
+			pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
+			pJS.canvas.ctx.stroke();
+			pJS.canvas.ctx.closePath();
+		}
+	}
+
 
 	/* --------- LAUNCH ----------- */
 
@@ -293,6 +363,10 @@ function launchParticlesJS(tag_id, params){
 
 	if(pJS.particles.anim.enable){
 		launchAnimation();
+	}
+
+	if(pJS.interactivity.enable){
+		pJS.fn.vendors.interactivity.listeners();
 	}
 
 
