@@ -12,9 +12,7 @@ function launchParticlesJS(tag_id, params){
 		canvas: {
 			el: document.querySelector('#'+tag_id+' > canvas'),
 			w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
-			h: document.querySelector('#'+tag_id+' > canvas').offsetHeight,
-			color_hex_bg: '#111',
-			opacity: 1
+			h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
 		},
 		particles: {
 			color_hex: '#fff',
@@ -34,10 +32,6 @@ function launchParticlesJS(tag_id, params){
 
 	/* params settings */
 	if(params){
-		if(params.canvas){
-			if(params.canvas.color_hex_bg) pJS.canvas.color_hex_bg = params.canvas.color_hex_bg;
-			if(params.canvas.opacity) pJS.canvas.opacity = params.canvas.opacity;
-		}
 		if(params.particles){
 			if(params.particles.color_hex) pJS.particles.color_hex = params.particles.color_hex;
 			if(params.particles.opacity) pJS.particles.opacity = params.particles.opacity;
@@ -52,7 +46,6 @@ function launchParticlesJS(tag_id, params){
 	}
 
 	/* convert hex colors to rgb */
-	pJS.canvas.color_rgb_bg = hexToRgb(pJS.canvas.color_hex_bg);
 	pJS.particles.color_rgb = hexToRgb(pJS.particles.color_hex);
 
 	/* detect retina */
@@ -94,7 +87,6 @@ function launchParticlesJS(tag_id, params){
 	};
 
 	pJS.fn.canvasPaint = function(){
-		pJS.canvas.ctx.fillStyle = 'rgba('+pJS.canvas.color_rgb_bg.r+','+pJS.canvas.color_rgb_bg.g+','+pJS.canvas.color_rgb_bg.b+','+pJS.canvas.opacity+')';
 		pJS.canvas.ctx.fillRect(0, 0, pJS.canvas.w, pJS.canvas.h);
 	};
 
@@ -166,8 +158,8 @@ function launchParticlesJS(tag_id, params){
 	};
 
 	pJS.fn.particlesDraw = function(){
-		/* repaint canvas */
-		pJS.fn.canvasPaint();
+		/* clear canvas */
+		pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
 
 		/* draw each particle */
 		for(var i = 0; i < pJS.particles.array.length; i++){
