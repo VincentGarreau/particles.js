@@ -13,6 +13,8 @@ Load particles.js and configure the particles:
 
 **app.js**
 ```javascript
+// particlesJS('dom-id', params);
+
 particlesJS('particles-js', {
 	canvas: {
 		color_hex_bg: '#15414e',
