@@ -14,7 +14,7 @@ Load particles.js and configure the particles:
 **app.js**
 ```javascript
 /* particlesJS('dom-id', params);
-/* @dom-id : set the id [string, optional, default value : particles-js]
+/* @dom-id : set the id of the html tag [string, optional, default value : particles-js]
 /* @params: set the params [object, optional, default value : check particles.js] */
 
 particlesJS('particles-js', {
