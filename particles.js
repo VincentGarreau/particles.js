@@ -226,10 +226,10 @@ function launchParticlesJS(tag_id, params){
 			p.y += p.vy * (pJS.particles.anim.speed/2);
 
 			/* change particle position if it is out of canvas */
-			if(p.x + p.radius > pJS.canvas.w) p.x = p.radius;
-			else if(p.x - p.radius < 0) p.x = pJS.canvas.w - p.radius;
-			if(p.y + p.radius > pJS.canvas.h) p.y = p.radius;
-			else if(p.y - p.radius < 0) p.y = pJS.canvas.h - p.radius;
+			if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
+			else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
+			if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
+			else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
 
 			/* Check distance between each particle and mouse position */
 			for(var j = i + 1; j < pJS.particles.array.length; j++){
