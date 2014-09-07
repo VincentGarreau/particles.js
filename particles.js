@@ -96,67 +96,67 @@ function launchParticlesJS(the_id, params){
 
 	pJS.fn.particle = function(color, opacity){
 
-        /* position */
-        this.x = Math.random() * pJS.canvas.w;
-        this.y = Math.random() * pJS.canvas.h;
-        
-        /* size */
-        if(pJS.retina){
-        	if(pJS.particles.size_random){
-        		this.radius = Math.random() * pJS.particles.size * 2;	
-        	}else{
-        		this.radius = pJS.particles.size * 2;	
-        	}
-        }else{
-        	if(pJS.particles.size_random){
-        		this.radius = Math.random() * pJS.particles.size * 1;	
-        	}else{
-        		this.radius = pJS.particles.size * 1;	
-        	}
-        }
-        
-        /* color */
-        this.color = color;
-        
-        /* opacity */
-        this.opacity = opacity;
-        
-        /* animation - velocity for speed */
-        this.vx = -.5 + Math.random() * 1;
-        this.vy = -.5 + Math.random() * 1;
-        
-        /* draw function */
-        this.draw = function(){
-        	pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
-        	pJS.canvas.ctx.beginPath();
-        	pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        	pJS.canvas.ctx.fill();
-        }
+		/* position */
+		this.x = Math.random() * pJS.canvas.w;
+		this.y = Math.random() * pJS.canvas.h;
+
+		/* size */
+		if(pJS.retina){
+			if(pJS.particles.size_random){
+				this.radius = Math.random() * pJS.particles.size * 2;	
+			}else{
+				this.radius = pJS.particles.size * 2;	
+			}
+		}else{
+			if(pJS.particles.size_random){
+				this.radius = Math.random() * pJS.particles.size * 1;	
+			}else{
+				this.radius = pJS.particles.size * 1;	
+			}
+		}
+		
+		/* color */
+		this.color = color;
+
+		/* opacity */
+		this.opacity = opacity;
+
+		/* animation - velocity for speed */
+		this.vx = -.5 + Math.random() * 1;
+		this.vy = -.5 + Math.random() * 1;
+
+		/* draw function */
+		this.draw = function(){
+			pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+			pJS.canvas.ctx.beginPath();
+			pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+			pJS.canvas.ctx.fill();
+		}
 
 	};
 
 
 	pJS.fn.particlesCreate = function(){
-	    for(var i = 0; i < pJS.particles.nb; i++) {
-	    	pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity));
-	    }
+		for(var i = 0; i < pJS.particles.nb; i++) {
+			pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity));
+		}
 	};
 
 	pJS.fn.particlesAnimate = function(){
-        for(var i = 0; i < pJS.particles.array.length; i++){
-            /* the particle */
-            var p = pJS.particles.array[i];
-    
-            /* move the particle */
-            p.x += p.vx * pJS.particles.anim.speed;
-            p.y += p.vy * pJS.particles.anim.speed;
-    
-            /* change particle position if it is out of window */
-            if(p.x + p.radius > pJS.canvas.w) p.x = p.radius;
-            else if(p.x - p.radius < 0) p.x = pJS.canvas.w - p.radius;
-            if(p.y + p.radius > pJS.canvas.h) p.y = p.radius;
-            else if(p.y - p.radius < 0) p.y = pJS.canvas.h - p.radius;
-        }
+		for(var i = 0; i < pJS.particles.array.length; i++){
+			/* the particle */
+			var p = pJS.particles.array[i];
+
+			/* move the particle */
+			p.x += p.vx * pJS.particles.anim.speed;
+			p.y += p.vy * pJS.particles.anim.speed;
+
+			/* change particle position if it is out of window */
+			if(p.x + p.radius > pJS.canvas.w) p.x = p.radius;
+			else if(p.x - p.radius < 0) p.x = pJS.canvas.w - p.radius;
+			if(p.y + p.radius > pJS.canvas.h) p.y = p.radius;
+			else if(p.y - p.radius < 0) p.y = pJS.canvas.h - p.radius;
+		}
 	};
 
 	pJS.fn.particlesDraw = function(){
@@ -229,18 +229,18 @@ function hexToRgb(hex){
 /* --- LAUNCH --- */
 
 window.particlesJS = function(the_id, params){
-    if(!the_id){ the_id = 'particles-js'; }
-    
-    /* create canvas element */
-    var canvas_el = document.createElement('canvas');
-    /* set size canvas */
-    canvas_el.style.width = "100%";
-    canvas_el.style.height = "100%";
-    /* append canvas */
-    var canvas = document.getElementById(the_id).appendChild(canvas_el);
+	if(!the_id){ the_id = 'particles-js'; }
+	
+	/* create canvas element */
+	var canvas_el = document.createElement('canvas');
+	/* set size canvas */
+	canvas_el.style.width = "100%";
+	canvas_el.style.height = "100%";
+	/* append canvas */
+	var canvas = document.getElementById(the_id).appendChild(canvas_el);
 
-    /* launch particle.js */
-    if(canvas != null){
-    	launchParticlesJS(the_id, params);
-    }
+	/* launch particle.js */
+	if(canvas != null){
+		launchParticlesJS(the_id, params);
+	}
 };
