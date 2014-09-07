@@ -20,8 +20,7 @@ Load particles.js and configure the particles:
 particlesJS('particles-js', {
 	particles: {
 	    color_hex: '#fff',
-	    // 'circle', 'edge' or 'rectangle' 
-	    shape: 'circle',
+	    shape: 'circle', // 'circle', 'edge' or 'rectangle' 
 		opacity: 1,
 		size: 2.5,
 		size_random: true,
