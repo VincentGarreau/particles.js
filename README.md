@@ -15,7 +15,7 @@ Load particles.js and configure the particles:
 ```javascript
 /* particlesJS('dom-id', params);
 /* @dom-id : set the html tag id [string, optional, default value : particles-js]
-/* @params: set the params [object, optional, default value : check particles.js] */
+/* @params: set the params [object, optional, default values : check particles.js] */
 
 particlesJS('particles-js', {
 	canvas: {
