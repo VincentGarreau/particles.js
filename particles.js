@@ -15,16 +15,24 @@ function launchParticlesJS(tag_id, params){
 			h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
 		},
 		particles: {
-			color_hex: '#fff',
+			color: '#fff',
 			shape: 'circle',
 			opacity: 1,
 			size: 2.5,
 			size_random: true,
 			nb: 200,
-			array: [],
+			line_linked: {
+				enable: true,
+				distance: 100,
+				color: '#fff',
+				opacity: 1,
+				width: 1
+			},
 			anim: {
+				enable: false,
 			    speed: 1
-			}
+			},
+			array: []
 		},
 		retina_detect: true,
 		interactivity: {},
@@ -34,12 +42,19 @@ function launchParticlesJS(tag_id, params){
 	/* params settings */
 	if(params){
 		if(params.particles){
-			if(params.particles.color_hex) pJS.particles.color_hex = params.particles.color_hex;
+			if(params.particles.color) pJS.particles.color = params.particles.color;
 			if(params.particles.shape) pJS.particles.shape = params.particles.shape;
 			if(params.particles.opacity) pJS.particles.opacity = params.particles.opacity;
 			if(params.particles.size) pJS.particles.size = params.particles.size;
 			if(params.particles.size_random == false) pJS.particles.size_random = params.particles.size_random;
 			if(params.particles.nb) pJS.particles.nb = params.particles.nb;
+			if(params.particles.line_linked){
+				if(params.particles.line_linked.enable == false) pJS.particles.line_linked.enable = params.particles.line_linked.enable;
+				if(params.particles.line_linked.distance) pJS.particles.line_linked.distance = params.particles.line_linked.distance;
+				if(params.particles.line_linked.color) pJS.particles.line_linked.color = params.particles.line_linked.color;
+				if(params.particles.line_linked.opacity) pJS.particles.line_linked.opacity = params.particles.line_linked.opacity;
+				if(params.particles.line_linked.width) pJS.particles.line_linked.width = params.particles.line_linked.width;
+			}
 			if(params.particles.anim){
 				if(params.particles.anim.speed) pJS.particles.anim.speed = params.particles.anim.speed;
 			}
@@ -48,7 +63,8 @@ function launchParticlesJS(tag_id, params){
 	}
 
 	/* convert hex colors to rgb */
-	pJS.particles.color_rgb = hexToRgb(pJS.particles.color_hex);
+	pJS.particles.color_rgb = hexToRgb(pJS.particles.color);
+	pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
 
 	/* detect retina */
 	if(pJS.retina_detect){
@@ -57,6 +73,8 @@ function launchParticlesJS(tag_id, params){
 			pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
 			pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
 			pJS.particles.anim.speed = pJS.particles.anim.speed*2; 
+			pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
+			pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
 		}
 	};
 
@@ -173,6 +191,15 @@ function launchParticlesJS(tag_id, params){
 			else if(p.x - p.radius < 0) p.x = pJS.canvas.w - p.radius;
 			if(p.y + p.radius > pJS.canvas.h) p.y = p.radius;
 			else if(p.y - p.radius < 0) p.y = pJS.canvas.h - p.radius;
+
+			/* Check distance between each particle and mouse position */
+			for(var j = i + 1; j < pJS.particles.array.length; j++){
+				var p2 = pJS.particles.array[j];
+				//distanceParticleMouse(p, p2);
+				if(pJS.particles.line_linked.enable){
+					distanceParticles(p, p2);
+				}
+			}
 		}
 	};
 
@@ -180,14 +207,15 @@ function launchParticlesJS(tag_id, params){
 		/* clear canvas */
 		pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
 
+		/* move particles */
+		pJS.fn.particlesAnimate();
+
 		/* draw each particle */
 		for(var i = 0; i < pJS.particles.array.length; i++){
 			var p = pJS.particles.array[i];
 			p.draw('rgba('+p.color.r+','+p.color.g+','+p.color.b+','+p.opacity+')');
 		}
-
-		/* move particles */
-		pJS.fn.particlesAnimate();
+		
 	};
 
 
@@ -223,6 +251,35 @@ window.requestAnimFrame = (function(){
 			window.setTimeout(callback, 1000 / 60);
 		  };
 })();
+
+function distanceParticles(p1, p2) {
+
+	var dist,
+		dx = p1.x - p2.x;
+		dy = p1.y - p2.y;
+	dist = Math.sqrt(dx*dx + dy*dy);
+	
+	/* Check distance between particle and mouse mos */
+	if(dist <= pJS.particles.line_linked.distance) {
+		// Draw the line
+		var color_line = pJS.particles.line_linked.color_rgb_line;
+		pJS.canvas.ctx.beginPath();
+		pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist/pJS.particles.line_linked.distance) +')';
+		pJS.canvas.ctx.moveTo(p1.x, p1.y);
+		pJS.canvas.ctx.lineTo(p2.x, p2.y);
+		pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
+		pJS.canvas.ctx.stroke();
+		pJS.canvas.ctx.closePath();
+
+		// Acceleration
+		/* var ax = dx/65000,
+			ay = dy/65000;
+		p1.vx -= ax;
+		p1.vy -= ay;
+		p2.vx += ax;
+		p2.vy += ay; */
+	}
+}
 
 function hexToRgb(hex){
     // By Tim Down - http://stackoverflow.com/a/5624139/3493650
