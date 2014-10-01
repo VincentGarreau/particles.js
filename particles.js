@@ -44,6 +44,7 @@ function launchParticlesJS(tag_id, params){
 			mouse: {
 				distance: 100
 			},
+			detect_on: 'canvas',
 			mode: 'grab'
 		},
 		retina_detect: false,
@@ -85,8 +86,9 @@ function launchParticlesJS(tag_id, params){
 			if(params.interactivity.enable == false) pJS.interactivity.enable = params.interactivity.enable;
 			if(params.interactivity.mouse){
 				if(params.interactivity.mouse.distance) pJS.interactivity.mouse.distance = params.interactivity.mouse.distance;
-				if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
 			}
+			if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
+			if(params.interactivity.detect_on) pJS.interactivity.detect_on = params.interactivity.detect_on;
 		}
 		pJS.retina_detect = params.retina_detect;
 	}
@@ -314,7 +316,13 @@ function launchParticlesJS(tag_id, params){
 	}
 
 	pJS.fn.vendors.interactivity.listeners = function(){
-		pJS.canvas.el.onmousemove = function(e){
+		if(pJS.interactivity.detect_on == 'window'){
+			var detect_el = window
+		}else{
+			var detect_el = pJS.canvas.el
+		}
+			
+		detect_el.onmousemove = function(e){
 			if(pJS.retina){
 				pJS.interactivity.mouse.pos_x = e.pageX*2;
 				pJS.interactivity.mouse.pos_y = e.pageY*2;
@@ -324,7 +332,7 @@ function launchParticlesJS(tag_id, params){
 			}
 			pJS.interactivity.status = 'mousemove';
 		}
-		pJS.canvas.el.onmouseleave = function(e){
+		detect_el.onmouseleave = function(e){
 			pJS.interactivity.mouse.pos_x = 0;
 			pJS.interactivity.mouse.pos_y = 0;
 			pJS.interactivity.status = 'mouseleave';
