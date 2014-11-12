@@ -47,7 +47,7 @@ particlesJS('particles-js', {
 		mouse: {
 			distance: 250
 		},
-		detect_on: 'canvas' // "canvas" or "window"
+		detect_on: 'canvas', // "canvas" or "window"
 		mode: 'grab'
 	},
 	/* Retina Display Support */
