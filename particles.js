@@ -348,7 +348,7 @@ function launchParticlesJS(tag_id, params){
 			dy_mouse = p1.y - pJS.interactivity.mouse.pos_y,
 			dist_mouse = Math.sqrt(dx_mouse*dx_mouse + dy_mouse*dy_mouse);
 
-		/* Check distace between 2 particles + Check distance between 1 particle and mouse position */
+		/* Check distance between 2 particles + Check distance between 1 particle and mouse position */
 		if(dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status == 'mousemove'){
 			/* Draw the line */
 			var color_line = pJS.particles.line_linked.color_rgb_line;
