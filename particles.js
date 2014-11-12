@@ -8,7 +8,7 @@
 function launchParticlesJS(tag_id, params){
 
 	/* particles.js variables with default values */
-	pJS = {
+	var pJS = {
 		canvas: {
 			el: document.querySelector('#'+tag_id+' > canvas'),
 			w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
