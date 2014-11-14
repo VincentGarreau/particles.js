@@ -6,13 +6,14 @@
 /* ----------------------------------------------- */
 
 function launchParticlesJS(tag_id, params){
+	var canvas_el = document.querySelector('#'+tag_id+' > canvas');
 
 	/* particles.js variables with default values */
 	pJS = {
 		canvas: {
-			el: document.querySelector('#'+tag_id+' > canvas'),
-			w: document.querySelector('#'+tag_id+' > canvas').offsetWidth,
-			h: document.querySelector('#'+tag_id+' > canvas').offsetHeight
+			el: canvas_el,
+			w: canvas_el.offsetWidth,
+			h: canvas_el.offsetHeight
 		},
 		particles: {
 			color: '#fff',
@@ -98,17 +99,15 @@ function launchParticlesJS(tag_id, params){
 	pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
 
 	/* detect retina */
-	if(pJS.retina_detect){
-		if(window.devicePixelRatio > 1){
-			pJS.retina = true;
-			pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
-			pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
-			pJS.particles.anim.speed = pJS.particles.anim.speed*2; 
-			pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
-			pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
-			pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2; 
-		}
-	};
+	if(pJS.retina_detect && window.devicePixelRatio > 1){
+		pJS.retina = true;
+		pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
+		pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
+		pJS.particles.anim.speed = pJS.particles.anim.speed*2; 
+		pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
+		pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
+		pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2; 
+	}
 
 
 	/* ---------- CANVAS functions ------------ */
@@ -122,14 +121,15 @@ function launchParticlesJS(tag_id, params){
 		pJS.canvas.el.height = pJS.canvas.h;
 
 		window.onresize = function(){
+			pJS.canvas.w = pJS.canvas.el.offsetWidth;
+			pJS.canvas.h = pJS.canvas.el.offsetHeight;
+
 			/* resize canvas */
 			if(pJS.retina){
-				pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
-				pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
-			}else{
-				pJS.canvas.w = pJS.canvas.el.offsetWidth;
-				pJS.canvas.h = pJS.canvas.el.offsetHeight;
+				pJS.canvas.w *= 2;
+				pJS.canvas.h *= 2;
 			}
+
 			pJS.canvas.el.width = pJS.canvas.w;
 			pJS.canvas.el.height = pJS.canvas.h;
 
@@ -161,19 +161,8 @@ function launchParticlesJS(tag_id, params){
 		this.y = Math.random() * pJS.canvas.h;
 
 		/* size */
-		if(pJS.retina){
-			if(pJS.particles.size_random){
-				this.radius = Math.random() * pJS.particles.size * 2;	
-			}else{
-				this.radius = pJS.particles.size * 2;	
-			}
-		}else{
-			if(pJS.particles.size_random){
-				this.radius = Math.random() * pJS.particles.size * 1;	
-			}else{
-				this.radius = pJS.particles.size * 1;	
-			}
-		}
+		this.radius = (pJS.particles.size_random ? Math.random() : 1) * pJS.particles.size;
+		if (pJS.retina) this.radius *= 2;
 		
 		/* color */
 		this.color = color;
@@ -302,9 +291,9 @@ function launchParticlesJS(tag_id, params){
 
 			/* condensed particles */
 			if(pJS.particles.line_linked.condensed_mode.enable){
-				var dx = p1.x - p2.x;
-					dy = p1.y - p2.y;
-				var ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
+				var dx = p1.x - p2.x,
+					dy = p1.y - p2.y,
+					ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
 					ay = dy/(pJS.particles.line_linked.condensed_mode.rotateY*1000);
 				// p1.vx -= ax;
 				// p1.vy -= ay;
@@ -323,13 +312,14 @@ function launchParticlesJS(tag_id, params){
 		}
 			
 		detect_el.onmousemove = function(e){
+			pJS.interactivity.mouse.pos_x = e.pageX;
+			pJS.interactivity.mouse.pos_y = e.pageY;
+
 			if(pJS.retina){
-				pJS.interactivity.mouse.pos_x = e.pageX*2;
-				pJS.interactivity.mouse.pos_y = e.pageY*2;
-			}else{
-				pJS.interactivity.mouse.pos_x = e.pageX;
-				pJS.interactivity.mouse.pos_y = e.pageY;
+				pJS.interactivity.mouse.pos_x *= 2;
+				pJS.interactivity.mouse.pos_y *= 2;
 			}
+
 			pJS.interactivity.status = 'mousemove';
 		}
 		detect_el.onmouseleave = function(e){
