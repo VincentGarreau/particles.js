@@ -154,7 +154,7 @@ function launchParticlesJS(tag_id, params){
 
 	/* --------- PARTICLES functions ----------- */
 
-	pJS.fn.particle = function(color, opacity){
+	pJS.fn.particle = function(color, opacity, position){
 
 		/* position */
 		this.x = position ? position.x : Math.random() * pJS.canvas.w;
