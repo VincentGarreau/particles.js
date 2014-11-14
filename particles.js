@@ -157,8 +157,8 @@ function launchParticlesJS(tag_id, params){
 	pJS.fn.particle = function(color, opacity){
 
 		/* position */
-		this.x = Math.random() * pJS.canvas.w;
-		this.y = Math.random() * pJS.canvas.h;
+		this.x = position ? position.x : Math.random() * pJS.canvas.w;
+		this.y = position ? position.y : Math.random() * pJS.canvas.h;
 
 		/* size */
 		if(pJS.retina){
@@ -336,6 +336,9 @@ function launchParticlesJS(tag_id, params){
 			pJS.interactivity.mouse.pos_x = 0;
 			pJS.interactivity.mouse.pos_y = 0;
 			pJS.interactivity.status = 'mouseleave';
+		}
+		detect_el.onclick = function(e){
+			pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity, {"x": pJS.interactivity.mouse.pos_x, "y": pJS.interactivity.mouse.pos_y}));
 		}
 	}
 
