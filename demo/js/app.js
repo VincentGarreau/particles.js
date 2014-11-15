@@ -44,7 +44,7 @@ particlesJS('particles-js', {
     	onclick: {
     		push_particle: {
     			enable: true,
-    			nb: 1
+    			nb: 4
     		}
     	}
     }
