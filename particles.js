@@ -6,6 +6,7 @@
 /* ----------------------------------------------- */
 
 function launchParticlesJS(tag_id, params){
+
 	var canvas_el = document.querySelector('#'+tag_id+' > canvas');
 
 	/* particles.js variables with default values */
@@ -46,7 +47,10 @@ function launchParticlesJS(tag_id, params){
 				distance: 100
 			},
 			detect_on: 'canvas',
-			mode: 'grab'
+			mode: 'grab',
+			line_linked: {
+	    	opacity: 1
+	    }
 		},
 		retina_detect: false,
 		fn: {
@@ -73,7 +77,6 @@ function launchParticlesJS(tag_id, params){
 				if(params.particles.line_linked.width) pJS.particles.line_linked.width = params.particles.line_linked.width;
 				if(params.particles.line_linked.condensed_mode){
 					if(params.particles.line_linked.condensed_mode.enable == false) pJS.particles.line_linked.condensed_mode.enable = params.particles.line_linked.condensed_mode.enable;
-					//if(params.particles.line_linked.condensed_mode.acceleration == false) pJS.particles.line_linked.condensed_mode.acceleration = params.particles.line_linked.condensed_mode.acceleration;
 					if(params.particles.line_linked.condensed_mode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = params.particles.line_linked.condensed_mode.rotateX;
 					if(params.particles.line_linked.condensed_mode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = params.particles.line_linked.condensed_mode.rotateY;
 				}
@@ -88,8 +91,11 @@ function launchParticlesJS(tag_id, params){
 			if(params.interactivity.mouse){
 				if(params.interactivity.mouse.distance) pJS.interactivity.mouse.distance = params.interactivity.mouse.distance;
 			}
-			if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
 			if(params.interactivity.detect_on) pJS.interactivity.detect_on = params.interactivity.detect_on;
+			if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
+			if(params.interactivity.line_linked){
+				if(params.interactivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = params.interactivity.line_linked.opacity;
+			}
 		}
 		pJS.retina_detect = params.retina_detect;
 	}
@@ -265,7 +271,7 @@ function launchParticlesJS(tag_id, params){
 
 	pJS.fn.particlesRemove = function(){
 		pJS.particles.array = [];
-	}
+	};
 
 
 	/* ---------- VENDORS functions ------------ */
@@ -292,17 +298,15 @@ function launchParticlesJS(tag_id, params){
 			/* condensed particles */
 			if(pJS.particles.line_linked.condensed_mode.enable){
 				var dx = p1.x - p2.x,
-					dy = p1.y - p2.y,
-					ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
-					ay = dy/(pJS.particles.line_linked.condensed_mode.rotateY*1000);
-				// p1.vx -= ax;
-				// p1.vy -= ay;
+						dy = p1.y - p2.y,
+						ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
+						ay = dy/(pJS.particles.line_linked.condensed_mode.rotateY*1000);
 				p2.vx += ax;
 				p2.vy += ay; 
 			}
 
 		}
-	}
+	};
 
 	pJS.fn.vendors.interactivity.listeners = function(){
 		if(pJS.interactivity.detect_on == 'window'){
@@ -327,30 +331,36 @@ function launchParticlesJS(tag_id, params){
 			pJS.interactivity.mouse.pos_y = 0;
 			pJS.interactivity.status = 'mouseleave';
 		}
-	}
+	};
 
 	pJS.fn.vendors.interactivity.grabParticles = function(p1, p2){
 		var dx = p1.x - p2.x,
-			dy = p1.y - p2.y,
-			dist = Math.sqrt(dx*dx + dy*dy);
+				dy = p1.y - p2.y,
+				dist = Math.sqrt(dx*dx + dy*dy);
 
 		var dx_mouse = p1.x - pJS.interactivity.mouse.pos_x,
-			dy_mouse = p1.y - pJS.interactivity.mouse.pos_y,
-			dist_mouse = Math.sqrt(dx_mouse*dx_mouse + dy_mouse*dy_mouse);
+				dy_mouse = p1.y - pJS.interactivity.mouse.pos_y,
+				dist_mouse = Math.sqrt(dx_mouse*dx_mouse + dy_mouse*dy_mouse);
 
 		/* Check distance between 2 particles + Check distance between 1 particle and mouse position */
 		if(dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status == 'mousemove'){
 			/* Draw the line */
 			var color_line = pJS.particles.line_linked.color_rgb_line;
 			pJS.canvas.ctx.beginPath();
-			pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist_mouse/pJS.interactivity.mouse.distance) +')';
+			pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.interactivity.line_linked.opacity-dist_mouse/pJS.interactivity.mouse.distance) +')';
 			pJS.canvas.ctx.moveTo(p1.x, p1.y);
 			pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x, pJS.interactivity.mouse.pos_y);
 			pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
 			pJS.canvas.ctx.stroke();
 			pJS.canvas.ctx.closePath();
 		}
-	}
+	};
+
+	pJS.fn.vendors.destroy = function(){
+		cancelAnimationFrame(pJS.fn.requestAnimFrame);
+		canvas_el.remove();
+		delete pJS;
+	};
 
 
 	/* --------- LAUNCH ----------- */
@@ -366,7 +376,7 @@ function launchParticlesJS(tag_id, params){
 
 	function launchAnimation(){
 		pJS.fn.particlesDraw();
-		requestAnimFrame(launchAnimation);
+		pJS.fn.requestAnimFrame = requestAnimFrame(launchAnimation);
 	};
 
 	
@@ -386,29 +396,38 @@ function launchParticlesJS(tag_id, params){
 /* --- VENDORS --- */
 
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       || 
-		  window.webkitRequestAnimationFrame || 
-		  window.mozRequestAnimationFrame    || 
-		  window.oRequestAnimationFrame      || 
-		  window.msRequestAnimationFrame     ||  
-		  function(callback){
+  return  window.requestAnimationFrame || 
+	  window.webkitRequestAnimationFrame || 
+	  window.mozRequestAnimationFrame    || 
+	  window.oRequestAnimationFrame      || 
+	  window.msRequestAnimationFrame     ||  
+	  function(callback){
 			window.setTimeout(callback, 1000 / 60);
-		  };
+	  };
 })();
 
+window.cancelRequestAnimFrame = ( function() {
+  return window.cancelAnimationFrame           ||
+      window.webkitCancelRequestAnimationFrame ||
+      window.mozCancelRequestAnimationFrame    ||
+      window.oCancelRequestAnimationFrame      ||
+      window.msCancelRequestAnimationFrame     ||
+      clearTimeout
+} )();
+
 function hexToRgb(hex){
-    // By Tim Down - http://stackoverflow.com/a/5624139/3493650
-    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-        return r + r + g + g + b + b;
-    });
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
+  // By Tim Down - http://stackoverflow.com/a/5624139/3493650
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+     return r + r + g + g + b + b;
+  });
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+  } : null;
 };
 
 
