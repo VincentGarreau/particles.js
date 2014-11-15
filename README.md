@@ -18,40 +18,51 @@ Load particles.js and configure the particles:
 /* @params: set the params [object, optional, default values : check particles.js] */
 
 particlesJS('particles-js', {
-	particles: {
-	    color: '#fff',
-	    shape: 'circle', // "circle", "edge" or "triangle"
-		opacity: 0.5,
-		size: 2,
-		size_random: true,
-		nb: 200,
-		line_linked: {
-			enable_auto: true,
-			distance: 250,
-			color: '#fff',
-			opacity: 0.5,
-			width: 1,
-			condensed_mode: {
-				enable: true,
-				rotateX: 600,
-				rotateY: 600
-			}
-		},
-		anim: {
-			enable: true,
-			speed: 2
-		}
-	},
-	interactivity: {
-		enable: false,
-		mouse: {
-			distance: 250
-		},
-		detect_on: 'canvas', // "canvas" or "window"
-		mode: 'grab'
-	},
-	/* Retina Display Support */
-	retina_detect: false
+  particles: {
+    color: '#fff',
+    shape: 'circle', // "circle", "edge" or "triangle"
+    opacity: .5,
+    size: 2,
+    size_random: true,
+    nb: 100,
+    line_linked: {
+      enable_auto: true,
+      distance: 100,
+      color: '#fff',
+      opacity: 1,
+      width: 1,
+      condensed_mode: {
+        enable: false,
+        rotateX: 600,
+        rotateY: 600
+      }
+    },
+    anim: {
+      enable: true,
+      speed: 2
+    }
+  },
+  interactivity: {
+    enable: true,
+    mouse: {
+      distance: 250
+    },
+    detect_on: 'canvas', // "canvas" or "window"
+    mode: 'grab',
+    line_linked: {
+    	opacity: .5
+    },
+    events: {
+    	onclick: {
+    		push_particles: {
+    			enable: true,
+    			nb: 4
+    		}
+    	}
+    }
+  },
+  /* Retina Display Support */
+  retina_detect: true
 });
 ```
 
