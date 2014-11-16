@@ -17,12 +17,19 @@ Load particles.js and configure the particles:
 /* @dom-id : set the html tag id [string, optional, default value : particles-js]
 /* @params: set the params [object, optional, default values : check particles.js] */
 
+/* default dom id (particles-js) */
+//particlesJS();
+
+/* config dom id */
+//particlesJS('dom-id');
+
+/* config dom id (optional) + config particles params */
 particlesJS('particles-js', {
   particles: {
     color: '#fff',
     shape: 'circle', // "circle", "edge" or "triangle"
-    opacity: .5,
-    size: 2,
+    opacity: 1,
+    size: 4,
     size_random: true,
     nb: 100,
     line_linked: {
@@ -39,7 +46,7 @@ particlesJS('particles-js', {
     },
     anim: {
       enable: true,
-      speed: 2
+      speed: 1
     }
   },
   interactivity: {
@@ -50,14 +57,14 @@ particlesJS('particles-js', {
     detect_on: 'canvas', // "canvas" or "window"
     mode: 'grab',
     line_linked: {
-    	opacity: .5
+      opacity: .5
     },
     events: {
-    	onclick: {
-    		push_particles: {
-    			enable: true,
-    			nb: 4
-    		}
+      onclick: {
+    	  push_particles: {
+    		  enable: true,
+    		  nb: 4
+    	  }
     	}
     }
   },
