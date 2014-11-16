@@ -1,5 +1,5 @@
 /* -----------------------------------------------
-/* Author : Vincent Garreau  - vincentgarreau.com 
+/* Author : Vincent Garreau  - vincentgarreau.com
 /* MIT license: http://opensource.org/licenses/MIT
 /* GitHub : https://github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
@@ -54,10 +54,9 @@ function launchParticlesJS(tag_id, params){
       },
       events: {
         onclick: {
-          push_particles: {
-            enable: true,
-            nb: 1
-          }
+          enable: true,
+          mode: 'push',
+          nb: 4
         }
       }
     },
@@ -72,45 +71,51 @@ function launchParticlesJS(tag_id, params){
   /* params settings */
   if(params){
     if(params.particles){
-      if(params.particles.color) pJS.particles.color = params.particles.color;
-      if(params.particles.shape) pJS.particles.shape = params.particles.shape;
-      if(params.particles.opacity) pJS.particles.opacity = params.particles.opacity;
-      if(params.particles.size) pJS.particles.size = params.particles.size;
-      if(params.particles.size_random == false) pJS.particles.size_random = params.particles.size_random;
-      if(params.particles.nb) pJS.particles.nb = params.particles.nb;
-      if(params.particles.line_linked){
-        if(params.particles.line_linked.enable_auto == false) pJS.particles.line_linked.enable_auto = params.particles.line_linked.enable_auto;
-        if(params.particles.line_linked.distance) pJS.particles.line_linked.distance = params.particles.line_linked.distance;
-        if(params.particles.line_linked.color) pJS.particles.line_linked.color = params.particles.line_linked.color;
-        if(params.particles.line_linked.opacity) pJS.particles.line_linked.opacity = params.particles.line_linked.opacity;
-        if(params.particles.line_linked.width) pJS.particles.line_linked.width = params.particles.line_linked.width;
-        if(params.particles.line_linked.condensed_mode){
-          if(params.particles.line_linked.condensed_mode.enable == false) pJS.particles.line_linked.condensed_mode.enable = params.particles.line_linked.condensed_mode.enable;
-          if(params.particles.line_linked.condensed_mode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = params.particles.line_linked.condensed_mode.rotateX;
-          if(params.particles.line_linked.condensed_mode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = params.particles.line_linked.condensed_mode.rotateY;
+      var paramsForParticles = params.particles;
+      if(paramsForParticles.color) pJS.particles.color = paramsForParticles.color;
+      if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
+      if(paramsForParticles.opacity) pJS.particles.opacity = paramsForParticles.opacity;
+      if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
+      if(paramsForParticles.size_random == false) pJS.particles.size_random = paramsForParticles.size_random;
+      if(paramsForParticles.nb) pJS.particles.nb = paramsForParticles.nb;
+      if(paramsForParticles.line_linked){
+        var paramsForLineLinked = paramsForParticles.line_linked;
+        if(paramsForLineLinked.enable_auto == false) pJS.particles.line_linked.enable_auto = paramsForLineLinked.enable_auto;
+        if(paramsForLineLinked.distance) pJS.particles.line_linked.distance = paramsForLineLinked.distance;
+        if(paramsForLineLinked.color) pJS.particles.line_linked.color = paramsForLineLinked.color;
+        if(paramsForLineLinked.opacity) pJS.particles.line_linked.opacity = paramsForLineLinked.opacity;
+        if(paramsForLineLinked.width) pJS.particles.line_linked.width = paramsForLineLinked.width;
+        if(paramsForLineLinked.condensed_mode){
+          var paramsForCondensedMode = paramsForLineLinked.condensed_mode;
+          if(paramsForCondensedMode.enable == false) pJS.particles.line_linked.condensed_mode.enable = paramsForCondensedMode.enable;
+          if(paramsForCondensedMode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = paramsForCondensedMode.rotateX;
+          if(paramsForCondensedMode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = paramsForCondensedMode.rotateY;
         }
       }
-      if(params.particles.anim){
-        if(params.particles.anim.enable == false) pJS.particles.anim.enable = params.particles.anim.enable;
-        if(params.particles.anim.speed) pJS.particles.anim.speed = params.particles.anim.speed;
+      if(paramsForParticles.anim){
+        var paramsForAnim = paramsForParticles.anim;
+        if(paramsForAnim.enable == false) pJS.particles.anim.enable = paramsForAnim.enable;
+        if(paramsForAnim.speed) pJS.particles.anim.speed = paramsForAnim.speed;
       }
     }
     if(params.interactivity){
-      if(params.interactivity.enable == false) pJS.interactivity.enable = params.interactivity.enable;
-      if(params.interactivity.mouse){
-        if(params.interactivity.mouse.distance) pJS.interactivity.mouse.distance = params.interactivity.mouse.distance;
+      var paramsForInteractivity = params.interactivity;
+      if(paramsForInteractivity.enable == false) pJS.interactivity.enable = paramsForInteractivity.enable;
+      if(paramsForInteractivity.mouse){
+        if(paramsForInteractivity.mouse.distance) pJS.interactivity.mouse.distance = paramsForInteractivity.mouse.distance;
       }
-      if(params.interactivity.detect_on) pJS.interactivity.detect_on = params.interactivity.detect_on;
-      if(params.interactivity.mode) pJS.interactivity.mode = params.interactivity.mode;
-      if(params.interactivity.line_linked){
-        if(params.interactivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = params.interactivity.line_linked.opacity;
+      if(paramsForInteractivity.detect_on) pJS.interactivity.detect_on = paramsForInteractivity.detect_on;
+      if(paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
+      if(paramsForInteractivity.line_linked){
+        if(paramsForInteractivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = paramsForInteractivity.line_linked.opacity;
       }
-      if(params.interactivity.events){
-        if(params.interactivity.events.onclick){
-          if(params.interactivity.events.onclick.push_particles){
-            if(params.interactivity.events.onclick.push_particles.enable == false) pJS.interactivity.events.onclick.push_particles.enable = params.interactivity.events.onclick.push_particles.enable;
-            if(params.interactivity.events.onclick.push_particles.nb) pJS.interactivity.events.onclick.push_particles.nb = params.interactivity.events.onclick.push_particles.nb;
-          }
+      if(paramsForInteractivity.events){
+        var paramsForEvents = paramsForInteractivity.events;
+        if(paramsForEvents.onclick){
+          var paramsForOnclick = paramsForEvents.onclick;
+          if(paramsForOnclick.enable == false) pJS.interactivity.events.onclick.enable = false;
+          if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
+          if(typeof paramsForOnclick.nb === 'number') pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
         }
       }
     }
@@ -126,15 +131,15 @@ function launchParticlesJS(tag_id, params){
     pJS.retina = true;
     pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
     pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
-    pJS.particles.anim.speed = pJS.particles.anim.speed*2; 
+    pJS.particles.anim.speed = pJS.particles.anim.speed*2;
     pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
     pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
-    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2; 
+    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2;
   }
 
 
   /* ---------- CANVAS functions ------------ */
-   
+
   pJS.fn.canvasInit = function(){
     pJS.canvas.ctx = pJS.canvas.el.getContext('2d');
   };
@@ -186,7 +191,7 @@ function launchParticlesJS(tag_id, params){
     /* size */
     this.radius = (pJS.particles.size_random ? Math.random() : 1) * pJS.particles.size;
     if (pJS.retina) this.radius *= 2;
-    
+
     /* color */
     this.color = color;
 
@@ -218,7 +223,7 @@ function launchParticlesJS(tag_id, params){
           pJS.canvas.ctx.closePath();
         break;
       }
-      
+
       pJS.canvas.ctx.fill();
     }
 
@@ -265,7 +270,7 @@ function launchParticlesJS(tag_id, params){
           }
 
         }
-        
+
 
       }
     }
@@ -283,7 +288,7 @@ function launchParticlesJS(tag_id, params){
       var p = pJS.particles.array[i];
       p.draw('rgba('+p.color.r+','+p.color.g+','+p.color.b+','+p.opacity+')');
     }
-    
+
   };
 
   pJS.fn.particlesRemove = function(){
@@ -298,10 +303,10 @@ function launchParticlesJS(tag_id, params){
     var dx = p1.x - p2.x,
       dy = p1.y - p2.y,
       dist = Math.sqrt(dx*dx + dy*dy);
-    
+
     /* Check distance between particle and mouse mos */
     if(dist <= pJS.particles.line_linked.distance) {
-      
+
       /* draw the line */
       var color_line = pJS.particles.line_linked.color_rgb_line;
       pJS.canvas.ctx.beginPath();
@@ -319,7 +324,7 @@ function launchParticlesJS(tag_id, params){
             ax = dx/(pJS.particles.line_linked.condensed_mode.rotateX*1000),
             ay = dy/(pJS.particles.line_linked.condensed_mode.rotateY*1000);
         p2.vx += ax;
-        p2.vy += ay; 
+        p2.vy += ay;
       }
 
     }
@@ -331,7 +336,7 @@ function launchParticlesJS(tag_id, params){
     }else{
       var detect_el = pJS.canvas.el
     }
-      
+
     detect_el.onmousemove = function(e){
       pJS.interactivity.mouse.pos_x = e.pageX;
       pJS.interactivity.mouse.pos_y = e.pageY;
@@ -350,21 +355,31 @@ function launchParticlesJS(tag_id, params){
       pJS.interactivity.status = 'mouseleave';
     };
 
-    if(pJS.interactivity.events.onclick.push_particles.enable){
-      detect_el.onclick = function(e){
-        for(var i = 0; i < pJS.interactivity.events.onclick.push_particles.nb; i++){
-          pJS.particles.array.push(
-            new pJS.fn.particle(
-              pJS.particles.color_rgb,
-              pJS.particles.opacity,
-              {
-                'x': pJS.interactivity.mouse.pos_x,
-                'y': pJS.interactivity.mouse.pos_y
-              }
-            )
-          )
-        }
-      };
+    if(pJS.interactivity.events.onclick.enable){
+      switch(pJS.interactivity.events.onclick.mode){
+        case 'push':
+          detect_el.onclick = function(e){
+            for(var i = 0; i < pJS.interactivity.events.onclick.nb; i++){
+              pJS.particles.array.push(
+                new pJS.fn.particle(
+                  pJS.particles.color_rgb,
+                  pJS.particles.opacity,
+                  {
+                    'x': pJS.interactivity.mouse.pos_x,
+                    'y': pJS.interactivity.mouse.pos_y
+                  }
+                )
+              )
+            };
+          }
+        break;
+
+        case 'remove':
+          detect_el.onclick = function(e){
+            pJS.particles.array.splice(0, pJS.interactivity.events.onclick.nb);
+          }
+        break;
+      }
     }
 
   };
@@ -416,7 +431,7 @@ function launchParticlesJS(tag_id, params){
     pJS.fn.requestAnimFrame = requestAnimFrame(launchAnimation);
   };
 
-  
+
   launchParticles();
 
   if(pJS.particles.anim.enable){
@@ -433,11 +448,11 @@ function launchParticlesJS(tag_id, params){
 /* --- VENDORS --- */
 
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame || 
-    window.webkitRequestAnimationFrame || 
-    window.mozRequestAnimationFrame    || 
-    window.oRequestAnimationFrame      || 
-    window.msRequestAnimationFrame     ||  
+  return  window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame    ||
+    window.oRequestAnimationFrame      ||
+    window.msRequestAnimationFrame     ||
     function(callback){
       window.setTimeout(callback, 1000 / 60);
     };
@@ -482,7 +497,7 @@ window.particlesJS = function(tag_id, params){
   if(!tag_id){
     tag_id = 'particles-js';
   }
-  
+
   /* create canvas element */
   var canvas_el = document.createElement('canvas');
 
