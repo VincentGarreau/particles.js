@@ -115,7 +115,7 @@ function launchParticlesJS(tag_id, params){
           var paramsForOnclick = paramsForEvents.onclick;
           if(paramsForOnclick.enable == false) pJS.interactivity.events.onclick.enable = false;
           if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
-          if(typeof paramsForOnclick.nb === 'number') pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
+          if(paramsForOnclick.nb) pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
         }
       }
     }
