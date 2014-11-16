@@ -149,24 +149,26 @@ function launchParticlesJS(tag_id, params){
     pJS.canvas.el.height = pJS.canvas.h;
 
     window.onresize = function(){
-      pJS.canvas.w = pJS.canvas.el.offsetWidth;
-      pJS.canvas.h = pJS.canvas.el.offsetHeight;
+      if(pJS){
+        pJS.canvas.w = pJS.canvas.el.offsetWidth;
+        pJS.canvas.h = pJS.canvas.el.offsetHeight;
 
-      /* resize canvas */
-      if(pJS.retina){
-        pJS.canvas.w *= 2;
-        pJS.canvas.h *= 2;
-      }
+        /* resize canvas */
+        if(pJS.retina){
+          pJS.canvas.w *= 2;
+          pJS.canvas.h *= 2;
+        }
 
-      pJS.canvas.el.width = pJS.canvas.w;
-      pJS.canvas.el.height = pJS.canvas.h;
+        pJS.canvas.el.width = pJS.canvas.w;
+        pJS.canvas.el.height = pJS.canvas.h;
 
-      /* repaint canvas */
-      pJS.fn.canvasPaint();
-      if(!pJS.particles.anim.enable){
-        pJS.fn.particlesRemove();
-        pJS.fn.canvasRemove();
-        launchParticles();
+        /* repaint canvas */
+        pJS.fn.canvasPaint();
+        if(!pJS.particles.anim.enable){
+          pJS.fn.particlesRemove();
+          pJS.fn.canvasRemove();
+          launchParticles();
+        }
       }
     }
   };
@@ -349,23 +351,31 @@ function launchParticlesJS(tag_id, params){
         var pos_x = e.offsetX,
             pos_y = e.offsetY;
       }
-      
-      pJS.interactivity.mouse.pos_x = pos_x;
-      pJS.interactivity.mouse.pos_y = pos_y;
 
-      if(pJS.retina){
-        pJS.interactivity.mouse.pos_x *= 2;
-        pJS.interactivity.mouse.pos_y *= 2;
+      if(pJS){
+
+        pJS.interactivity.mouse.pos_x = pos_x;
+        pJS.interactivity.mouse.pos_y = pos_y;
+
+        if(pJS.retina){
+          pJS.interactivity.mouse.pos_x *= 2;
+          pJS.interactivity.mouse.pos_y *= 2;
+        }
+
+        pJS.interactivity.status = 'mousemove';
       }
 
-      pJS.interactivity.status = 'mousemove';
     };
 
     /* el on onmouseleave */
     detect_el.onmouseleave = function(e){
-      pJS.interactivity.mouse.pos_x = 0;
-      pJS.interactivity.mouse.pos_y = 0;
-      pJS.interactivity.status = 'mouseleave';
+
+      if(pJS){
+        pJS.interactivity.mouse.pos_x = 0;
+        pJS.interactivity.mouse.pos_y = 0;
+        pJS.interactivity.status = 'mouseleave';
+      }
+
     };
 
     /* el on onclick */
@@ -373,18 +383,20 @@ function launchParticlesJS(tag_id, params){
       switch(pJS.interactivity.events.onclick.mode){
         case 'push':
           detect_el.onclick = function(e){
-            for(var i = 0; i < pJS.interactivity.events.onclick.nb; i++){
-              pJS.particles.array.push(
-                new pJS.fn.particle(
-                  pJS.particles.color_rgb,
-                  pJS.particles.opacity,
-                  {
-                    'x': pJS.interactivity.mouse.pos_x,
-                    'y': pJS.interactivity.mouse.pos_y
-                  }
+            if(pJS){
+              for(var i = 0; i < pJS.interactivity.events.onclick.nb; i++){
+                pJS.particles.array.push(
+                  new pJS.fn.particle(
+                    pJS.particles.color_rgb,
+                    pJS.particles.opacity,
+                    {
+                      'x': pJS.interactivity.mouse.pos_x,
+                      'y': pJS.interactivity.mouse.pos_y
+                    }
+                  )
                 )
-              )
-            };
+              }
+            }
           }
         break;
 
