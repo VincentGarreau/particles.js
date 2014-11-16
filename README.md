@@ -17,13 +17,6 @@ Load particles.js and configure the particles:
 /* @dom-id : set the html tag id [string, optional, default value : particles-js]
 /* @params: set the params [object, optional, default values : check particles.js] */
 
-/* default dom id (particles-js) */
-//particlesJS();
-
-/* config dom id */
-//particlesJS('dom-id');
-
-/* config dom id (optional) + config particles params */
 particlesJS('particles-js', {
   particles: {
     color: '#fff',
