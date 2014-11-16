@@ -341,8 +341,8 @@ function launchParticlesJS(tag_id, params){
 
     /* el on mousemove */
     detect_el.onmousemove = function(e){
-      pJS.interactivity.mouse.pos_x = e.pageX;
-      pJS.interactivity.mouse.pos_y = e.pageY;
+      pJS.interactivity.mouse.pos_x = e.offsetX;
+      pJS.interactivity.mouse.pos_y = e.offsetY;
 
       if(pJS.retina){
         pJS.interactivity.mouse.pos_x *= 2;
