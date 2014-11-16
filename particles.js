@@ -334,17 +334,16 @@ function launchParticlesJS(tag_id, params){
 
     /* init el */
     if(pJS.interactivity.detect_on == 'window'){
-      var detect_el = window
+      var detect_el = window;
     }else{
-      var detect_el = pJS.canvas.el
+      var detect_el = pJS.canvas.el;
     }
 
     /* el on mousemove */
     detect_el.onmousemove = function(e){
-
       if(detect_el == window){
-        var pos_x = e.pageX,
-            pos_y = e.pageY;
+        var pos_x = e.clientX,
+            pos_y = e.clientY;
       }
       else{
         var pos_x = e.offsetX,
