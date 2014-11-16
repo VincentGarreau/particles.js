@@ -331,12 +331,15 @@ function launchParticlesJS(tag_id, params){
   };
 
   pJS.fn.vendors.interactivity.listeners = function(){
+
+    /* init el */
     if(pJS.interactivity.detect_on == 'window'){
       var detect_el = window
     }else{
       var detect_el = pJS.canvas.el
     }
 
+    /* el on mousemove */
     detect_el.onmousemove = function(e){
       pJS.interactivity.mouse.pos_x = e.pageX;
       pJS.interactivity.mouse.pos_y = e.pageY;
@@ -349,12 +352,14 @@ function launchParticlesJS(tag_id, params){
       pJS.interactivity.status = 'mousemove';
     };
 
+    /* el on onmouseleave */
     detect_el.onmouseleave = function(e){
       pJS.interactivity.mouse.pos_x = 0;
       pJS.interactivity.mouse.pos_y = 0;
       pJS.interactivity.status = 'mouseleave';
     };
 
+    /* el on onclick */
     if(pJS.interactivity.events.onclick.enable){
       switch(pJS.interactivity.events.onclick.mode){
         case 'push':
@@ -381,7 +386,6 @@ function launchParticlesJS(tag_id, params){
         break;
       }
     }
-
   };
 
 
