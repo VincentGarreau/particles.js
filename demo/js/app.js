@@ -9,10 +9,10 @@ particlesJS('particles-js', {
   particles: {
     color: '#fff',
     shape: 'circle', // "circle", "edge" or "triangle"
-    opacity: .5,
-    size: 2,
+    opacity: 1,
+    size: 4,
     size_random: true,
-    nb: 100,
+    nb: 150,
     line_linked: {
       enable_auto: true,
       distance: 100,
@@ -27,26 +27,26 @@ particlesJS('particles-js', {
     },
     anim: {
       enable: true,
-      speed: 2
+      speed: 1
     }
   },
   interactivity: {
     enable: true,
     mouse: {
-      distance: 250
+      distance: 300
     },
     detect_on: 'canvas', // "canvas" or "window"
     mode: 'grab',
     line_linked: {
-    	opacity: .5
+      opacity: .5
     },
     events: {
-    	onclick: {
-    		push_particles: {
-    			enable: true,
-    			nb: 4
-    		}
-    	}
+      onclick: {
+        push_particles: {
+          enable: true,
+          nb: 4
+        }
+      }
     }
   },
   /* Retina Display Support */
