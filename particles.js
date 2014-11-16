@@ -341,8 +341,18 @@ function launchParticlesJS(tag_id, params){
 
     /* el on mousemove */
     detect_el.onmousemove = function(e){
-      pJS.interactivity.mouse.pos_x = e.offsetX;
-      pJS.interactivity.mouse.pos_y = e.offsetY;
+
+      if(detect_el == window){
+        var pos_x = e.pageX,
+            pos_y = e.pageY;
+      }
+      else{
+        var pos_x = e.offsetX,
+            pos_y = e.offsetY;
+      }
+      
+      pJS.interactivity.mouse.pos_x = pos_x;
+      pJS.interactivity.mouse.pos_y = pos_y;
 
       if(pJS.retina){
         pJS.interactivity.mouse.pos_x *= 2;
