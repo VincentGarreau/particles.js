@@ -129,12 +129,14 @@ function launchParticlesJS(tag_id, params){
   /* detect retina */
   if(pJS.retina_detect && window.devicePixelRatio > 1){
     pJS.retina = true;
-    pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
-    pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
-    pJS.particles.anim.speed = pJS.particles.anim.speed*2;
-    pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
-    pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
-    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2;
+	
+    var pixel_ratio = window.devicePixelRatio;
+    pJS.canvas.w = pJS.canvas.el.offsetWidth * pixel_ratio;
+    pJS.canvas.h = pJS.canvas.el.offsetHeight * pixel_ratio;
+    pJS.particles.anim.speed = pJS.particles.anim.speed * pixel_ratio;
+    pJS.particles.line_linked.distance = pJS.particles.line_linked.distance * pixel_ratio;
+    pJS.particles.line_linked.width = pJS.particles.line_linked.width * pixel_ratio;
+    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance * pixel_ratio;
   }
 
 
