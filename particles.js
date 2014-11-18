@@ -348,8 +348,8 @@ function launchParticlesJS(tag_id, params){
             pos_y = e.clientY;
       }
       else{
-        var pos_x = e.offsetX,
-            pos_y = e.offsetY;
+        var pos_x = e.offsetX==undefined?e.layerX:e.offsetX,
+			      pos_y = e.offsetY==undefined?e.layerY:e.offsetY;
       }
 
       if(pJS){
