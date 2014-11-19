@@ -221,9 +221,9 @@ function launchParticlesJS(tag_id, params){
         break;
 
         case 'triangle':
-          pJS.canvas.ctx.moveTo(this.x,this.y);
-          pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius*2);
-          pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius*2);
+          pJS.canvas.ctx.moveTo(this.x,this.y-this.radius);
+          pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius);
+          pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius);
           pJS.canvas.ctx.closePath();
         break;
       }
