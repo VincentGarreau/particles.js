@@ -129,7 +129,7 @@ function launchParticlesJS(tag_id, params){
   /* detect retina */
   if(pJS.retina_detect && window.devicePixelRatio > 1){
     pJS.retina = true;
-	
+  
     pJS.canvas.pxratio = window.devicePixelRatio
     pJS.canvas.w = pJS.canvas.el.offsetWidth * pJS.canvas.pxratio;
     pJS.canvas.h = pJS.canvas.el.offsetHeight * pJS.canvas.pxratio;

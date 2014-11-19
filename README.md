@@ -17,6 +17,7 @@ Load particles.js and configure the particles:
 /* @dom-id : set the html tag id [string, optional, default value : particles-js]
 /* @params: set the params [object, optional, default values : check particles.js] */
 
+/* config dom id (optional) + config particles params */
 particlesJS('particles-js', {
   particles: {
     color: '#fff',
@@ -45,7 +46,7 @@ particlesJS('particles-js', {
   interactivity: {
     enable: true,
     mouse: {
-      distance: 300
+      distance: 250
     },
     detect_on: 'canvas', // "canvas" or "window"
     mode: 'grab',
@@ -55,7 +56,7 @@ particlesJS('particles-js', {
     events: {
       onclick: {
         enable: true,
-        mode: 'push', // "push" or "remove"
+        mode: 'push', // "push" or "remove" (particles)
         nb: 4
       }
     }
