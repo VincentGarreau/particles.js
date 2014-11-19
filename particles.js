@@ -19,6 +19,7 @@ function launchParticlesJS(tag_id, params){
     },
     particles: {
       color: '#fff',
+      p_color_random: false,
       shape: 'circle',
       opacity: 1,
       size: 2.5,
@@ -73,6 +74,7 @@ function launchParticlesJS(tag_id, params){
     if(params.particles){
       var paramsForParticles = params.particles;
       if(paramsForParticles.color) pJS.particles.color = paramsForParticles.color;
+      if(paramsForParticles.p_color_random) pJS.particles.p_color_random = paramsForParticles.p_color_random;
       if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
       if(paramsForParticles.opacity) pJS.particles.opacity = paramsForParticles.opacity;
       if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
@@ -201,6 +203,12 @@ function launchParticlesJS(tag_id, params){
 
     /* opacity */
     this.opacity = opacity;
+    
+    /* if random color RGBA (0-255, 0-255, 0-255)*/
+    if (pJS.particles.p_color_random==true)
+      {
+        this.add_color_rgba='rgba('+(Math.floor(Math.random() * (255 - 0 + 1)) + 0)+','+(Math.floor(Math.random() * (255 - 0 + 1)) + 0)+','+(Math.floor(Math.random() * (255 - 0 + 1)) + 0)+','+this.opacity+')';
+      }
 
     /* animation - velocity for speed */
     this.vx = -.5 + Math.random();
@@ -208,7 +216,14 @@ function launchParticlesJS(tag_id, params){
 
     /* draw function */
     this.draw = function(){
-      pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+      if (pJS.particles.p_color_random==true)
+      {
+      	pJS.canvas.ctx.fillStyle = this.add_color_rgba;
+      }
+      else
+      {
+      	pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+      }
       pJS.canvas.ctx.beginPath();
 
       switch(pJS.particles.shape){
