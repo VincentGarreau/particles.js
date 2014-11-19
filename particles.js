@@ -3,7 +3,7 @@
 /* MIT license: http://opensource.org/licenses/MIT
 /* GitHub : https://github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v1.0.2
+/* v1.0.3
 /* ----------------------------------------------- */
 
 function launchParticlesJS(tag_id, params){
@@ -343,7 +343,7 @@ function launchParticlesJS(tag_id, params){
 
     /* el on mousemove */
     detect_el.onmousemove = function(e){
-      
+
       if(detect_el == window){
         var pos_x = e.clientX,
             pos_y = e.clientY;
