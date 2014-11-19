@@ -343,13 +343,14 @@ function launchParticlesJS(tag_id, params){
 
     /* el on mousemove */
     detect_el.onmousemove = function(e){
+      
       if(detect_el == window){
         var pos_x = e.clientX,
             pos_y = e.clientY;
       }
       else{
-        var pos_x = e.offsetX,
-            pos_y = e.offsetY;
+        var pos_x = e.offsetX||e.clientX,
+            pos_y = e.offsetY||e.clientY;
       }
 
       if(pJS){
