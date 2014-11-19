@@ -130,13 +130,13 @@ function launchParticlesJS(tag_id, params){
   if(pJS.retina_detect && window.devicePixelRatio > 1){
     pJS.retina = true;
 	
-    var pixel_ratio = window.devicePixelRatio;
-    pJS.canvas.w = pJS.canvas.el.offsetWidth * pixel_ratio;
-    pJS.canvas.h = pJS.canvas.el.offsetHeight * pixel_ratio;
-    pJS.particles.anim.speed = pJS.particles.anim.speed * pixel_ratio;
-    pJS.particles.line_linked.distance = pJS.particles.line_linked.distance * pixel_ratio;
-    pJS.particles.line_linked.width = pJS.particles.line_linked.width * pixel_ratio;
-    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance * pixel_ratio;
+    pJS.canvas.pxratio = window.devicePixelRatio
+    pJS.canvas.w = pJS.canvas.el.offsetWidth * pJS.canvas.pxratio;
+    pJS.canvas.h = pJS.canvas.el.offsetHeight * pJS.canvas.pxratio;
+    pJS.particles.anim.speed = pJS.particles.anim.speed * pJS.canvas.pxratio;
+    pJS.particles.line_linked.distance = pJS.particles.line_linked.distance * pJS.canvas.pxratio;
+    pJS.particles.line_linked.width = pJS.particles.line_linked.width * pJS.canvas.pxratio;
+    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance * pJS.canvas.pxratio;
   }
 
 
@@ -157,8 +157,8 @@ function launchParticlesJS(tag_id, params){
 
         /* resize canvas */
         if(pJS.retina){
-          pJS.canvas.w *= 2;
-          pJS.canvas.h *= 2;
+          pJS.canvas.w *= pJS.canvas.pxratio;
+          pJS.canvas.h *= pJS.canvas.pxratio;
         }
 
         pJS.canvas.el.width = pJS.canvas.w;
@@ -194,7 +194,7 @@ function launchParticlesJS(tag_id, params){
 
     /* size */
     this.radius = (pJS.particles.size_random ? Math.random() : 1) * pJS.particles.size;
-    if (pJS.retina) this.radius *= 2;
+    if (pJS.retina) this.radius *= pJS.canvas.pxratio;
 
     /* color */
     this.color = color;
@@ -361,8 +361,8 @@ function launchParticlesJS(tag_id, params){
         pJS.interactivity.mouse.pos_y = pos_y;
 
         if(pJS.retina){
-          pJS.interactivity.mouse.pos_x *= 2;
-          pJS.interactivity.mouse.pos_y *= 2;
+          pJS.interactivity.mouse.pos_x *= pJS.canvas.pxratio;
+          pJS.interactivity.mouse.pos_y *= pJS.canvas.pxratio;
         }
 
         pJS.interactivity.status = 'mousemove';
