@@ -3,7 +3,7 @@
 /* MIT license: http://opensource.org/licenses/MIT
 /* GitHub : https://github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v1.0.2
+/* v1.0.3
 /* ----------------------------------------------- */
 
 function launchParticlesJS(tag_id, params){
@@ -129,12 +129,14 @@ function launchParticlesJS(tag_id, params){
   /* detect retina */
   if(pJS.retina_detect && window.devicePixelRatio > 1){
     pJS.retina = true;
-    pJS.canvas.w = pJS.canvas.el.offsetWidth*2;
-    pJS.canvas.h = pJS.canvas.el.offsetHeight*2;
-    pJS.particles.anim.speed = pJS.particles.anim.speed*2;
-    pJS.particles.line_linked.distance = pJS.particles.line_linked.distance*2;
-    pJS.particles.line_linked.width = pJS.particles.line_linked.width*2;
-    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance*2;
+  
+    pJS.canvas.pxratio = window.devicePixelRatio
+    pJS.canvas.w = pJS.canvas.el.offsetWidth * pJS.canvas.pxratio;
+    pJS.canvas.h = pJS.canvas.el.offsetHeight * pJS.canvas.pxratio;
+    pJS.particles.anim.speed = pJS.particles.anim.speed * pJS.canvas.pxratio;
+    pJS.particles.line_linked.distance = pJS.particles.line_linked.distance * pJS.canvas.pxratio;
+    pJS.particles.line_linked.width = pJS.particles.line_linked.width * pJS.canvas.pxratio;
+    pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance * pJS.canvas.pxratio;
   }
 
 
@@ -155,8 +157,8 @@ function launchParticlesJS(tag_id, params){
 
         /* resize canvas */
         if(pJS.retina){
-          pJS.canvas.w *= 2;
-          pJS.canvas.h *= 2;
+          pJS.canvas.w *= pJS.canvas.pxratio;
+          pJS.canvas.h *= pJS.canvas.pxratio;
         }
 
         pJS.canvas.el.width = pJS.canvas.w;
@@ -192,7 +194,7 @@ function launchParticlesJS(tag_id, params){
 
     /* size */
     this.radius = (pJS.particles.size_random ? Math.random() : 1) * pJS.particles.size;
-    if (pJS.retina) this.radius *= 2;
+    if (pJS.retina) this.radius *= pJS.canvas.pxratio;
 
     /* color */
     this.color = color;
@@ -219,9 +221,9 @@ function launchParticlesJS(tag_id, params){
         break;
 
         case 'triangle':
-          pJS.canvas.ctx.moveTo(this.x,this.y);
-          pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius*2);
-          pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius*2);
+          pJS.canvas.ctx.moveTo(this.x,this.y-this.radius);
+          pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius);
+          pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius);
           pJS.canvas.ctx.closePath();
         break;
       }
@@ -343,13 +345,14 @@ function launchParticlesJS(tag_id, params){
 
     /* el on mousemove */
     detect_el.onmousemove = function(e){
+
       if(detect_el == window){
         var pos_x = e.clientX,
             pos_y = e.clientY;
       }
       else{
-        var pos_x = e.offsetX,
-            pos_y = e.offsetY;
+        var pos_x = e.offsetX||e.clientX,
+            pos_y = e.offsetY||e.clientY;
       }
 
       if(pJS){
@@ -358,8 +361,8 @@ function launchParticlesJS(tag_id, params){
         pJS.interactivity.mouse.pos_y = pos_y;
 
         if(pJS.retina){
-          pJS.interactivity.mouse.pos_x *= 2;
-          pJS.interactivity.mouse.pos_y *= 2;
+          pJS.interactivity.mouse.pos_x *= pJS.canvas.pxratio;
+          pJS.interactivity.mouse.pos_y *= pJS.canvas.pxratio;
         }
 
         pJS.interactivity.status = 'mousemove';
