@@ -3,7 +3,7 @@
 /* MIT license: http://opensource.org/licenses/MIT
 /* GitHub : https://github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v1.0.3
+/* v1.0.4
 /* ----------------------------------------------- */
 
 function launchParticlesJS(tag_id, params){
