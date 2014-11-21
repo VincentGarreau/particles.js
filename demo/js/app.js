@@ -9,7 +9,11 @@ particlesJS('particles-js', {
   particles: {
     color: '#fff',
     shape: 'circle', // "circle", "edge" or "triangle"
-    opacity: 1,
+    opacity: {
+      default_opacity: 1,
+      anim: true,
+      anim_speed: 10, // Min: 0
+    },
     size: 4,
     size_random: true,
     nb: 150,
