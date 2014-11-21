@@ -23,7 +23,7 @@ function launchParticlesJS(tag_id, params){
       opacity: {
         default_opacity: 1,
         anim: true,
-        anim_speed: 10,
+        anim_speed: 1,
       },
       size: 2.5,
       size_random: true,
