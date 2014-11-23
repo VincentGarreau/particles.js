@@ -12,9 +12,9 @@ particlesJS('particles-js', {
     opacity: {
       default_opacity: 1,
       anim: true,
-      anim_speed: 1, // Min: 0
+      anim_speed: 7, // Min: 0
     },
-    size: 4,
+    size: 1,
     size_random: true,
     nb: 150,
     line_linked: {
@@ -39,7 +39,7 @@ particlesJS('particles-js', {
     mouse: {
       distance: 300
     },
-    detect_on: 'canvas', // "canvas" or "window"
+    detect_on: 'window', // "canvas" or "window"
     mode: 'grab',
     line_linked: {
       opacity: .5
