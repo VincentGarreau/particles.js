@@ -439,7 +439,7 @@ function launchParticlesJS(tag_id, params){
   pJS.fn.vendors.destroy = function(){
     cancelAnimationFrame(pJS.fn.requestAnimFrame);
     canvas_el.remove();
-    delete pJS;
+    pJS = null;
   };
 
 
