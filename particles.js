@@ -18,109 +18,55 @@ function launchParticlesJS(tag_id, params){
       h: canvas_el.offsetHeight
     },
     particles: {
-      color: '#fff',
-      shape: 'circle',
-      opacity: 1,
-      size: 2.5,
-      size_random: true,
-      nb: 200,
+      color: params.particles.color || '#fff',
+      shape: params.particles.shape || 'circle',
+      opacity: params.particles.opacity || 1,
+      size: params.particles.size || 2.5,
+      size_random: params.particles.size_random || true,
+      nb: params.particles.nb || 200,
       line_linked: {
-        enable_auto: true,
-        distance: 100,
-        color: '#fff',
-        opacity: 1,
-        width: 1,
+        enable_auto: params.particles.line_linked.enable_auto || true,
+        distance: params.particles.line_linked.distance || 100,
+        color: params.particles.line_linked.color || '#fff',
+        opacity: params.particles.line_linked.opacity || 1,
+        width: params.particles.line_linked.width || 1,
         condensed_mode: {
-          enable: true,
-          rotateX: 65000,
-          rotateY: 65000
+          enable: params.particles.line_linked.condensed_mode.enable || true,
+          rotateX: params.particles.line_linked.condensed_mode.rotateX || 65000,
+          rotateY: params.particles.line_linked.condensed_mode.rotateY || 65000
         }
       },
       anim: {
-        enable: true,
-          speed: 1
+        enable: params.particles.anim.enable || true,
+        speed: params.particles.anim.speed || 1
       },
       array: []
     },
     interactivity: {
-      enable: true,
+      enable: params.interactivity.enable || true,
       mouse: {
-        distance: 100
+        distance: params.interactivity.mouse.distance || 100
       },
-      detect_on: 'canvas',
-      mode: 'grab',
+      detect_on: params.interactivity.detect_on || 'canvas',
+      mode: params.interactivity.mode || 'grab',
       line_linked: {
-        opacity: 1
+        opacity: params.interactivity.line_linked.opacity || 1
       },
       events: {
         onclick: {
-          enable: true,
-          mode: 'push',
-          nb: 4
+          enable: params.interactivity.events.enable ||true,
+          mode: params.interactivity.events.mode ||'push',
+          nb: params.interactivity.events.nb ||4
         }
       }
     },
-    retina_detect: false,
+    retina_detect: params.retina_detect || false,
     fn: {
-      vendors:{
+      vendors: {
         interactivity: {}
       }
     }
   };
-
-  /* params settings */
-  if(params){
-    if(params.particles){
-      var paramsForParticles = params.particles;
-      if(paramsForParticles.color) pJS.particles.color = paramsForParticles.color;
-      if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
-      if(paramsForParticles.opacity) pJS.particles.opacity = paramsForParticles.opacity;
-      if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
-      if(paramsForParticles.size_random == false) pJS.particles.size_random = paramsForParticles.size_random;
-      if(paramsForParticles.nb) pJS.particles.nb = paramsForParticles.nb;
-      if(paramsForParticles.line_linked){
-        var paramsForLineLinked = paramsForParticles.line_linked;
-        if(paramsForLineLinked.enable_auto == false) pJS.particles.line_linked.enable_auto = paramsForLineLinked.enable_auto;
-        if(paramsForLineLinked.distance) pJS.particles.line_linked.distance = paramsForLineLinked.distance;
-        if(paramsForLineLinked.color) pJS.particles.line_linked.color = paramsForLineLinked.color;
-        if(paramsForLineLinked.opacity) pJS.particles.line_linked.opacity = paramsForLineLinked.opacity;
-        if(paramsForLineLinked.width) pJS.particles.line_linked.width = paramsForLineLinked.width;
-        if(paramsForLineLinked.condensed_mode){
-          var paramsForCondensedMode = paramsForLineLinked.condensed_mode;
-          if(paramsForCondensedMode.enable == false) pJS.particles.line_linked.condensed_mode.enable = paramsForCondensedMode.enable;
-          if(paramsForCondensedMode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = paramsForCondensedMode.rotateX;
-          if(paramsForCondensedMode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = paramsForCondensedMode.rotateY;
-        }
-      }
-      if(paramsForParticles.anim){
-        var paramsForAnim = paramsForParticles.anim;
-        if(paramsForAnim.enable == false) pJS.particles.anim.enable = paramsForAnim.enable;
-        if(paramsForAnim.speed) pJS.particles.anim.speed = paramsForAnim.speed;
-      }
-    }
-    if(params.interactivity){
-      var paramsForInteractivity = params.interactivity;
-      if(paramsForInteractivity.enable == false) pJS.interactivity.enable = paramsForInteractivity.enable;
-      if(paramsForInteractivity.mouse){
-        if(paramsForInteractivity.mouse.distance) pJS.interactivity.mouse.distance = paramsForInteractivity.mouse.distance;
-      }
-      if(paramsForInteractivity.detect_on) pJS.interactivity.detect_on = paramsForInteractivity.detect_on;
-      if(paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
-      if(paramsForInteractivity.line_linked){
-        if(paramsForInteractivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = paramsForInteractivity.line_linked.opacity;
-      }
-      if(paramsForInteractivity.events){
-        var paramsForEvents = paramsForInteractivity.events;
-        if(paramsForEvents.onclick){
-          var paramsForOnclick = paramsForEvents.onclick;
-          if(paramsForOnclick.enable == false) pJS.interactivity.events.onclick.enable = false;
-          if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
-          if(paramsForOnclick.nb) pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
-        }
-      }
-    }
-    pJS.retina_detect = params.retina_detect;
-  }
 
   /* convert hex colors to rgb */
   pJS.particles.color_rgb = hexToRgb(pJS.particles.color);
@@ -129,7 +75,7 @@ function launchParticlesJS(tag_id, params){
   /* detect retina */
   if(pJS.retina_detect && window.devicePixelRatio > 1){
     pJS.retina = true;
-  
+
     pJS.canvas.pxratio = window.devicePixelRatio
     pJS.canvas.w = pJS.canvas.el.offsetWidth * pJS.canvas.pxratio;
     pJS.canvas.h = pJS.canvas.el.offsetHeight * pJS.canvas.pxratio;
