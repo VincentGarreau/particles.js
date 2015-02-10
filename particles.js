@@ -370,7 +370,7 @@ function launchParticlesJS(tag_id, params) {
       /* Draw the line */
       var color_line = pJS.particles.line_linked.color_rgb_line;
       pJS.canvas.ctx.beginPath();
-      pJS.canvas.ctx.strokeStyle = 'rgba(' + color_line.r + ',' + color_line.g + ',' + color_line.b + ',' + (pJS.interactivity.line_linked.opacity-dist_mouse / pJS.interactivity.mouse.distance) + ')';
+      pJS.canvas.ctx.strokeStyle = 'rgba(' + color_line.r + ',' + color_line.g + ',' + color_line.b + ',' + (pJS.interactivity.line_linked.opacity - dist_mouse / pJS.interactivity.mouse.distance) + ')';
       pJS.canvas.ctx.moveTo(p1.x, p1.y);
       pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x, pJS.interactivity.mouse.pos_y);
       pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
