@@ -176,22 +176,22 @@ function launchParticlesJS(tag_id, params) {
   };
 
   pJS.fn.particle.prototype.draw = function() {
-    pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+    pJS.canvas.ctx.fillStyle = 'rgba(' + this.color.r + ',' + this.color.g + ',' + this.color.b + ',' + this.opacity + ')';
     pJS.canvas.ctx.beginPath();
 
-    switch(pJS.particles.shape){
+    switch (pJS.particles.shape) {
       case 'circle':
         pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
       break;
 
       case 'edge':
-        pJS.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
+        pJS.canvas.ctx.rect(this.x, this.y, this.radius * 2, this.radius * 2);
       break;
 
       case 'triangle':
-        pJS.canvas.ctx.moveTo(this.x,this.y-this.radius);
-        pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius);
-        pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius);
+        pJS.canvas.ctx.moveTo(this.x, this.y - this.radius);
+        pJS.canvas.ctx.lineTo(this.x + this.radius, this.y + this.radius);
+        pJS.canvas.ctx.lineTo(this.x - this.radius, this.y + this.radius);
         pJS.canvas.ctx.closePath();
       break;
     }
