@@ -21,7 +21,15 @@ function launchParticlesJS(tag_id, params){
       color: '#fff',
       color_random: false,
       shape: 'circle',
-      opacity: 1,
+      opacity: {
+        opacity: 1,
+        anim: {
+          enable: true,
+          speed: 2,
+          opacity_min: 0,
+          sync: true
+        }
+      },
       size: 2.5,
       size_random: true,
       nb: 200,
@@ -76,7 +84,17 @@ function launchParticlesJS(tag_id, params){
       if(paramsForParticles.color) pJS.particles.color = paramsForParticles.color;
       if(paramsForParticles.color_random) pJS.particles.color_random = paramsForParticles.color_random;
       if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
-      if(paramsForParticles.opacity) pJS.particles.opacity = paramsForParticles.opacity;
+      if(paramsForParticles.opacity) {
+        var paramsForOpacity = paramsForParticles.opacity;
+        pJS.particles.opacity.opacity = paramsForOpacity.opacity;
+        if(paramsForOpacity.anim){
+          var paramsForOpacityAnim = paramsForOpacity.anim;
+          if(paramsForOpacityAnim.enable == false) pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
+          if(paramsForOpacityAnim.speed) pJS.particles.opacity.anim.speed = paramsForOpacityAnim.speed;
+          if(paramsForOpacityAnim.opacity_min) pJS.particles.opacity.anim.opacity_min = paramsForOpacityAnim.opacity_min;
+          if(paramsForOpacityAnim.sync == false) pJS.particles.opacity.anim.sync = paramsForOpacityAnim.sync;
+        }
+      }
       if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
       if(paramsForParticles.size_random == false) pJS.particles.size_random = paramsForParticles.size_random;
       if(paramsForParticles.nb) pJS.particles.nb = paramsForParticles.nb;
@@ -211,6 +229,13 @@ function launchParticlesJS(tag_id, params){
 
     /* opacity */
     this.opacity = opacity;
+    if(pJS.particles.opacity.anim.enable){
+      this.opacity_status = false;
+      this.vo = pJS.particles.opacity.anim.speed / 100;
+      if(!pJS.particles.opacity.anim.sync){
+        this.vo = this.vo * Math.random();
+      }
+    }
 
     /* animation - velocity for speed */
     this.vx = -.5 + Math.random();
@@ -246,7 +271,7 @@ function launchParticlesJS(tag_id, params){
 
   pJS.fn.particlesCreate = function(){
     for(var i = 0; i < pJS.particles.nb; i++) {
-      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity));
+      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity.opacity));
     }
   };
 
@@ -258,6 +283,17 @@ function launchParticlesJS(tag_id, params){
       /* move the particle */
       p.x += p.vx * (pJS.particles.anim.speed/2);
       p.y += p.vy * (pJS.particles.anim.speed/2);
+
+      /* change opacity status */
+      if(pJS.particles.opacity.anim.enable) {
+        if(p.opacity_status == true) {
+          if(p.opacity >= pJS.particles.opacity.opacity) p.opacity_status = false;
+          p.opacity += p.vo;
+        }else {
+          if(p.opacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
+          p.opacity -= p.vo;
+        }
+      }
 
       /* change particle position if it is out of canvas */
       if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
@@ -403,7 +439,7 @@ function launchParticlesJS(tag_id, params){
                 pJS.particles.array.push(
                   new pJS.fn.particle(
                     pJS.particles.color_rgb,
-                    pJS.particles.opacity,
+                    pJS.particles.opacity.opacity,
                     {
                       'x': pJS.interactivity.mouse.pos_x,
                       'y': pJS.interactivity.mouse.pos_y
