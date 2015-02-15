@@ -125,7 +125,7 @@ function launchParticlesJS(tag_id, params){
         if(paramsForInteractivity.mouse.distance) pJS.interactivity.mouse.distance = paramsForInteractivity.mouse.distance;
       }
       if(paramsForInteractivity.detect_on) pJS.interactivity.detect_on = paramsForInteractivity.detect_on;
-      if(paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
+      if(paramsForInteractivity.mode == false || paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
       if(paramsForInteractivity.line_linked){
         if(paramsForInteractivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = paramsForInteractivity.line_linked.opacity;
       }
