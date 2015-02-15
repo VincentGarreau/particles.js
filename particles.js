@@ -167,10 +167,11 @@ function launchParticlesJS(tag_id, params){
   };
 
   pJS.fn.canvasSize = function(){
+
     pJS.canvas.el.width = pJS.canvas.w;
     pJS.canvas.el.height = pJS.canvas.h;
 
-    window.onresize = function(){
+    window.addEventListener('resize', function(){
       if(pJS){
         pJS.canvas.w = pJS.canvas.el.offsetWidth;
         pJS.canvas.h = pJS.canvas.el.offsetHeight;
@@ -192,7 +193,8 @@ function launchParticlesJS(tag_id, params){
           launchParticles();
         }
       }
-    }
+    });
+
   };
 
   pJS.fn.canvasPaint = function(){
