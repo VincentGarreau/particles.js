@@ -195,19 +195,6 @@ function launchParticlesJS(tag_id, params){
           launchParticles();
         }
 
-        /* density enabled */
-        // if(pJS.particles.density_onresize){
-        //   surface = (window.innerWidth * window.innerHeight) / 1000;
-        //   console.log(surface);
-        //   //console.log(Math.sqrt(surface));
-        //   window.nb_particles = Math.round(Math.sqrt(surface * pJS.particles.density_onresize));
-        //   console.log(window.nb_particles);
-          
-        //   pJS.fn.vendors.destroy();
-        //   pJS = false;
-        //   launch_pJS();
-        // }
-
       }
 
     });
