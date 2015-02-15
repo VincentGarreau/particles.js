@@ -14,5 +14,24 @@
 
 <script src="../particles.js"></script>
 <script src="js/app.js"></script>
+
+<!-- stats.js -->
+<script src="js/lib/stats.js"></script>
+<script>
+  var stats = new Stats();
+  stats.setMode(0); // 0: fps, 1: ms
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+  document.body.appendChild( stats.domElement );
+  var update = function (){
+    stats.begin();
+    // monitored code goes here
+    stats.end();
+    requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+</script>
+
 </body>
 </html>

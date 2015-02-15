@@ -8,6 +8,7 @@
 particlesJS('particles-js', {
   particles: {
     color: '#fff',
+    color_random: false,
     shape: 'circle', // "circle", "edge" or "triangle"
     opacity: 1,
     size: 4,
