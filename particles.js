@@ -47,7 +47,7 @@ function launchParticlesJS(tag_id, params){
       },
       anim: {
         enable: true,
-          speed: 1
+        speed: 2
       },
       array: []
     },
@@ -66,6 +66,10 @@ function launchParticlesJS(tag_id, params){
           enable: true,
           mode: 'push',
           nb: 4
+        },
+        onresize: {
+          enable: true,
+          mode: 'out'
         }
       }
     },
@@ -137,6 +141,11 @@ function launchParticlesJS(tag_id, params){
           if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
           if(paramsForOnclick.nb) pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
         }
+        if(paramsForEvents.onresize){
+          var paramsForOnresize = paramsForEvents.onresize;
+          if(paramsForOnresize.enable == false) pJS.interactivity.events.onresize.enable = false;
+          if(paramsForOnresize.mode) pJS.interactivity.events.onresize.mode = paramsForOnresize.mode;
+        }
       }
     }
     pJS.retina_detect = params.retina_detect;
@@ -173,7 +182,7 @@ function launchParticlesJS(tag_id, params){
 
     window.addEventListener('resize', function(){
 
-      if(pJS){
+      if(pJS && pJS.interactivity.events.onresize.enable){
 
         pJS.canvas.w = pJS.canvas.el.offsetWidth;
         pJS.canvas.h = pJS.canvas.el.offsetHeight;
@@ -302,10 +311,22 @@ function launchParticlesJS(tag_id, params){
       }
 
       /* change particle position if it is out of canvas */
-      if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
-      else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
-      if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
-      else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
+      switch(pJS.interactivity.events.onresize.mode){
+        case 'bounce':
+          if (p.x - p.radius > pJS.canvas.w) p.vx = -p.vx;
+          else if (p.x + p.radius < 0) p.vx = -p.vx;
+          if (p.y - p.radius > pJS.canvas.h) p.vy = -p.vy;
+          else if (p.y + p.radius < 0) p.vy = -p.vy;
+        break;
+
+        case 'out':
+          if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
+          else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
+          if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
+          else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
+        break;        
+      }
+
 
       /* Check distance between each particle and mouse position */
       for(var j = i + 1; j < pJS.particles.array.length; j++){
