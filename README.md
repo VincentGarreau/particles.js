@@ -2,6 +2,8 @@
 
 ### A lightweight JavaScript library for creating particles.
 
+-------------------------------
+
 Load particles.js and configure the particles:
 
 **index.html**
@@ -66,12 +68,13 @@ particlesJS('particles-js', {
   retina_detect: true
 });
 ```
-
+-------------------------------
 ### ***Live Demo***
 <a href="http://codepen.io/VincentGarreau/pen/pnlso" target="_blank">CodePen demo</a>
 
 <a href="http://htmlpreview.github.io/?https://github.com/VincentGarreau/particles.js/blob/master/demo/index.html" target="_blank">GitHub demo</a>
 
+-------------------------------
 
 ##### ***Install with Bower***
 ```
