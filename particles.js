@@ -24,10 +24,10 @@ function launchParticlesJS(tag_id, params){
       opacity: {
         opacity: 1,
         anim: {
-          enable: true,
+          enable: false,
           speed: 2,
           opacity_min: 0,
-          sync: true
+          sync: false
         }
       },
       size: 2.5,
