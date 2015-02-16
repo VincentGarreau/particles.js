@@ -60,7 +60,7 @@ particlesJS('particles-js', {
       distance: 300
     },
     detect_on: 'canvas', // "canvas" or "window"
-    mode: 'grab',
+    mode: 'grab', // "grab" of false
     line_linked: {
       opacity: .5
     },
