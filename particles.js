@@ -96,10 +96,10 @@ function launchParticlesJS(tag_id, params){
         else pJS.particles.opacity.opacity = paramsForOpacity;
         if(paramsForOpacity.anim){
           var paramsForOpacityAnim = paramsForOpacity.anim;
-          if(paramsForOpacityAnim.enable == false) pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
+          if(paramsForOpacityAnim.enable == false || paramsForOpacityAnim.enable) pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
           if(paramsForOpacityAnim.speed) pJS.particles.opacity.anim.speed = paramsForOpacityAnim.speed;
           if(paramsForOpacityAnim.opacity_min) pJS.particles.opacity.anim.opacity_min = paramsForOpacityAnim.opacity_min;
-          if(paramsForOpacityAnim.sync == false) pJS.particles.opacity.anim.sync = paramsForOpacityAnim.sync;
+          if(paramsForOpacityAnim.sync == false || paramsForOpacityAnim.sync) pJS.particles.opacity.anim.sync = paramsForOpacityAnim.sync;
         }
       }
       if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
