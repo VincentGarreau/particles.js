@@ -54,6 +54,12 @@ particlesJS('particles-js', {
         enable: true,
         mode: 'push', // "push" or "remove"
         nb: 4
+      },
+      onresize: {
+        enable: true,
+        mode: 'out', // "out" or "bounce"
+        density_auto: false,
+        density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
       }
     }
   },
