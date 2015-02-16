@@ -147,7 +147,7 @@ function launchParticlesJS(tag_id, params){
           var paramsForOnresize = paramsForEvents.onresize;
           if(paramsForOnresize.enable == false) pJS.interactivity.events.onresize.enable = false;
           if(paramsForOnresize.mode) pJS.interactivity.events.onresize.mode = paramsForOnresize.mode;
-          if(paramsForOnresize.density_auto == false) pJS.interactivity.events.onresize.density_auto = false;
+          if(paramsForOnresize.density_auto == false || paramsForOnresize.density_auto) pJS.interactivity.events.onresize.density_auto = paramsForOnresize.density_auto;
           if(paramsForOnresize.density_area) pJS.interactivity.events.onresize.density_area = paramsForOnresize.density_area;
         }
       }
