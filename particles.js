@@ -40,9 +40,9 @@ function launchParticlesJS(tag_id, params){
         opacity: 1,
         width: 1,
         condensed_mode: {
-          enable: true,
-          rotateX: 65000,
-          rotateY: 65000
+          enable: false,
+          rotateX: 3000,
+          rotateY: 3000
         }
       },
       anim: {
