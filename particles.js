@@ -92,7 +92,8 @@ function launchParticlesJS(tag_id, params){
       if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
       if(paramsForParticles.opacity) {
         var paramsForOpacity = paramsForParticles.opacity;
-        pJS.particles.opacity.opacity = paramsForOpacity.opacity;
+        if(typeof paramsForOpacity == 'object') pJS.particles.opacity.opacity = paramsForOpacity.opacity;
+        else pJS.particles.opacity.opacity = paramsForOpacity;
         if(paramsForOpacity.anim){
           var paramsForOpacityAnim = paramsForOpacity.anim;
           if(paramsForOpacityAnim.enable == false) pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
