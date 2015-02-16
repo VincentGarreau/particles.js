@@ -3,7 +3,7 @@
 /* MIT license: http://opensource.org/licenses/MIT
 /* GitHub : https://github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v1.0.3
+/* v1.1.0
 /* ----------------------------------------------- */
 
 function launchParticlesJS(tag_id, params){
@@ -19,8 +19,17 @@ function launchParticlesJS(tag_id, params){
     },
     particles: {
       color: '#fff',
-      shape: 'circle',
-      opacity: 1,
+      color_random: false,
+      shape: 'circle', // "circle", "edge" or "triangle"
+      opacity: {
+        opacity: 1,
+        anim: {
+          enable: false,
+          speed: 2,
+          opacity_min: 0,
+          sync: false
+        }
+      },
       size: 2.5,
       size_random: true,
       nb: 200,
@@ -31,14 +40,14 @@ function launchParticlesJS(tag_id, params){
         opacity: 1,
         width: 1,
         condensed_mode: {
-          enable: true,
-          rotateX: 65000,
-          rotateY: 65000
+          enable: false,
+          rotateX: 3000,
+          rotateY: 3000
         }
       },
       anim: {
         enable: true,
-          speed: 1
+        speed: 2
       },
       array: []
     },
@@ -57,6 +66,12 @@ function launchParticlesJS(tag_id, params){
           enable: true,
           mode: 'push',
           nb: 4
+        },
+        onresize: {
+          enable: true,
+          mode: 'out', // "out" or "bounce"
+          density_auto: false,
+          density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
         }
       }
     },
@@ -73,8 +88,20 @@ function launchParticlesJS(tag_id, params){
     if(params.particles){
       var paramsForParticles = params.particles;
       if(paramsForParticles.color) pJS.particles.color = paramsForParticles.color;
+      if(paramsForParticles.color_random) pJS.particles.color_random = paramsForParticles.color_random;
       if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
-      if(paramsForParticles.opacity) pJS.particles.opacity = paramsForParticles.opacity;
+      if(paramsForParticles.opacity) {
+        var paramsForOpacity = paramsForParticles.opacity;
+        if(typeof paramsForOpacity == 'object') pJS.particles.opacity.opacity = paramsForOpacity.opacity;
+        else pJS.particles.opacity.opacity = paramsForOpacity;
+        if(paramsForOpacity.anim){
+          var paramsForOpacityAnim = paramsForOpacity.anim;
+          if(paramsForOpacityAnim.enable == false) pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
+          if(paramsForOpacityAnim.speed) pJS.particles.opacity.anim.speed = paramsForOpacityAnim.speed;
+          if(paramsForOpacityAnim.opacity_min) pJS.particles.opacity.anim.opacity_min = paramsForOpacityAnim.opacity_min;
+          if(paramsForOpacityAnim.sync == false) pJS.particles.opacity.anim.sync = paramsForOpacityAnim.sync;
+        }
+      }
       if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
       if(paramsForParticles.size_random == false) pJS.particles.size_random = paramsForParticles.size_random;
       if(paramsForParticles.nb) pJS.particles.nb = paramsForParticles.nb;
@@ -105,7 +132,7 @@ function launchParticlesJS(tag_id, params){
         if(paramsForInteractivity.mouse.distance) pJS.interactivity.mouse.distance = paramsForInteractivity.mouse.distance;
       }
       if(paramsForInteractivity.detect_on) pJS.interactivity.detect_on = paramsForInteractivity.detect_on;
-      if(paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
+      if(paramsForInteractivity.mode == false || paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
       if(paramsForInteractivity.line_linked){
         if(paramsForInteractivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = paramsForInteractivity.line_linked.opacity;
       }
@@ -116,6 +143,13 @@ function launchParticlesJS(tag_id, params){
           if(paramsForOnclick.enable == false) pJS.interactivity.events.onclick.enable = false;
           if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
           if(paramsForOnclick.nb) pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
+        }
+        if(paramsForEvents.onresize){
+          var paramsForOnresize = paramsForEvents.onresize;
+          if(paramsForOnresize.enable == false) pJS.interactivity.events.onresize.enable = false;
+          if(paramsForOnresize.mode) pJS.interactivity.events.onresize.mode = paramsForOnresize.mode;
+          if(paramsForOnresize.density_auto == false || paramsForOnresize.density_auto) pJS.interactivity.events.onresize.density_auto = paramsForOnresize.density_auto;
+          if(paramsForOnresize.density_area) pJS.interactivity.events.onresize.density_area = paramsForOnresize.density_area;
         }
       }
     }
@@ -147,11 +181,14 @@ function launchParticlesJS(tag_id, params){
   };
 
   pJS.fn.canvasSize = function(){
+
     pJS.canvas.el.width = pJS.canvas.w;
     pJS.canvas.el.height = pJS.canvas.h;
 
-    window.onresize = function(){
-      if(pJS){
+    window.addEventListener('resize', function(){
+
+      if(pJS && pJS.interactivity.events.onresize.enable){
+
         pJS.canvas.w = pJS.canvas.el.offsetWidth;
         pJS.canvas.h = pJS.canvas.el.offsetHeight;
 
@@ -171,7 +208,36 @@ function launchParticlesJS(tag_id, params){
           pJS.fn.canvasRemove();
           launchParticles();
         }
+
+        /* density particles enabled */
+        pJS.fn.densityAuto();
+
       }
+
+    });
+
+  };
+
+  pJS.fn.densityAuto = function(){
+    if(pJS.interactivity.events.onresize.density_auto){
+
+      /* calc area */
+      var area = pJS.canvas.el.width * pJS.canvas.el.height / 1000;
+      if(pJS.retina){
+        area = area/(pJS.canvas.pxratio*2);
+      }
+
+      /* calc number of particles based on density area */
+      var nb_particles = area * pJS.particles.nb / pJS.interactivity.events.onresize.density_area;
+
+      /* show nb_particles (add or remove X particles) */
+      var missing_particles = pJS.particles.array.length - nb_particles;
+      if(missing_particles < 0){
+        pJS.fn.vendors.interactivity.pushParticles(Math.abs(missing_particles));
+      }else{
+        pJS.fn.vendors.interactivity.removeParticles(missing_particles);
+      }
+      
     }
   };
 
@@ -197,45 +263,61 @@ function launchParticlesJS(tag_id, params){
     if (pJS.retina) this.radius *= pJS.canvas.pxratio;
 
     /* color */
-    this.color = color;
+    if(pJS.particles.color_random){
+      this.color = {
+        r: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
+        g: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
+        b: (Math.floor(Math.random() * (255 - 0 + 1)) + 0)
+      }
+    }else{
+      this.color = color;
+    }
 
     /* opacity */
     this.opacity = opacity;
+    if(pJS.particles.opacity.anim.enable){
+      this.opacity_status = false;
+      this.vo = pJS.particles.opacity.anim.speed / 100;
+      if(!pJS.particles.opacity.anim.sync){
+        this.vo = this.vo * Math.random();
+      }
+    }
 
     /* animation - velocity for speed */
     this.vx = -.5 + Math.random();
     this.vy = -.5 + Math.random();
 
-    /* draw function */
-    this.draw = function(){
-      pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
-      pJS.canvas.ctx.beginPath();
+  };
 
-      switch(pJS.particles.shape){
-        case 'circle':
-          pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        break;
+  pJS.fn.particle.prototype.draw = function() {
 
-        case 'edge':
-          pJS.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
-        break;
+    pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+    pJS.canvas.ctx.beginPath();
 
-        case 'triangle':
-          pJS.canvas.ctx.moveTo(this.x,this.y-this.radius);
-          pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius);
-          pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius);
-          pJS.canvas.ctx.closePath();
-        break;
-      }
+    switch(pJS.particles.shape){
+      case 'circle':
+        pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+      break;
 
-      pJS.canvas.ctx.fill();
+      case 'edge':
+        pJS.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
+      break;
+
+      case 'triangle':
+        pJS.canvas.ctx.moveTo(this.x,this.y-this.radius);
+        pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius);
+        pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius);
+        pJS.canvas.ctx.closePath();
+      break;
     }
 
+    pJS.canvas.ctx.fill();
+    
   };
 
   pJS.fn.particlesCreate = function(){
     for(var i = 0; i < pJS.particles.nb; i++) {
-      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity));
+      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity.opacity));
     }
   };
 
@@ -248,11 +330,34 @@ function launchParticlesJS(tag_id, params){
       p.x += p.vx * (pJS.particles.anim.speed/2);
       p.y += p.vy * (pJS.particles.anim.speed/2);
 
+      /* change opacity status */
+      if(pJS.particles.opacity.anim.enable) {
+        if(p.opacity_status == true) {
+          if(p.opacity >= pJS.particles.opacity.opacity) p.opacity_status = false;
+          p.opacity += p.vo;
+        }else {
+          if(p.opacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
+          p.opacity -= p.vo;
+        }
+      }
+
       /* change particle position if it is out of canvas */
-      if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
-      else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
-      if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
-      else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
+      switch(pJS.interactivity.events.onresize.mode){
+        case 'bounce':
+          if (p.x - p.radius > pJS.canvas.w) p.vx = -p.vx;
+          else if (p.x + p.radius < 0) p.vx = -p.vx;
+          if (p.y - p.radius > pJS.canvas.h) p.vy = -p.vy;
+          else if (p.y + p.radius < 0) p.vy = -p.vy;
+        break;
+
+        case 'out':
+          if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
+          else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
+          if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
+          else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
+        break;        
+      }
+
 
       /* Check distance between each particle and mouse position */
       for(var j = i + 1; j < pJS.particles.array.length; j++){
@@ -305,8 +410,8 @@ function launchParticlesJS(tag_id, params){
   pJS.fn.vendors.distanceParticles = function(p1, p2){
 
     var dx = p1.x - p2.x,
-      dy = p1.y - p2.y,
-      dist = Math.sqrt(dx*dx + dy*dy);
+        dy = p1.y - p2.y,
+        dist = Math.sqrt(dx*dx + dy*dy);
 
     /* Check distance between particle and mouse mos */
     if(dist <= pJS.particles.line_linked.distance) {
@@ -332,6 +437,7 @@ function launchParticlesJS(tag_id, params){
       }
 
     }
+
   };
 
   pJS.fn.vendors.interactivity.listeners = function(){
@@ -386,29 +492,39 @@ function launchParticlesJS(tag_id, params){
       switch(pJS.interactivity.events.onclick.mode){
         case 'push':
           detect_el.onclick = function(e){
-            if(pJS){
-              for(var i = 0; i < pJS.interactivity.events.onclick.nb; i++){
-                pJS.particles.array.push(
-                  new pJS.fn.particle(
-                    pJS.particles.color_rgb,
-                    pJS.particles.opacity,
-                    {
-                      'x': pJS.interactivity.mouse.pos_x,
-                      'y': pJS.interactivity.mouse.pos_y
-                    }
-                  )
-                )
-              }
-            }
+            pJS.fn.vendors.interactivity.pushParticles(pJS.interactivity.events.onclick.nb, pJS.interactivity.mouse);
           }
         break;
 
         case 'remove':
           detect_el.onclick = function(e){
-            pJS.particles.array.splice(0, pJS.interactivity.events.onclick.nb);
+            pJS.fn.vendors.interactivity.removeParticles(pJS.interactivity.events.onclick.nb);
           }
         break;
       }
+    }
+  };
+
+  pJS.fn.vendors.interactivity.pushParticles = function(nb, pos){
+    if(pJS){
+      for(var i = 0; i < nb; i++){
+        pJS.particles.array.push(
+          new pJS.fn.particle(
+            pJS.particles.color_rgb,
+            pJS.particles.opacity.opacity,
+            {
+              'x': pos ? pos.pos_x : Math.random() * pJS.canvas.w,
+              'y': pos ? pos.pos_y : Math.random() * pJS.canvas.h
+            }
+          )
+        )
+      }
+    }
+  };
+
+  pJS.fn.vendors.interactivity.removeParticles = function(nb){
+    if(pJS){
+      pJS.particles.array.splice(0, nb);
     }
   };
 
@@ -439,7 +555,7 @@ function launchParticlesJS(tag_id, params){
   pJS.fn.vendors.destroy = function(){
     cancelAnimationFrame(pJS.fn.requestAnimFrame);
     canvas_el.remove();
-    delete pJS;
+    pJS = null;
   };
 
 
@@ -451,6 +567,7 @@ function launchParticlesJS(tag_id, params){
     pJS.fn.canvasPaint();
     pJS.fn.particlesCreate();
     pJS.fn.particlesDraw();
+    pJS.fn.densityAuto();
   };
 
 

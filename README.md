@@ -2,6 +2,8 @@
 
 ### A lightweight JavaScript library for creating particles.
 
+-------------------------------
+
 Load particles.js and configure the particles:
 
 **index.html**
@@ -21,8 +23,17 @@ Load particles.js and configure the particles:
 particlesJS('particles-js', {
   particles: {
     color: '#fff',
+    color_random: false,
     shape: 'circle', // "circle", "edge" or "triangle"
-    opacity: 1,
+    opacity: {
+      opacity: 1,
+      anim: {
+        enable: true,
+        speed: 1.5,
+        opacity_min: 0,
+        sync: false
+      }
+    },
     size: 4,
     size_random: true,
     nb: 150,
@@ -46,7 +57,7 @@ particlesJS('particles-js', {
   interactivity: {
     enable: true,
     mouse: {
-      distance: 250
+      distance: 300
     },
     detect_on: 'canvas', // "canvas" or "window"
     mode: 'grab',
@@ -56,8 +67,14 @@ particlesJS('particles-js', {
     events: {
       onclick: {
         enable: true,
-        mode: 'push', // "push" or "remove" (particles)
+        mode: 'push', // "push" or "remove"
         nb: 4
+      },
+      onresize: {
+        enable: true,
+        mode: 'out', // "out" or "bounce"
+        density_auto: false,
+        density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
       }
     }
   },
@@ -65,8 +82,15 @@ particlesJS('particles-js', {
   retina_detect: true
 });
 ```
-
+-------------------------------
 ### ***Live Demo***
 <a href="http://codepen.io/VincentGarreau/pen/pnlso" target="_blank">CodePen demo</a>
 
 <a href="http://htmlpreview.github.io/?https://github.com/VincentGarreau/particles.js/blob/master/demo/index.html" target="_blank">GitHub demo</a>
+
+-------------------------------
+
+##### ***Install with Bower***
+```
+bower install particles.js --save
+```

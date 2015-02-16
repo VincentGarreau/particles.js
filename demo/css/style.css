@@ -25,7 +25,7 @@ li{list-style:none}
 html,body{ 
 	width:100%;
 	height:100%;
-	background:#000;
+	background:#111;
 }
 
 /* remove canvas default margin */
