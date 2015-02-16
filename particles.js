@@ -70,7 +70,7 @@ function launchParticlesJS(tag_id, params){
         onresize: {
           enable: true,
           mode: 'out', // "out" or "bounce"
-          density_auto: true,
+          density_auto: false,
           density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
         }
       }
