@@ -20,7 +20,7 @@ function launchParticlesJS(tag_id, params){
     particles: {
       color: '#fff',
       color_random: false,
-      shape: 'circle',
+      shape: 'circle', // "circle", "edge" or "triangle"
       opacity: {
         opacity: 1,
         anim: {
@@ -69,7 +69,9 @@ function launchParticlesJS(tag_id, params){
         },
         onresize: {
           enable: true,
-          mode: 'out'
+          mode: 'out', // "out" or "bounce"
+          density_auto: true,
+          density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
         }
       }
     },
@@ -145,6 +147,8 @@ function launchParticlesJS(tag_id, params){
           var paramsForOnresize = paramsForEvents.onresize;
           if(paramsForOnresize.enable == false) pJS.interactivity.events.onresize.enable = false;
           if(paramsForOnresize.mode) pJS.interactivity.events.onresize.mode = paramsForOnresize.mode;
+          if(paramsForOnresize.density_auto == false) pJS.interactivity.events.onresize.density_auto = false;
+          if(paramsForOnresize.density_area) pJS.interactivity.events.onresize.density_area = paramsForOnresize.density_area;
         }
       }
     }
@@ -204,10 +208,36 @@ function launchParticlesJS(tag_id, params){
           launchParticles();
         }
 
+        /* density particles enabled */
+        pJS.fn.densityAuto();
+
       }
 
     });
 
+  };
+
+  pJS.fn.densityAuto = function(){
+    if(pJS.interactivity.events.onresize.density_auto){
+
+      /* calc area */
+      var area = pJS.canvas.el.width * pJS.canvas.el.height / 1000;
+      if(pJS.retina){
+        area = area/(pJS.canvas.pxratio*2);
+      }
+
+      /* calc number of particles based on density area */
+      var nb_particles = area * pJS.particles.nb / pJS.interactivity.events.onresize.density_area;
+
+      /* show nb_particles (add or remove X particles) */
+      var missing_particles = pJS.particles.array.length - nb_particles;
+      if(missing_particles < 0){
+        pJS.fn.vendors.interactivity.pushParticles(Math.abs(missing_particles));
+      }else{
+        pJS.fn.vendors.interactivity.removeParticles(missing_particles);
+      }
+      
+    }
   };
 
   pJS.fn.canvasPaint = function(){
@@ -461,7 +491,7 @@ function launchParticlesJS(tag_id, params){
       switch(pJS.interactivity.events.onclick.mode){
         case 'push':
           detect_el.onclick = function(e){
-            pJS.fn.vendors.interactivity.pushParticles(pJS.interactivity.events.onclick.nb);
+            pJS.fn.vendors.interactivity.pushParticles(pJS.interactivity.events.onclick.nb, pJS.interactivity.mouse);
           }
         break;
 
@@ -474,7 +504,7 @@ function launchParticlesJS(tag_id, params){
     }
   };
 
-  pJS.fn.vendors.interactivity.pushParticles = function(nb){
+  pJS.fn.vendors.interactivity.pushParticles = function(nb, pos){
     if(pJS){
       for(var i = 0; i < nb; i++){
         pJS.particles.array.push(
@@ -482,8 +512,8 @@ function launchParticlesJS(tag_id, params){
             pJS.particles.color_rgb,
             pJS.particles.opacity.opacity,
             {
-              'x': pJS.interactivity.mouse.pos_x,
-              'y': pJS.interactivity.mouse.pos_y
+              'x': pos ? pos.pos_x : Math.random() * pJS.canvas.w,
+              'y': pos ? pos.pos_y : Math.random() * pJS.canvas.h
             }
           )
         )
@@ -536,6 +566,7 @@ function launchParticlesJS(tag_id, params){
     pJS.fn.canvasPaint();
     pJS.fn.particlesCreate();
     pJS.fn.particlesDraw();
+    pJS.fn.densityAuto();
   };
 
 
