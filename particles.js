@@ -263,13 +263,17 @@ function launchParticlesJS(tag_id, params){
     if (pJS.retina) this.radius *= pJS.canvas.pxratio;
 
     /* color */
-    if(pJS.particles.color_random){
+    if(pJS.particles.color_random === true){
       this.color = {
         r: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
         g: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
         b: (Math.floor(Math.random() * (255 - 0 + 1)) + 0)
       }
-    }else{
+    }
+     else if( pJS.particles.color_random instanceof Array){
+	    this.color = pJS.particles.color_random[Math.floor(Math.random() * pJS.particles.color_random.length)];
+    }
+    else{
       this.color = color;
     }
 
@@ -291,7 +295,7 @@ function launchParticlesJS(tag_id, params){
 
   pJS.fn.particle.prototype.draw = function() {
 
-    pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+    pJS.canvas.ctx.fillStyle = this.color.toString().charAt(0) === '#' ?  this.color : 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
     pJS.canvas.ctx.beginPath();
 
     switch(pJS.particles.shape){
