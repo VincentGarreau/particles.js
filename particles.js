@@ -154,6 +154,7 @@ function launchParticlesJS(tag_id, params){
       }
     }
     pJS.retina_detect = params.retina_detect;
+    pJS.collissionRectangles = params.collissionRectangles || [];
   }
 
   /* convert hex colors to rgb */
@@ -171,6 +172,12 @@ function launchParticlesJS(tag_id, params){
     pJS.particles.line_linked.distance = pJS.particles.line_linked.distance * pJS.canvas.pxratio;
     pJS.particles.line_linked.width = pJS.particles.line_linked.width * pJS.canvas.pxratio;
     pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance * pJS.canvas.pxratio;
+    for(var i=0; i < pJS.collissionRectangles.length; ++i){
+      pJS.collissionRectangles[i].x *= pJS.canvas.pxratio;
+      pJS.collissionRectangles[i].y *= pJS.canvas.pxratio;
+      pJS.collissionRectangles[i].width *= pJS.canvas.pxratio;
+      pJS.collissionRectangles[i].height *=  pJS.canvas.pxratio;
+    }
   }
 
 
@@ -262,6 +269,11 @@ function launchParticlesJS(tag_id, params){
     this.radius = (pJS.particles.size_random ? Math.random() : 1) * pJS.particles.size;
     if (pJS.retina) this.radius *= pJS.canvas.pxratio;
 
+    while (this.isOutOfBounds()) {
+      this.x = Math.random() * pJS.canvas.w;
+      this.y = Math.random() * pJS.canvas.h;
+    }
+
     /* color */
     if(pJS.particles.color_random){
       this.color = {
@@ -287,6 +299,30 @@ function launchParticlesJS(tag_id, params){
     this.vx = -.5 + Math.random();
     this.vy = -.5 + Math.random();
 
+  };
+
+  pJS.fn.particle.prototype.isOutOfBounds = function(){
+    var outOfCanvas = (this.x - this.radius) > pJS.canvas.w ||
+        this.x + this.radius < 0 ||
+        (this.y - this.radius) > pJS.canvas.h ||
+        this.y + this.radius < 0;
+    if(outOfCanvas) {
+      return true;
+    }
+    for (var i = 0; i < pJS.collissionRectangles.length; ++i) {
+      var rect = pJS.collissionRectangles[i];
+      var circleDistanceX = Math.abs(rect.x + rect.width / 2 - this.x) - this.radius;
+      var circleDistanceY = Math.abs(rect.y + rect.height / 2 - this.y) - this.radius;
+
+      if (circleDistanceX > (rect.width / 2)) {
+        continue;
+      }
+      if (circleDistanceY > (rect.height / 2)) {
+        continue;
+      }
+      return true;
+    }
+    return false;
   };
 
   pJS.fn.particle.prototype.draw = function() {
@@ -342,20 +378,25 @@ function launchParticlesJS(tag_id, params){
       }
 
       /* change particle position if it is out of canvas */
-      switch(pJS.interactivity.events.onresize.mode){
-        case 'bounce':
-          if (p.x - p.radius > pJS.canvas.w) p.vx = -p.vx;
-          else if (p.x + p.radius < 0) p.vx = -p.vx;
-          if (p.y - p.radius > pJS.canvas.h) p.vy = -p.vy;
-          else if (p.y + p.radius < 0) p.vy = -p.vy;
-        break;
+      if (p.isOutOfBounds()) {
+        switch (pJS.interactivity.events.onresize.mode) {
+          case 'bounce':
+            p.vx = -p.vx;
+            p.vy = -p.vy;
+            break;
 
-        case 'out':
-          if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
-          else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
-          if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
-          else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
-        break;        
+          case 'out':
+            p.x = p.vx < 0 ? p.radius : pJS.canvas.w + p.radius;
+            p.y = p.vy < 0 ? p.radius : pJS.canvas.h + p.radius;
+            /* In the event that we have a collision at the edge of the canvas we'll search along it's path
+             * to the first available position.
+             * */
+            while (p.isOutOfBounds()) {
+              p.x += p.vx * (pJS.particles.anim.speed / 2);
+              p.y += p.vy * (pJS.particles.anim.speed / 2);
+            }
+            break;
+        }
       }
 
 
