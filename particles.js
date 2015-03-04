@@ -83,77 +83,22 @@ function launchParticlesJS(tag_id, params){
     }
   };
 
+  Object.deepExtend = function(destination, source) {
+    for (var property in source) {
+      if (source[property] && source[property].constructor &&
+       source[property].constructor === Object) {
+        destination[property] = destination[property] || {};
+        arguments.callee(destination[property], source[property]);
+      } else {
+        destination[property] = source[property];
+      }
+    }
+    return destination;
+  };
+
   /* params settings */
   if(params){
-    if(params.particles){
-      var paramsForParticles = params.particles;
-      if(paramsForParticles.color) pJS.particles.color = paramsForParticles.color;
-      if(paramsForParticles.color_random) pJS.particles.color_random = paramsForParticles.color_random;
-      if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
-      if(paramsForParticles.opacity) {
-        var paramsForOpacity = paramsForParticles.opacity;
-        if(typeof paramsForOpacity == 'object') pJS.particles.opacity.opacity = paramsForOpacity.opacity;
-        else pJS.particles.opacity.opacity = paramsForOpacity;
-        if(paramsForOpacity.anim){
-          var paramsForOpacityAnim = paramsForOpacity.anim;
-          if(paramsForOpacityAnim.enable == false || paramsForOpacityAnim.enable) pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
-          if(paramsForOpacityAnim.speed) pJS.particles.opacity.anim.speed = paramsForOpacityAnim.speed;
-          if(paramsForOpacityAnim.opacity_min) pJS.particles.opacity.anim.opacity_min = paramsForOpacityAnim.opacity_min;
-          if(paramsForOpacityAnim.sync == false || paramsForOpacityAnim.sync) pJS.particles.opacity.anim.sync = paramsForOpacityAnim.sync;
-        }
-      }
-      if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
-      if(paramsForParticles.size_random == false) pJS.particles.size_random = paramsForParticles.size_random;
-      if(paramsForParticles.nb) pJS.particles.nb = paramsForParticles.nb;
-      if(paramsForParticles.line_linked){
-        var paramsForLineLinked = paramsForParticles.line_linked;
-        if(paramsForLineLinked.enable_auto == false) pJS.particles.line_linked.enable_auto = paramsForLineLinked.enable_auto;
-        if(paramsForLineLinked.distance) pJS.particles.line_linked.distance = paramsForLineLinked.distance;
-        if(paramsForLineLinked.color) pJS.particles.line_linked.color = paramsForLineLinked.color;
-        if(paramsForLineLinked.opacity) pJS.particles.line_linked.opacity = paramsForLineLinked.opacity;
-        if(paramsForLineLinked.width) pJS.particles.line_linked.width = paramsForLineLinked.width;
-        if(paramsForLineLinked.condensed_mode){
-          var paramsForCondensedMode = paramsForLineLinked.condensed_mode;
-          if(paramsForCondensedMode.enable == false) pJS.particles.line_linked.condensed_mode.enable = paramsForCondensedMode.enable;
-          if(paramsForCondensedMode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = paramsForCondensedMode.rotateX;
-          if(paramsForCondensedMode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = paramsForCondensedMode.rotateY;
-        }
-      }
-      if(paramsForParticles.anim){
-        var paramsForAnim = paramsForParticles.anim;
-        if(paramsForAnim.enable == false) pJS.particles.anim.enable = paramsForAnim.enable;
-        if(paramsForAnim.speed) pJS.particles.anim.speed = paramsForAnim.speed;
-      }
-    }
-    if(params.interactivity){
-      var paramsForInteractivity = params.interactivity;
-      if(paramsForInteractivity.enable == false) pJS.interactivity.enable = paramsForInteractivity.enable;
-      if(paramsForInteractivity.mouse){
-        if(paramsForInteractivity.mouse.distance) pJS.interactivity.mouse.distance = paramsForInteractivity.mouse.distance;
-      }
-      if(paramsForInteractivity.detect_on) pJS.interactivity.detect_on = paramsForInteractivity.detect_on;
-      if(paramsForInteractivity.mode == false || paramsForInteractivity.mode) pJS.interactivity.mode = paramsForInteractivity.mode;
-      if(paramsForInteractivity.line_linked){
-        if(paramsForInteractivity.line_linked.opacity) pJS.interactivity.line_linked.opacity = paramsForInteractivity.line_linked.opacity;
-      }
-      if(paramsForInteractivity.events){
-        var paramsForEvents = paramsForInteractivity.events;
-        if(paramsForEvents.onclick){
-          var paramsForOnclick = paramsForEvents.onclick;
-          if(paramsForOnclick.enable == false) pJS.interactivity.events.onclick.enable = false;
-          if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
-          if(paramsForOnclick.nb) pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
-        }
-        if(paramsForEvents.onresize){
-          var paramsForOnresize = paramsForEvents.onresize;
-          if(paramsForOnresize.enable == false) pJS.interactivity.events.onresize.enable = false;
-          if(paramsForOnresize.mode) pJS.interactivity.events.onresize.mode = paramsForOnresize.mode;
-          if(paramsForOnresize.density_auto == false || paramsForOnresize.density_auto) pJS.interactivity.events.onresize.density_auto = paramsForOnresize.density_auto;
-          if(paramsForOnresize.density_area) pJS.interactivity.events.onresize.density_area = paramsForOnresize.density_area;
-        }
-      }
-    }
-    pJS.retina_detect = params.retina_detect;
+    Object.deepExtend(pJS, params);
   }
 
   /* convert hex colors to rgb */
