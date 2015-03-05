@@ -329,7 +329,6 @@ function launchParticlesJS(tag_id, params){
 
         }
 
-
       }
     }
   };
