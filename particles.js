@@ -217,6 +217,7 @@ function launchParticlesJS(tag_id, params){
     }
      else if( pJS.particles.color_random instanceof Array){
 	    this.color = pJS.particles.color_random[Math.floor(Math.random() * pJS.particles.color_random.length)];
+        this.color = hexToRgb(this.color);
     }
     else{
       this.color = color;
