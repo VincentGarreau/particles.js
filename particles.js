@@ -240,7 +240,7 @@ function launchParticlesJS(tag_id, params){
 
   pJS.fn.particle.prototype.draw = function() {
 
-    pJS.canvas.ctx.fillStyle = this.color.toString().charAt(0) === '#' ?  this.color : 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+    pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
     pJS.canvas.ctx.beginPath();
 
     switch(pJS.particles.shape){
@@ -607,3 +607,4 @@ window.particlesJS = function(tag_id, params){
   }
 
 };
+
