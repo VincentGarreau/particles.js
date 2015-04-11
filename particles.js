@@ -301,22 +301,6 @@ function launchParticlesJS(tag_id, params){
 
         var t = this;
 
-        if(t.img.obj){
-          drawImg();
-        }else{
-          createImgObj(t.img.type);
-        }
-
-        function drawImg(){
-          pJS.canvas.ctx.drawImage(
-            t.img.obj,
-            t.x-t.radius,
-            t.y-t.radius,
-            t.radius*2,
-            t.radius*2 / t.img.ratio
-          );
-        }
-
         function createImgObj(img_type){
 
           // SVG
@@ -362,6 +346,22 @@ function launchParticlesJS(tag_id, params){
             img.src = t.img.src;
           }
 
+        }
+
+        function drawImg(){
+          pJS.canvas.ctx.drawImage(
+            t.img.obj,
+            t.x-t.radius,
+            t.y-t.radius,
+            t.radius*2,
+            t.radius*2 / t.img.ratio
+          );
+        }
+
+        if(t.img.obj){
+          drawImg();
+        }else{
+          createImgObj(t.img.type);
         }
 
       break;
