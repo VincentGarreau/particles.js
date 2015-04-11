@@ -387,8 +387,10 @@ function launchParticlesJS(tag_id, params){
       var p = pJS.particles.array[i];
 
       /* move the particle */
-      p.x += p.vx * (pJS.particles.anim.speed/2);
-      p.y += p.vy * (pJS.particles.anim.speed/2);
+      if(pJS.particles.anim.enable){
+        p.x += p.vx * (pJS.particles.anim.speed/2);
+        p.y += p.vy * (pJS.particles.anim.speed/2);
+      }
 
       /* change opacity status */
       if(pJS.particles.opacity.anim.enable) {
@@ -400,7 +402,6 @@ function launchParticlesJS(tag_id, params){
           p.opacity -= p.vo;
         }
       }
-
 
       /* change particle position if it is out of canvas */
       if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
@@ -444,6 +445,7 @@ function launchParticlesJS(tag_id, params){
   };
 
   pJS.fn.particlesDraw = function(){
+
     /* clear canvas */
     pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
 
@@ -453,7 +455,6 @@ function launchParticlesJS(tag_id, params){
     /* draw each particle */
     for(var i = 0; i < pJS.particles.array.length; i++){
       var p = pJS.particles.array[i];
-      //console.log(p.color.rgb);
       p.draw('rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+p.opacity+')');
     }
 
@@ -477,11 +478,14 @@ function launchParticlesJS(tag_id, params){
 
       /* draw the line */
       var color_line = pJS.particles.line_linked.color_rgb_line;
-      pJS.canvas.ctx.beginPath();
+      
       pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.particles.line_linked.opacity-dist/pJS.particles.line_linked.distance) +')';
+      pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
+      pJS.canvas.ctx.lineCap = 'round';
+      
+      pJS.canvas.ctx.beginPath();
       pJS.canvas.ctx.moveTo(p1.x, p1.y);
       pJS.canvas.ctx.lineTo(p2.x, p2.y);
-      pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
       pJS.canvas.ctx.stroke();
       pJS.canvas.ctx.closePath();
 
@@ -577,6 +581,9 @@ function launchParticlesJS(tag_id, params){
             }
           )
         )
+        if(i == nb-1){
+          pJS.fn.particlesDraw();
+        }
       }
     }
   };
@@ -584,6 +591,7 @@ function launchParticlesJS(tag_id, params){
   pJS.fn.vendors.interactivity.removeParticles = function(nb){
     if(pJS){
       pJS.particles.array.splice(0, nb);
+      pJS.fn.particlesDraw();
     }
   };
 
@@ -601,11 +609,14 @@ function launchParticlesJS(tag_id, params){
     if(dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status == 'mousemove'){
       /* Draw the line */
       var color_line = pJS.particles.line_linked.color_rgb_line;
-      pJS.canvas.ctx.beginPath();
+
       pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+ (pJS.interactivity.line_linked.opacity-dist_mouse/pJS.interactivity.mouse.distance) +')';
+      pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
+      pJS.canvas.ctx.lineCap = 'round';
+      
+      pJS.canvas.ctx.beginPath();
       pJS.canvas.ctx.moveTo(p1.x, p1.y);
       pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x, pJS.interactivity.mouse.pos_y);
-      pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
       pJS.canvas.ctx.stroke();
       pJS.canvas.ctx.closePath();
     }
