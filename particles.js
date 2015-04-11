@@ -18,8 +18,9 @@ function launchParticlesJS(tag_id, params){
       h: canvas_el.offsetHeight
     },
     particles: {
-      color: '#fff',
-      color_random: false,
+      color: {
+        value: '#fff' // "#ffaa44", "['#ffaa44', '#ffffaa', '#445500']" or "random"
+      },
       shape: {
         type: 'circle', // "circle", "edge", "triangle", "polygon", "star" or "image"
         nb_sides: 5, // 5+
@@ -108,7 +109,7 @@ function launchParticlesJS(tag_id, params){
   }
 
   /* convert hex colors to rgb */
-  pJS.particles.color_rgb = hexToRgb(pJS.particles.color);
+  //pJS.particles.color.rgb = hexToRgb(pJS.particles.color.value);
   pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
 
   /* detect retina */
@@ -214,19 +215,21 @@ function launchParticlesJS(tag_id, params){
     if (pJS.retina) this.radius *= pJS.canvas.pxratio;
 
     /* color */
-    if(pJS.particles.color_random === true){
-      this.color = {
+    this.color = {};
+    if(typeof(color.value) == 'object'){
+      var color_selected = color.value[Math.floor(Math.random() * pJS.particles.color.value.length)];
+      this.color.rgb = hexToRgb(color_selected);
+    }
+    else if(color.value == 'random'){
+      this.color.rgb = {
         r: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
         g: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
         b: (Math.floor(Math.random() * (255 - 0 + 1)) + 0)
       }
     }
-     else if( pJS.particles.color_random instanceof Array){
-      this.color = pJS.particles.color_random[Math.floor(Math.random() * pJS.particles.color_random.length)];
-        this.color = hexToRgb(this.color);
-    }
     else{
       this.color = color;
+      this.color.rgb = hexToRgb(this.color.value);
     }
 
     /* opacity */
@@ -258,29 +261,31 @@ function launchParticlesJS(tag_id, params){
 
   pJS.fn.particle.prototype.draw = function() {
 
-    pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
+    var t = this;
+
+    pJS.canvas.ctx.fillStyle = 'rgba('+t.color.rgb.r+','+t.color.rgb.g+','+t.color.rgb.b+','+t.opacity+')';
     pJS.canvas.ctx.beginPath();
 
     switch(pJS.particles.shape.type){
 
       case 'circle':
-        pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        pJS.canvas.ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2, false);
       break;
 
       case 'edge':
-        pJS.canvas.ctx.rect(this.x-this.radius, this.y-this.radius, this.radius*2, this.radius*2);
+        pJS.canvas.ctx.rect(t.x-t.radius, t.y-t.radius, t.radius*2, t.radius*2);
       break;
 
       case 'triangle':
-        pJS.fn.vendors.drawShape(pJS.canvas.ctx, this.x-this.radius, this.y+this.radius / 1.66, this.radius*2, 3, 2);
+        pJS.fn.vendors.drawShape(pJS.canvas.ctx, t.x-t.radius, t.y+t.radius / 1.66, t.radius*2, 3, 2);
       break;
 
       case 'polygon':
         pJS.fn.vendors.drawShape(
           pJS.canvas.ctx,
-          this.x - this.radius / (pJS.particles.shape.nb_sides/3.5), // startX
-          this.y - this.radius / (2.66/3.5), // startY
-          this.radius*2.66 / (pJS.particles.shape.nb_sides/3), // sideLength
+          t.x - t.radius / (pJS.particles.shape.nb_sides/3.5), // startX
+          t.y - t.radius / (2.66/3.5), // startY
+          t.radius*2.66 / (pJS.particles.shape.nb_sides/3), // sideLength
           pJS.particles.shape.nb_sides, // sideCountNumerator
           1 // sideCountDenominator
         );
@@ -289,17 +294,15 @@ function launchParticlesJS(tag_id, params){
       case 'star':
         pJS.fn.vendors.drawShape(
           pJS.canvas.ctx,
-          this.x - this.radius*2 / (pJS.particles.shape.nb_sides/4), // startX
-          this.y - this.radius / (2*2.66/3.5), // startY
-          this.radius*2*2.66 / (pJS.particles.shape.nb_sides/3), // sideLength
+          t.x - t.radius*2 / (pJS.particles.shape.nb_sides/4), // startX
+          t.y - t.radius / (2*2.66/3.5), // startY
+          t.radius*2*2.66 / (pJS.particles.shape.nb_sides/3), // sideLength
           pJS.particles.shape.nb_sides, // sideCountNumerator
           2 // sideCountDenominator
         );
       break;
 
       case 'image':
-
-        var t = this;
 
         function createImgObj(img_type){
 
@@ -314,10 +317,10 @@ function launchParticlesJS(tag_id, params){
               var svgXml = data.currentTarget.response,
                   rgbHex = /#([0-9A-F]{3,6})/gi,
                   coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
-                    return 'rgba(' + t.color.r + ','
-                                  + t.color.g + ','
-                                  + t.color.b + ','
-                                  + t.opacity + ')'
+                    return 'rgba(' + t.color.rgb.r + ','
+                                   + t.color.rgb.g + ','
+                                   + t.color.rgb.b + ','
+                                   + t.opacity + ')'
                   });
 
               var svg = new Blob([coloredSvgXml], {type: 'image/svg+xml;charset=utf-8'}),
@@ -374,7 +377,7 @@ function launchParticlesJS(tag_id, params){
 
   pJS.fn.particlesCreate = function(){
     for(var i = 0; i < pJS.particles.nb; i++) {
-      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb, pJS.particles.opacity.opacity));
+      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.opacity));
     }
   };
 
@@ -450,7 +453,8 @@ function launchParticlesJS(tag_id, params){
     /* draw each particle */
     for(var i = 0; i < pJS.particles.array.length; i++){
       var p = pJS.particles.array[i];
-      p.draw('rgba('+p.color.r+','+p.color.g+','+p.color.b+','+p.opacity+')');
+      //console.log(p.color.rgb);
+      p.draw('rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+p.opacity+')');
     }
 
   };
@@ -565,7 +569,7 @@ function launchParticlesJS(tag_id, params){
       for(var i = 0; i < nb; i++){
         pJS.particles.array.push(
           new pJS.fn.particle(
-            pJS.particles.color_rgb,
+            pJS.particles.color,
             pJS.particles.opacity.opacity,
             {
               'x': pos ? pos.pos_x : Math.random() * pJS.canvas.w,
