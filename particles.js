@@ -37,8 +37,16 @@ function launchParticlesJS(tag_id, params){
           sync: false
         }
       },
-      size: 2.5,
-      size_random: true,
+      size: {
+        value: 20,
+        random: false,
+        anim: {
+          enable: false,
+          speed: 20,
+          size_min: 0,
+          sync: false
+        }
+      },
       nb: 200,
       line_linked: {
         enable_auto: true,
@@ -109,7 +117,6 @@ function launchParticlesJS(tag_id, params){
   }
 
   /* convert hex colors to rgb */
-  //pJS.particles.color.rgb = hexToRgb(pJS.particles.color.value);
   pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
 
   /* detect retina */
@@ -119,10 +126,13 @@ function launchParticlesJS(tag_id, params){
     pJS.canvas.pxratio = window.devicePixelRatio
     pJS.canvas.w = pJS.canvas.el.offsetWidth * pJS.canvas.pxratio;
     pJS.canvas.h = pJS.canvas.el.offsetHeight * pJS.canvas.pxratio;
+    pJS.particles.size.value *= pJS.canvas.pxratio;
+    pJS.particles.size.anim.speed *= pJS.canvas.pxratio;
     pJS.particles.anim.speed = pJS.particles.anim.speed * pJS.canvas.pxratio;
     pJS.particles.line_linked.distance = pJS.particles.line_linked.distance * pJS.canvas.pxratio;
     pJS.particles.line_linked.width = pJS.particles.line_linked.width * pJS.canvas.pxratio;
     pJS.interactivity.mouse.distance = pJS.interactivity.mouse.distance * pJS.canvas.pxratio;
+    
   }
 
 
@@ -211,8 +221,14 @@ function launchParticlesJS(tag_id, params){
     this.y = position ? position.y : Math.random() * pJS.canvas.h;
 
     /* size */
-    this.radius = (pJS.particles.size_random ? Math.random() : 1) * pJS.particles.size;
-    if (pJS.retina) this.radius *= pJS.canvas.pxratio;
+    this.radius = (pJS.particles.size.random ? Math.random() : 1) * pJS.particles.size.value;
+    if(pJS.particles.size.anim.enable){
+      this.size_status = false;
+      this.vs = pJS.particles.size.anim.speed / 100;
+      if(!pJS.particles.size.anim.sync){
+        this.vs = this.vs * Math.random();
+      }
+    }
 
     /* color */
     this.color = {};
@@ -401,6 +417,19 @@ function launchParticlesJS(tag_id, params){
           if(p.opacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
           p.opacity -= p.vo;
         }
+        if(p.opacity < 0) p.opacity = 0;
+      }
+
+      /* change size */
+      if(pJS.particles.size.anim.enable){
+        if(p.size_status == true){
+          if(p.radius >= pJS.particles.size.value) p.size_status = false;
+          p.radius += p.vs;
+        }else{
+          if(p.radius <= pJS.particles.size.anim.size_min) p.size_status = true;
+          p.radius -= p.vs;
+        }
+        if(p.radius < 0) p.radius = 0;
       }
 
       /* change particle position if it is out of canvas */
