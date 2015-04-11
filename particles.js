@@ -330,9 +330,10 @@ function launchParticlesJS(tag_id, params){
               var svgXml = data.currentTarget.response,
                   rgbHex = /#([0-9A-F]{3,6})/gi,
                   coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
-                    return 'rgb(' + t.color.r + ','
+                    return 'rgba(' + t.color.r + ','
                                   + t.color.g + ','
-                                  + t.color.b + ')';
+                                  + t.color.b + ','
+                                  + t.opacity + ')'
                   });
 
               var svg = new Blob([coloredSvgXml], {type: 'image/svg+xml;charset=utf-8'}),
