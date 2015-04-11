@@ -20,7 +20,10 @@ function launchParticlesJS(tag_id, params){
     particles: {
       color: '#fff',
       color_random: false,
-      shape: 'circle', // "circle", "edge" or "triangle"
+      shape: {
+        type: 'circle', // "circle", "edge", "triangle", "polygon" or "star"
+        nb_sides: 5
+      },
       opacity: {
         opacity: 1,
         anim: {
@@ -216,7 +219,7 @@ function launchParticlesJS(tag_id, params){
       }
     }
      else if( pJS.particles.color_random instanceof Array){
-	    this.color = pJS.particles.color_random[Math.floor(Math.random() * pJS.particles.color_random.length)];
+      this.color = pJS.particles.color_random[Math.floor(Math.random() * pJS.particles.color_random.length)];
         this.color = hexToRgb(this.color);
     }
     else{
@@ -244,21 +247,42 @@ function launchParticlesJS(tag_id, params){
     pJS.canvas.ctx.fillStyle = 'rgba('+this.color.r+','+this.color.g+','+this.color.b+','+this.opacity+')';
     pJS.canvas.ctx.beginPath();
 
-    switch(pJS.particles.shape){
+    switch(pJS.particles.shape.type){
+
       case 'circle':
         pJS.canvas.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
       break;
 
       case 'edge':
-        pJS.canvas.ctx.rect(this.x, this.y, this.radius*2, this.radius*2);
+        pJS.canvas.ctx.rect(this.x-this.radius, this.y-this.radius, this.radius*2, this.radius*2);
       break;
 
       case 'triangle':
-        pJS.canvas.ctx.moveTo(this.x,this.y-this.radius);
-        pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius);
-        pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius);
-        pJS.canvas.ctx.closePath();
+        pJS.fn.vendors.drawShape(pJS.canvas.ctx, this.x-this.radius, this.y+this.radius / 1.66, this.radius*2, 3, 2);
       break;
+
+      case 'polygon':
+        pJS.fn.vendors.drawShape(
+          pJS.canvas.ctx,
+          this.x - this.radius / (pJS.particles.shape.nb_sides/3.5), // startX
+          this.y - this.radius / (2.66/3.5), // startY
+          this.radius*2.66 / (pJS.particles.shape.nb_sides/3), // sideLength
+          pJS.particles.shape.nb_sides, // sideCountNumerator
+          1 // sideCountDenominator
+        );
+      break;
+
+      case 'star':
+        pJS.fn.vendors.drawShape(
+          pJS.canvas.ctx,
+          this.x - this.radius*2 / (pJS.particles.shape.nb_sides/4), // startX
+          this.y - this.radius / (2*2.66/3.5), // startY
+          this.radius*2*2.66 / (pJS.particles.shape.nb_sides/3), // sideLength
+          pJS.particles.shape.nb_sides, // sideCountNumerator
+          2 // sideCountDenominator
+        );
+      break;
+
     }
 
     pJS.canvas.ctx.fill();
@@ -507,6 +531,26 @@ function launchParticlesJS(tag_id, params){
     pJS = null;
   };
 
+  // By Programming Thomas - https://programmingthomas.wordpress.com/2013/04/03/n-sided-shapes/
+  pJS.fn.vendors.drawShape = function(c, startX, startY, sideLength, sideCountNumerator, sideCountDenominator){
+    var sideCount = sideCountNumerator * sideCountDenominator;
+    var decimalSides = sideCountNumerator / sideCountDenominator;
+    var interiorAngleDegrees = (180 * (decimalSides - 2)) / decimalSides;
+    var interiorAngle = Math.PI - Math.PI * interiorAngleDegrees / 180; // convert to radians
+    c.save();
+    c.beginPath();
+    c.translate(startX, startY);
+    c.moveTo(0,0);
+    for (var i = 0; i < sideCount; i++) {
+      c.lineTo(sideLength,0);
+      c.translate(sideLength,0);
+      c.rotate(interiorAngle);
+    }
+    //c.stroke();
+    c.fill();
+    c.restore();
+  };
+
 
   /* --------- LAUNCH ----------- */
 
@@ -608,4 +652,3 @@ window.particlesJS = function(tag_id, params){
   }
 
 };
-
