@@ -11,7 +11,7 @@ function launchParticlesJS(tag_id, params){
   var canvas_el = document.querySelector('#'+tag_id+' > canvas');
 
   /* particles.js variables with default values */
-  pJS = {
+  window.pJS = {
     canvas: {
       el: canvas_el,
       w: canvas_el.offsetWidth,
@@ -21,8 +21,11 @@ function launchParticlesJS(tag_id, params){
       color: '#fff',
       color_random: false,
       shape: {
-        type: 'circle', // "circle", "edge", "triangle", "polygon" or "star"
-        nb_sides: 5
+        type: 'circle', // "circle", "edge", "triangle", "polygon", "star" or "image"
+        nb_sides: 5, // 5+
+        img_src: 'http://f.cl.ly/items/3s2O2E0c3L3x2Q3J1y1Q/github.svg',
+        img_width: 100,
+        img_height: 100
       },
       opacity: {
         opacity: 1,
@@ -240,6 +243,17 @@ function launchParticlesJS(tag_id, params){
     this.vx = -.5 + Math.random();
     this.vy = -.5 + Math.random();
 
+    /* if shape is image */
+    if(pJS.particles.shape.type == 'image'){
+      var sh = pJS.particles.shape;
+      this.img = {
+        src: sh.img_src,
+        ratio: sh.img_width / sh.img_height,
+        type: sh.img_src.substr(sh.img_src.length - 3)
+      }
+      if(!this.img.ratio) this.img.ratio = 1;
+    }
+
   };
 
   pJS.fn.particle.prototype.draw = function() {
@@ -283,6 +297,74 @@ function launchParticlesJS(tag_id, params){
         );
       break;
 
+      case 'image':
+
+        var t = this;
+
+        if(t.img.obj){
+          drawImg();
+        }else{
+          createImgObj(t.img.type);
+        }
+
+        function drawImg(){
+          pJS.canvas.ctx.drawImage(
+            t.img.obj,
+            t.x-t.radius,
+            t.y-t.radius,
+            t.radius*2,
+            t.radius*2 / t.img.ratio
+          );
+        }
+
+        function createImgObj(img_type){
+
+          // SVG
+
+          if(img_type == 'svg'){
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', t.img.src);
+            xhr.onreadystatechange = function (data) {
+
+              var svgXml = data.currentTarget.response,
+                  rgbHex = /#([0-9A-F]{3,6})/gi,
+                  coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
+                    return 'rgb(' + t.color.r + ','
+                                  + t.color.g + ','
+                                  + t.color.b + ')';
+                  });
+
+              var svg = new Blob([coloredSvgXml], {type: 'image/svg+xml;charset=utf-8'}),
+                  DOMURL = window.URL || window.webkitURL || window,
+                  url = DOMURL.createObjectURL(svg);
+
+              var img = new Image();
+              img.onload = function (){
+                t.img.obj = img;
+                DOMURL.revokeObjectURL(url);
+              }
+              img.src = url;
+
+            }
+            xhr.send();
+
+          }
+
+          // PNG
+
+          else if(img_type == 'png'){
+            var img = new Image();
+            img.onload = function(){
+              t.img.obj = img;
+            }
+            img.src = t.img.src;
+          }
+
+        }
+
+      break;
+
     }
 
     pJS.canvas.ctx.fill();
@@ -315,21 +397,20 @@ function launchParticlesJS(tag_id, params){
         }
       }
 
+
       /* change particle position if it is out of canvas */
+      if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
+      else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
+      if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
+      else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
+
       switch(pJS.interactivity.events.onresize.mode){
         case 'bounce':
-          if (p.x - p.radius > pJS.canvas.w) p.vx = -p.vx;
-          else if (p.x + p.radius < 0) p.vx = -p.vx;
-          if (p.y - p.radius > pJS.canvas.h) p.vy = -p.vy;
-          else if (p.y + p.radius < 0) p.vy = -p.vy;
+          if (p.x + p.radius > pJS.canvas.w) p.vx = -p.vx;
+          else if (p.x - p.radius < 0) p.vx = -p.vx;
+          if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
+          else if (p.y - p.radius < 0) p.vy = -p.vy;
         break;
-
-        case 'out':
-          if(p.x - p.radius > pJS.canvas.w) p.x = p.radius;
-          else if(p.x + p.radius < 0) p.x = pJS.canvas.w + p.radius;
-          if(p.y - p.radius > pJS.canvas.h) p.y = p.radius;
-          else if(p.y + p.radius < 0) p.y = pJS.canvas.h + p.radius;
-        break;        
       }
 
 
