@@ -356,9 +356,9 @@ function launchParticlesJS(tag_id, params){
 
           }
 
-          // PNG
+          // PNG, JPG, GIF...
 
-          else if(img_type == 'png'){
+          else{
             var img = new Image();
             img.onload = function(){
               t.img.obj = img;
