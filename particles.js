@@ -29,7 +29,8 @@ function launchParticlesJS(tag_id, params){
         img_height: 100
       },
       opacity: {
-        opacity: 1,
+        value: 1,
+        random: false,
         anim: {
           enable: false,
           speed: 2,
@@ -249,7 +250,7 @@ function launchParticlesJS(tag_id, params){
     }
 
     /* opacity */
-    this.opacity = opacity;
+    this.opacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
     if(pJS.particles.opacity.anim.enable){
       this.opacity_status = false;
       this.vo = pJS.particles.opacity.anim.speed / 100;
@@ -393,7 +394,7 @@ function launchParticlesJS(tag_id, params){
 
   pJS.fn.particlesCreate = function(){
     for(var i = 0; i < pJS.particles.nb; i++) {
-      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.opacity));
+      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.value));
     }
   };
 
@@ -411,7 +412,7 @@ function launchParticlesJS(tag_id, params){
       /* change opacity status */
       if(pJS.particles.opacity.anim.enable) {
         if(p.opacity_status == true) {
-          if(p.opacity >= pJS.particles.opacity.opacity) p.opacity_status = false;
+          if(p.opacity >= pJS.particles.opacity.value) p.opacity_status = false;
           p.opacity += p.vo;
         }else {
           if(p.opacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
@@ -603,7 +604,7 @@ function launchParticlesJS(tag_id, params){
         pJS.particles.array.push(
           new pJS.fn.particle(
             pJS.particles.color,
-            pJS.particles.opacity.opacity,
+            pJS.particles.opacity.value,
             {
               'x': pos ? pos.pos_x : Math.random() * pJS.canvas.w,
               'y': pos ? pos.pos_y : Math.random() * pJS.canvas.h
