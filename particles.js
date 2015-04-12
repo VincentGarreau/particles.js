@@ -6,12 +6,12 @@
 /* v1.1.1
 /* ----------------------------------------------- */
 
-function launchParticlesJS(tag_id, params){
+var pJS = function(tag_id, params){
 
   var canvas_el = document.querySelector('#'+tag_id+' > canvas');
 
   /* particles.js variables with default values */
-  window.pJS = {
+  this.pJS = {
     canvas: {
       el: canvas_el,
       w: canvas_el.offsetWidth,
@@ -98,6 +98,8 @@ function launchParticlesJS(tag_id, params){
       }
     }
   };
+
+  var pJS = this.pJS;
 
   Object.deepExtend = function(destination, source) {
     for (var property in source) {
@@ -750,6 +752,8 @@ function hexToRgb(hex){
 
 /* --- LAUNCH --- */
 
+window.pJSDom = [];
+
 window.particlesJS = function(tag_id, params){
 
   /* no string id? so it's object params, and set the id with default id */
@@ -775,7 +779,7 @@ window.particlesJS = function(tag_id, params){
 
   /* launch particle.js */
   if(canvas != null){
-    launchParticlesJS(tag_id, params);
+    pJSDom.push(new pJS(tag_id, params));
   }
 
 };
