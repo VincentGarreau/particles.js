@@ -284,8 +284,9 @@ function launchParticlesJS(tag_id, params){
     }
 
     /* animation - velocity for speed */
-    this.vx = -.5 + Math.random();
-    this.vy = -.5 + Math.random();
+    var theta = 2.0 * Math.PI * Math.random();
+    this.vx = Math.cos(theta);
+    this.vy = Math.sin(theta);
 
   };
 
