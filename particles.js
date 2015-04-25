@@ -708,8 +708,8 @@ window.particlesJS = function (tag_id, params, callback) {
   if (canvas != null) {
     launchParticlesJS(tag_id, params);
   }
-  
+
   /* callback function */
-  if(typeof callback !== 'undefined')
+  if (typeof callback !== 'undefined')
     callback();
 };
