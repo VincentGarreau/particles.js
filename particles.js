@@ -97,7 +97,7 @@ function launchParticlesJS(tag_id, params) {
         pJS.particles.shape = paramsForParticles.shape;
       if (paramsForParticles.opacity) {
         var paramsForOpacity = paramsForParticles.opacity;
-        if (typeof paramsForOpacity == 'object')
+        if (typeof paramsForOpacity === 'object')
           pJS.particles.opacity.opacity = paramsForOpacity.opacity;
         else
           pJS.particles.opacity.opacity = paramsForOpacity;
@@ -171,7 +171,7 @@ function launchParticlesJS(tag_id, params) {
           var paramsForOnclick = paramsForEvents.onclick;
           if (paramsForOnclick.enable == false)
             pJS.interactivity.events.onclick.enable = false;
-          if (paramsForOnclick.mode != 'push')
+          if (paramsForOnclick.mode !== 'push')
             pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
           if (paramsForOnclick.nb)
             pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
@@ -490,7 +490,7 @@ function launchParticlesJS(tag_id, params) {
   pJS.fn.vendors.interactivity.listeners = function () {
 
     /* init el */
-    if (pJS.interactivity.detect_on == 'window') {
+    if (pJS.interactivity.detect_on === 'window') {
       var detect_el = window;
     } else {
       var detect_el = pJS.canvas.el;
@@ -499,7 +499,7 @@ function launchParticlesJS(tag_id, params) {
     /* el on mousemove */
     detect_el.onmousemove = function (e) {
 
-      if (detect_el == window) {
+      if (detect_el === window) {
         var pos_x = e.clientX,
           pos_y = e.clientY;
       }
@@ -586,7 +586,7 @@ function launchParticlesJS(tag_id, params) {
       dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
 
     /* Check distance between 2 particles + Check distance between 1 particle and mouse position */
-    if (dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status == 'mousemove') {
+    if (dist <= pJS.particles.line_linked.distance && dist_mouse <= pJS.interactivity.mouse.distance && pJS.interactivity.status === 'mousemove') {
       /* Draw the line */
       var color_line = pJS.particles.line_linked.color_rgb_line;
       pJS.canvas.ctx.beginPath();
@@ -684,7 +684,7 @@ function hexToRgb(hex) {
 window.particlesJS = function (tag_id, params, callback) {
 
   /* no string id? so it's object params, and set the id with default id */
-  if (typeof (tag_id) != 'string') {
+  if (typeof (tag_id) !== 'string') {
     params = tag_id;
     tag_id = 'particles-js';
   }
@@ -705,7 +705,7 @@ window.particlesJS = function (tag_id, params, callback) {
   var canvas = document.getElementById(tag_id).appendChild(canvas_el);
 
   /* launch particle.js */
-  if (canvas != null) {
+  if (canvas !== null) {
     launchParticlesJS(tag_id, params);
   }
 
