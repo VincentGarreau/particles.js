@@ -6,12 +6,14 @@
  /* v1.1.0
  /* ----------------------------------------------- */
 
+"use strict";
+
 function launchParticlesJS(tag_id, params) {
 
   var canvas_el = document.querySelector('#' + tag_id + ' > canvas');
 
   /* particles.js variables with default values */
-  pJS = {
+  var pJS = {
     canvas: {
       el: canvas_el,
       w: canvas_el.offsetWidth,
@@ -707,6 +709,7 @@ window.particlesJS = function (tag_id, params, callback) {
     launchParticlesJS(tag_id, params);
   }
   
-  // callback function
-  callback();
+  /* callback function */
+  if(typeof callback !== 'undefined')
+    callback();
 };
