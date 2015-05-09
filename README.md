@@ -10,6 +10,9 @@
 Configure, export, and share your particles.js configuration on CodePen: <br />
 http://vincentgarreau.com/particles.js
 
+CodePen demo: <br />
+http://codepen.io/VincentGarreau/pen/pnlso
+
 -------------------------------
 ### `Usage`
 
