@@ -2,6 +2,10 @@
 
 ### A lightweight JavaScript library for creating particles.
 
+<img src="https://dl.dropboxusercontent.com/u/19580440/particlesjs-assets/github-screen.jpg" />
+Configure, export, and share your particles.js configuration on CodePen: <br />
+http://vincentgarreau.com/particles.js
+
 -------------------------------
 
 Load particles.js and configure the particles:
