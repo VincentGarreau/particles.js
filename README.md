@@ -8,7 +8,7 @@
 <a href="http://vincentgarreau.com/particles.js" target="_blank"><img src="https://dl.dropboxusercontent.com/u/19580440/particlesjs-assets/github-screen.jpg" alt="particles.js generator" /></a>
 
 Configure, export, and share your particles.js configuration on CodePen: <br />
-<a href="http://vincentgarreau.com/particles.js" target="_blank">http://vincentgarreau.com/particles.js</a>
+http://vincentgarreau.com/particles.js
 
 -------------------------------
 ### `Usage`
