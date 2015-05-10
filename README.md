@@ -5,10 +5,10 @@
 ------------------------------
 ### `Demo / Generator`
 
-<a href="http://vincentgarreau.com/particles.js" target="_blank"><img src="https://dl.dropboxusercontent.com/u/19580440/particlesjs-assets/github-screen.jpg" alt="particles.js generator" /></a>
+<a href="http://vincentgarreau.com/particles.js/" target="_blank"><img src="https://dl.dropboxusercontent.com/u/19580440/particlesjs-assets/github-screen.jpg" alt="particles.js generator" /></a>
 
 Configure, export, and share your particles.js configuration on CodePen: <br />
-http://vincentgarreau.com/particles.js
+http://vincentgarreau.com/particles.js/
 
 CodePen demo: <br />
 http://codepen.io/VincentGarreau/pen/pnlso
@@ -214,6 +214,7 @@ key | option type / notes | example
 ### `Packages install`
 
 ##### ***npm***
+https://www.npmjs.com/package/particles.js
 ```
 npm install particles.js
 ```
@@ -226,6 +227,12 @@ bower install particles.js --save
 ##### ***Rails Assets***
 ```
 gem 'rails-assets-particles.js'
+```
+
+##### ***Meteor***
+https://atmospherejs.com/newswim/particles
+```
+meteor add newswim:particles
 ```
 
 -------------------------------
