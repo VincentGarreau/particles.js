@@ -267,7 +267,6 @@ var pJS = function(tag_id, params){
 
     /* color */
     this.color = {};
-
     if(typeof(color.value) == 'object'){
 
       if(color.value instanceof Array){
