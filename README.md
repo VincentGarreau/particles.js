@@ -227,3 +227,9 @@ bower install particles.js --save
 ```
 gem 'rails-assets-particles.js'
 ```
+
+-------------------------------
+
+### `Hosting / CDN`
+
+http://www.jsdelivr.com/#!particles.js
