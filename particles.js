@@ -8,9 +8,31 @@
 
 "use strict";
 
+var util = {
+  selector: function (tag) {
+    var element = tag;
+    tag = tag.slice(1);
+
+    console.log(element);
+    console.log(tag);
+    switch (element) {
+      case (element.match("^\\.")):
+        element = document.querySelectorAll(tag);
+        break;
+
+      case (element.match("^#")):
+      default:
+        element = document.querySelectorAll(tag);
+        break;
+    }
+
+    return element;
+  }
+};
+
 function launchParticlesJS(tag_id, params) {
 
-  var canvas_el = document.querySelector('#' + tag_id + ' > canvas');
+  var canvas_el = document.querySelectorAll(tag_id + ' > canvas');
 
   /* particles.js variables with default values */
   var pJS = {
@@ -103,25 +125,25 @@ function launchParticlesJS(tag_id, params) {
           pJS.particles.opacity.opacity = paramsForOpacity;
         if (paramsForOpacity.anim) {
           var paramsForOpacityAnim = paramsForOpacity.anim;
-          if (paramsForOpacityAnim.enable == false || paramsForOpacityAnim.enable)
+          if (paramsForOpacityAnim.enable === false || paramsForOpacityAnim.enable)
             pJS.particles.opacity.anim.enable = paramsForOpacityAnim.enable;
           if (paramsForOpacityAnim.speed)
             pJS.particles.opacity.anim.speed = paramsForOpacityAnim.speed;
           if (paramsForOpacityAnim.opacity_min)
             pJS.particles.opacity.anim.opacity_min = paramsForOpacityAnim.opacity_min;
-          if (paramsForOpacityAnim.sync == false || paramsForOpacityAnim.sync)
+          if (paramsForOpacityAnim.sync === false || paramsForOpacityAnim.sync)
             pJS.particles.opacity.anim.sync = paramsForOpacityAnim.sync;
         }
       }
       if (paramsForParticles.size)
         pJS.particles.size = paramsForParticles.size;
-      if (paramsForParticles.size_random == false)
+      if (paramsForParticles.size_random === false)
         pJS.particles.size_random = paramsForParticles.size_random;
       if (paramsForParticles.nb)
         pJS.particles.nb = paramsForParticles.nb;
       if (paramsForParticles.line_linked) {
         var paramsForLineLinked = paramsForParticles.line_linked;
-        if (paramsForLineLinked.enable_auto == false)
+        if (paramsForLineLinked.enable_auto === false)
           pJS.particles.line_linked.enable_auto = paramsForLineLinked.enable_auto;
         if (paramsForLineLinked.distance)
           pJS.particles.line_linked.distance = paramsForLineLinked.distance;
@@ -133,7 +155,7 @@ function launchParticlesJS(tag_id, params) {
           pJS.particles.line_linked.width = paramsForLineLinked.width;
         if (paramsForLineLinked.condensed_mode) {
           var paramsForCondensedMode = paramsForLineLinked.condensed_mode;
-          if (paramsForCondensedMode.enable == false)
+          if (paramsForCondensedMode.enable === false)
             pJS.particles.line_linked.condensed_mode.enable = paramsForCondensedMode.enable;
           if (paramsForCondensedMode.rotateX)
             pJS.particles.line_linked.condensed_mode.rotateX = paramsForCondensedMode.rotateX;
@@ -143,7 +165,7 @@ function launchParticlesJS(tag_id, params) {
       }
       if (paramsForParticles.anim) {
         var paramsForAnim = paramsForParticles.anim;
-        if (paramsForAnim.enable == false)
+        if (paramsForAnim.enable === false)
           pJS.particles.anim.enable = paramsForAnim.enable;
         if (paramsForAnim.speed)
           pJS.particles.anim.speed = paramsForAnim.speed;
@@ -151,7 +173,7 @@ function launchParticlesJS(tag_id, params) {
     }
     if (params.interactivity) {
       var paramsForInteractivity = params.interactivity;
-      if (paramsForInteractivity.enable == false)
+      if (paramsForInteractivity.enable === false)
         pJS.interactivity.enable = paramsForInteractivity.enable;
       if (paramsForInteractivity.mouse) {
         if (paramsForInteractivity.mouse.distance)
@@ -159,7 +181,7 @@ function launchParticlesJS(tag_id, params) {
       }
       if (paramsForInteractivity.detect_on)
         pJS.interactivity.detect_on = paramsForInteractivity.detect_on;
-      if (paramsForInteractivity.mode == false || paramsForInteractivity.mode)
+      if (paramsForInteractivity.mode === false || paramsForInteractivity.mode)
         pJS.interactivity.mode = paramsForInteractivity.mode;
       if (paramsForInteractivity.line_linked) {
         if (paramsForInteractivity.line_linked.opacity)
@@ -169,7 +191,7 @@ function launchParticlesJS(tag_id, params) {
         var paramsForEvents = paramsForInteractivity.events;
         if (paramsForEvents.onclick) {
           var paramsForOnclick = paramsForEvents.onclick;
-          if (paramsForOnclick.enable == false)
+          if (paramsForOnclick.enable === false)
             pJS.interactivity.events.onclick.enable = false;
           if (paramsForOnclick.mode !== 'push')
             pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
@@ -178,11 +200,11 @@ function launchParticlesJS(tag_id, params) {
         }
         if (paramsForEvents.onresize) {
           var paramsForOnresize = paramsForEvents.onresize;
-          if (paramsForOnresize.enable == false)
+          if (paramsForOnresize.enable === false)
             pJS.interactivity.events.onresize.enable = false;
           if (paramsForOnresize.mode)
             pJS.interactivity.events.onresize.mode = paramsForOnresize.mode;
-          if (paramsForOnresize.density_auto == false || paramsForOnresize.density_auto)
+          if (paramsForOnresize.density_auto === false || paramsForOnresize.density_auto)
             pJS.interactivity.events.onresize.density_auto = paramsForOnresize.density_auto;
           if (paramsForOnresize.density_area)
             pJS.interactivity.events.onresize.density_area = paramsForOnresize.density_area;
@@ -369,7 +391,7 @@ function launchParticlesJS(tag_id, params) {
 
       /* change opacity status */
       if (pJS.particles.opacity.anim.enable) {
-        if (p.opacity_status == true) {
+        if (p.opacity_status === true) {
           if (p.opacity >= pJS.particles.opacity.opacity)
             p.opacity_status = false;
           p.opacity += p.vo;
@@ -702,7 +724,7 @@ window.particlesJS = function (tag_id, params, callback) {
   canvas_el.style.height = "100%";
 
   /* append canvas */
-  var canvas = document.getElementById(tag_id).appendChild(canvas_el);
+  var canvas = document.querySelectorAll(tag_id).appendChild(canvas_el);
 
   /* launch particle.js */
   if (canvas !== null) {
