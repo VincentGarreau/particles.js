@@ -1,7 +1,6 @@
 {
   "name": "particles.js",
   "main": "particles.js",
-  "version": "2.0.0",
   "homepage": "https://github.com/VincentGarreau/particles.js",
   "authors": [
     "Vincent Garreau <vin.garreau@gmail.com>"
