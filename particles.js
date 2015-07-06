@@ -83,6 +83,8 @@ function launchParticlesJS(tag_id, params){
     }
   };
 
+  window.pJS = pJS;
+
   /* params settings */
   if(params){
     if(params.particles){
