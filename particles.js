@@ -4,9 +4,9 @@
 /* Demo / Generator : vincentgarreau.com/particles.js
 /* GitHub : github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v2.0.0
+/* v2.0.1
 /* ----------------------------------------------- */
-'use strict'
+'use strict';
 
 var pJS = function(tag_id, params){
 
