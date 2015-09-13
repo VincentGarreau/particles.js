@@ -6,6 +6,7 @@
 /* How to use? : Check the GitHub README
 /* v2.0.0
 /* ----------------------------------------------- */
+'use strict'
 
 var pJS = function(tag_id, params){
 
@@ -1418,7 +1419,7 @@ Object.deepExtend = function(destination, source) {
     if (source[property] && source[property].constructor &&
      source[property].constructor === Object) {
       destination[property] = destination[property] || {};
-      arguments.callee(destination[property], source[property]);
+      this.deepExtend(destination[property], source[property]);
     } else {
       destination[property] = source[property];
     }
