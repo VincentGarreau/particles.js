@@ -1515,7 +1515,9 @@ window.particlesJS = function(tag_id, params){
 
   /* launch particle.js */
   if(canvas != null){
-    pJSDom.push(new pJS(tag_id, params));
+    var pjs = new pJS(tag_id, params);
+    pJSDom.push(pjs);
+    return pjs;
   }
 
 };
