@@ -5,7 +5,7 @@
 ------------------------------
 ### `Demo / Generator`
 
-<a href="http://vincentgarreau.com/particles.js/" target="_blank"><img src="https://dl.dropboxusercontent.com/u/19580440/particlesjs-assets/github-screen.jpg" alt="particles.js generator" /></a>
+<a href="http://vincentgarreau.com/particles.js/" target="_blank"><img src="http://vincentgarreau.com/particles.js/assets/img/github-screen.jpg" alt="particles.js generator" /></a>
 
 Configure, export, and share your particles.js configuration on CodePen: <br />
 http://vincentgarreau.com/particles.js/
