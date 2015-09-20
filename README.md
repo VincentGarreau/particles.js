@@ -128,7 +128,7 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
         "distance": 800,
         "size": 80,
         "duration": 2,
-        "opacity": 8,
+        "opacity": 0.8,
         "speed": 3
       },
       "repulse": {
