@@ -13,7 +13,7 @@ particlesJS.load('particles-js', 'particles.json', function() {
 /* Otherwise just put the config content (json): */
 
 particlesJS('particles-js',
-  
+
   {
     "particles": {
       "number": {
@@ -90,7 +90,7 @@ particlesJS('particles-js',
           "mode": "repulse",
           "parallax": {
             "enable": true,
-            "force": 2,
+            "force": 60,
             "smooth": 10
           }
         },
