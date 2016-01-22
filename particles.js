@@ -1256,7 +1256,7 @@ var pJS = function(tag_id, params){
       c.translate(sideLength,0);
       c.rotate(interiorAngle);
     }
-    //c.stroke();
+    // c.stroke();
     c.fill();
     c.restore();
 
@@ -1320,7 +1320,7 @@ var pJS = function(tag_id, params){
           if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
           else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
         }else{
-          //console.log('still loading...');
+          // console.log('still loading...');
           if(!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
         }
 
