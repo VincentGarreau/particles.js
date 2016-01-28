@@ -4,7 +4,7 @@
 /* Demo / Generator : vincentgarreau.com/particles.js
 /* GitHub : github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v2.0.0
+/* v2.1.0
 /* ----------------------------------------------- */
 
 var pJS = function(tag_id, params){
@@ -1059,10 +1059,18 @@ var pJS = function(tag_id, params){
 
   /* ---------- pJS functions - vendors ------------ */
 
+  function getMousePos(canvas, evt) {
+	var rect = canvas.getBoundingClientRect();
+	return {
+	  x: evt.clientX - rect.left,
+	  y: evt.clientY - rect.top
+	};
+  }
+  
   pJS.fn.vendors.eventsListeners = function(){
 
     /* events target element */
-    if(pJS.interactivity.detect_on == 'window'){
+    if(pJS.interactivity.detect_on == 'window' || pJS.interactivity.detect_on == 'direct_canvas'){
       pJS.interactivity.el = window;
     }else{
       pJS.interactivity.el = pJS.canvas.el;
@@ -1075,7 +1083,12 @@ var pJS = function(tag_id, params){
       /* el on mousemove */
       pJS.interactivity.el.addEventListener('mousemove', function(e){
 
-        if(pJS.interactivity.el == window){
+        if(pJS.interactivity.detect_on == 'direct_canvas'){
+          var mousePos = getMousePos(pJS.canvas.el, e);
+          var pos_x = mousePos.x,
+              pos_y = mousePos.y;
+		}
+		else if(pJS.interactivity.el == window){
           var pos_x = e.clientX,
               pos_y = e.clientY;
         }
