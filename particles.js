@@ -150,7 +150,8 @@ var pJS = function(tag_id, params){
     mode_grab_distance: pJS.interactivity.modes.grab.distance,
     mode_bubble_distance: pJS.interactivity.modes.bubble.distance,
     mode_bubble_size: pJS.interactivity.modes.bubble.size,
-    mode_repulse_distance: pJS.interactivity.modes.repulse.distance
+    mode_repulse_distance: pJS.interactivity.modes.repulse.distance,
+    mode_paused: false, 
   };
 
 
@@ -1149,6 +1150,18 @@ var pJS = function(tag_id, params){
                 pJS.tmp.repulse_clicking = false;
               }, pJS.interactivity.modes.repulse.duration*1000)
             break;
+            
+            case 'pause':
+                if(pJS.tmp.mode_paused){
+                    pJS.particles.move.enable = true;
+                    pJS.fn.particlesRefresh();
+                    pJS.tmp.mode_paused = false;
+                } else {
+                    pJS.particles.move.enable = false;
+                    pJS.tmp.mode_paused = true;
+                };
+            break;
+            
 
           }
 
