@@ -15,7 +15,7 @@ http://codepen.io/VincentGarreau/pen/pnlso
 
 -------------------------------
 ### `Usage`
-
+#### Using a configuration file
 Load particles.js and configure the particles:
 
 **index.html**
@@ -146,7 +146,34 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
   "retina_detect": true
 }
 ```
+#### Directly passing options to particlesJS
+Instead of using a seperate file `particles.json`, you can also store the options in a variable and pass them directly to particlesJS.
 
+**index.html**
+```html
+<div id="particles-js"></div>
+
+<script src="particles.js"></script>
+```
+
+**app.js**
+```javascript
+/* options passed in as a variable  */
+var options = {
+  "particles": {
+    "number": {
+      "value": 80,
+      "density": {
+        "enable": true,
+        "value_area": 800
+      }
+    },
+    ...
+};
+
+/* particlesJS(@dom-id, @path-json); */
+particlesJS('particles-js', options);
+```
 -------------------------------
 
 ### `Options`
