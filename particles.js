@@ -67,6 +67,7 @@ var pJS = function(tag_id, params){
       },
       line_linked: {
         enable: true,
+        over_bounds: false,
         distance: 100,
         color: '#fff',
         opacity: 1,
@@ -589,21 +590,34 @@ var pJS = function(tag_id, params){
         }
       }
 
-      if((p.x) - p.radius > pJS.canvas.w - p.offsetX){
-        p.x = new_pos.x_left;
-        p.y = Math.random() * pJS.canvas.h;
-      }
-      else if((p.x) + p.radius < 0 - p.offsetX){
-        p.x = new_pos.x_right;
-        p.y = Math.random() * pJS.canvas.h;
-      }
-      if((p.y) - p.radius > pJS.canvas.h - p.offsetY){
-        p.y = new_pos.y_top;
-        p.x = Math.random() * pJS.canvas.w;
-      }
-      else if((p.y) + p.radius < 0 - p.offsetY){
-        p.y = new_pos.y_bottom;
-        p.x = Math.random() * pJS.canvas.w;
+      if(pJS.particles.move.out_mode == 'wrap'){
+        if(p.x - p.radius > pJS.canvas.w){
+          p.x = new_pos.x_left;
+        }
+        else if(p.x + p.radius < 0){
+          p.x = new_pos.x_right;
+        }
+        if(p.y - p.radius > pJS.canvas.h){
+          p.y = new_pos.y_top;
+        }
+        else if(p.y + p.radius < 0){
+          p.y = new_pos.y_bottom;
+        }
+      }else{
+        if((p.x) - p.radius > pJS.canvas.w - p.offsetX){
+          p.x = new_pos.x_left;
+          p.y = Math.random() * pJS.canvas.h;
+        }else if((p.x) + p.radius < 0 - p.offsetX){
+          p.x = new_pos.x_right;
+          p.y = Math.random() * pJS.canvas.h;
+        }
+        if((p.y) - p.radius > pJS.canvas.h - p.offsetY){
+          p.y = new_pos.y_top;
+          p.x = Math.random() * pJS.canvas.w;
+        }else if((p.y) + p.radius < 0 - p.offsetY){
+          p.y = new_pos.y_bottom;
+          p.x = Math.random() * pJS.canvas.w;
+        }
       }
 
       /* out of canvas modes */
@@ -697,36 +711,66 @@ var pJS = function(tag_id, params){
   /* ---------- pJS functions - particles interaction ------------ */
 
   pJS.fn.interact.linkParticles = function(p1, p2){
-
     var dx = (p1.x + p1.offsetX) - (p2.x + p2.offsetX),
         dy = (p1.y + p1.offsetY) - (p2.y + p2.offsetY),
         dist = Math.sqrt(dx*dx + dy*dy);
 
     /* draw a line between p1 and p2 if the distance between them is under the config distance */
     if(dist <= pJS.particles.line_linked.distance){
-
       var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
+      pJS.fn.drawLine(p1.x, p1.y, p2.x, p2.y, opacity_line);
+    }else{
+      if(pJS.particles.line_linked.over_bounds){
 
-      if(opacity_line > 0){
+        //line wrap around x-axis
+        if(p1.y < pJS.particles.line_linked.distance){
+          if(p2.y > pJS.canvas.h - pJS.particles.line_linked.distance){
+            dx = p1.x - p2.x;
+            dy = p1.y - (p2.y - pJS.canvas.h)
+            dist = Math.sqrt(dx*dx + dy*dy);
 
-        /* style */
-        var color_line = pJS.particles.line_linked.color_rgb_line;
-        pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
-        pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
-        //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
+            if(dist <= pJS.particles.line_linked.distance){
+              var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
+              var yi = p1.y - ((dy / dx) * p1.x);
+              var xi = yi * -1 / (dy / dx);
+              pJS.fn.drawLine(p1.x, p1.y, xi, 0, opacity_line);
+              pJS.fn.drawLine(p2.x, p2.y, xi, pJS.canvas.h, opacity_line);
+            }
+          }
+        }
 
-        /* path */
-        pJS.canvas.ctx.beginPath();
-        pJS.canvas.ctx.moveTo((p1.x + p1.offsetX), (p1.y + p1.offsetY));
-        pJS.canvas.ctx.lineTo((p2.x + p2.offsetX), (p2.y + p2.offsetY));
-        pJS.canvas.ctx.stroke();
-        pJS.canvas.ctx.closePath();
+        // line wrap around y-axis
+        if(p1.x < pJS.particles.line_linked.distance){
+          if(p2.x > pJS.canvas.w - (pJS.particles.line_linked.distance)){
+            dx = p1.x - (p2.x - pJS.canvas.w),
+            dy = p1.y - p2.y;
+            dist = Math.sqrt(dx*dx + dy*dy);
 
+            if(dist <= pJS.particles.line_linked.distance){
+              var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
+              var yi = p1.y - ((dy / dx) * p1.x);
+              pJS.fn.drawLine(p1.x, p1.y, 0, yi, opacity_line);
+              pJS.fn.drawLine(p2.x, p2.y, pJS.canvas.w, yi, opacity_line);
+            }
+          }
+        }
       }
-
     }
-
   };
+
+  pJS.fn.drawLine = function(p1x, p1y, p2x, p2y, opacity){
+    if(opacity > 0){
+      var color_line = pJS.particles.line_linked.color_rgb_line;
+      pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity+')';
+      pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
+
+      pJS.canvas.ctx.beginPath();
+      pJS.canvas.ctx.moveTo(p1x, p1y);
+      pJS.canvas.ctx.lineTo(p2x, p2y);
+      pJS.canvas.ctx.stroke();
+      pJS.canvas.ctx.closePath();
+    }
+  }
 
 
   pJS.fn.interact.attractParticles  = function(p1, p2){
