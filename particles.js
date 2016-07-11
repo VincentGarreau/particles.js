@@ -713,8 +713,8 @@ var pJS = function(tag_id, params){
   /* ---------- pJS functions - particles interaction ------------ */
 
   pJS.fn.interact.linkParticles = function(p1, p2){
-    var dx = p1.x - p2.x,
-        dy = p1.y - p2.y,
+    var dx = (p1.x + p1.offsetX) - (p2.x + p2.offsetX),
+        dy = (p1.y + p1.offsetY) - (p2.y + p2.offsetY),
         dist = Math.sqrt(dx*dx + dy*dy);
 
     /* draw a line between p1 and p2 if the distance between them is under the config distance */
