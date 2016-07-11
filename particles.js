@@ -4,8 +4,9 @@
 /* Demo / Generator : vincentgarreau.com/particles.js
 /* GitHub : github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v2.0.0
+/* v2.0.1
 /* ----------------------------------------------- */
+'use strict';
 
 var pJS = function(tag_id, params){
 
@@ -66,7 +67,6 @@ var pJS = function(tag_id, params){
       },
       line_linked: {
         enable: true,
-        over_bounds: false,
         distance: 100,
         color: '#fff',
         opacity: 1,
@@ -93,7 +93,12 @@ var pJS = function(tag_id, params){
       events: {
         onhover: {
           enable: true,
-          mode: 'grab'
+          mode: 'grab',
+          parallax: {
+            enable: true,
+            force: 2,
+            smooth: 10
+          }
         },
         onclick: {
           enable: true,
@@ -261,6 +266,10 @@ var pJS = function(tag_id, params){
     if(this.y > pJS.canvas.h - this.radius*2) this.y = this.y - this.radius;
     else if(this.y < this.radius*2) this.y = this.y + this.radius;
 
+    /* parallax */
+    this.offsetX = 0;
+    this.offsetY = 0;
+
     /* check position - avoid overlap */
     if(pJS.particles.move.bounce){
       pJS.fn.vendors.checkOverlap(this, position);
@@ -423,10 +432,13 @@ var pJS = function(tag_id, params){
     pJS.canvas.ctx.fillStyle = color_value;
     pJS.canvas.ctx.beginPath();
 
+    var p_x = p.x + p.offsetX,
+        p_y = p.y + p.offsetY;
+
     switch(p.shape){
 
       case 'circle':
-        pJS.canvas.ctx.arc(p.x, p.y, radius, 0, Math.PI * 2, false);
+        pJS.canvas.ctx.arc(p_x, p_y, radius, 0, Math.PI * 2, false);
       break;
 
       case 'edge':
@@ -526,6 +538,16 @@ var pJS = function(tag_id, params){
         p.y += p.vy * ms;
       }
 
+      /* parallax */
+      if(pJS.interactivity.mouse.pos_x && pJS.interactivity.events.onhover.parallax.enable){
+        /* smaller is the particle, longer is the offset distance */
+        var tmp_x = (pJS.interactivity.mouse.pos_x - (window.innerWidth / 2)) * (p.radius / pJS.interactivity.events.onhover.parallax.force);
+        p.offsetX += (tmp_x - p.offsetX) / pJS.interactivity.events.onhover.parallax.smooth; // Easing equation
+
+        var tmp_y = (pJS.interactivity.mouse.pos_y - (window.innerHeight / 2)) * (p.radius / pJS.interactivity.events.onhover.parallax.force);
+        p.offsetY += (tmp_y - p.offsetY) / pJS.interactivity.events.onhover.parallax.smooth; // Easing equation
+      }
+
       /* change opacity status */
       if(pJS.particles.opacity.anim.enable) {
         if(p.opacity_status == true) {
@@ -560,10 +582,10 @@ var pJS = function(tag_id, params){
         }
       }else{
         var new_pos = {
-          x_left: -p.radius,
-          x_right: pJS.canvas.w + p.radius,
-          y_top: -p.radius,
-          y_bottom: pJS.canvas.h + p.radius
+          x_left: -p.radius - p.offsetX,
+          x_right: pJS.canvas.w + p.radius + p.offsetX,
+          y_top: -p.radius - p.offsetY,
+          y_bottom: pJS.canvas.h + p.radius - p.offsetY
         }
       }
 
@@ -599,14 +621,13 @@ var pJS = function(tag_id, params){
         }
       }
 
-
       /* out of canvas modes */
       switch(pJS.particles.move.out_mode){
         case 'bounce':
-          if (p.x + p.radius > pJS.canvas.w) p.vx = -p.vx;
-          else if (p.x - p.radius < 0) p.vx = -p.vx;
-          if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
-          else if (p.y - p.radius < 0) p.vy = -p.vy;
+          if ((p.x + p.offsetX) + p.radius > pJS.canvas.w) p.vx = -p.vx;
+          else if ((p.x + p.offsetX) - p.radius < 0) p.vx = -p.vx;
+          if ((p.y + p.offsetY) + p.radius > pJS.canvas.h) p.vy = -p.vy;
+          else if ((p.y + p.offsetY) - p.radius < 0) p.vy = -p.vy;
         break;
       }
 
@@ -642,9 +663,13 @@ var pJS = function(tag_id, params){
           if(pJS.particles.move.bounce){
             pJS.fn.interact.bounceParticles(p,p2);
           }
+
         }
       }
+
+
     }
+
   };
 
   pJS.fn.particlesDraw = function(){
@@ -748,6 +773,7 @@ var pJS = function(tag_id, params){
     }
   }
 
+
   pJS.fn.interact.attractParticles  = function(p1, p2){
 
     /* condensed particles */
@@ -833,8 +859,8 @@ var pJS = function(tag_id, params){
     /* on hover event */
     if(pJS.interactivity.events.onhover.enable && isInArray('bubble', pJS.interactivity.events.onhover.mode)){
 
-      var dx_mouse = p.x - pJS.interactivity.mouse.pos_x,
-          dy_mouse = p.y - pJS.interactivity.mouse.pos_y,
+      var dx_mouse = (p.x + p.offsetX) - pJS.interactivity.mouse.pos_x,
+          dy_mouse = (p.y + p.offsetY) - pJS.interactivity.mouse.pos_y,
           dist_mouse = Math.sqrt(dx_mouse*dx_mouse + dy_mouse*dy_mouse),
           ratio = 1 - dist_mouse / pJS.interactivity.modes.bubble.distance;
 
@@ -1084,7 +1110,7 @@ var pJS = function(tag_id, params){
 
           /* path */
           pJS.canvas.ctx.beginPath();
-          pJS.canvas.ctx.moveTo(p.x, p.y);
+          pJS.canvas.ctx.moveTo(p.x + p.offsetX, p.y + p.offsetY);
           pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x, pJS.interactivity.mouse.pos_y);
           pJS.canvas.ctx.stroke();
           pJS.canvas.ctx.closePath();
@@ -1460,7 +1486,7 @@ Object.deepExtend = function(destination, source) {
     if (source[property] && source[property].constructor &&
      source[property].constructor === Object) {
       destination[property] = destination[property] || {};
-      arguments.callee(destination[property], source[property]);
+      this.deepExtend(destination[property], source[property]);
     } else {
       destination[property] = source[property];
     }
@@ -1556,7 +1582,9 @@ window.particlesJS = function(tag_id, params){
 
   /* launch particle.js */
   if(canvas != null){
-    pJSDom.push(new pJS(tag_id, params));
+    var pjs = new pJS(tag_id, params);
+    pJSDom.push(pjs);
+    return pjs;
   }
 
 };
