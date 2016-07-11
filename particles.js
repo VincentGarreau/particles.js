@@ -604,19 +604,17 @@ var pJS = function(tag_id, params){
           p.y = new_pos.y_bottom;
         }
       }else{
-        if(p.x - p.radius > pJS.canvas.w){
+        if((p.x) - p.radius > pJS.canvas.w - p.offsetX){
           p.x = new_pos.x_left;
           p.y = Math.random() * pJS.canvas.h;
-        }
-        else if(p.x + p.radius < 0){
+        }else if((p.x) + p.radius < 0 - p.offsetX){
           p.x = new_pos.x_right;
           p.y = Math.random() * pJS.canvas.h;
         }
-        if(p.y - p.radius > pJS.canvas.h){
+        if((p.y) - p.radius > pJS.canvas.h - p.offsetY){
           p.y = new_pos.y_top;
           p.x = Math.random() * pJS.canvas.w;
-        }
-        else if(p.y + p.radius < 0){
+        }else if((p.y) + p.radius < 0 - p.offsetY){
           p.y = new_pos.y_bottom;
           p.x = Math.random() * pJS.canvas.w;
         }
