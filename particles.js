@@ -1389,7 +1389,8 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.start = function(){
 
     if(isInArray('image', pJS.particles.shape.type)){
-      pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
+      var src_split = pJS.particles.shape.image.src.split(".");
+      pJS.tmp.img_type = src_split[ src_split.length - 1 >= 0 ? src_split.length - 1 : '' ];
       pJS.fn.vendors.loadImg(pJS.tmp.img_type);
     }else{
       pJS.fn.vendors.checkBeforeDraw();
