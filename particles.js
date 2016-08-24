@@ -40,6 +40,7 @@ var pJS = function(tag_id, params){
         },
         image: {
           src: '',
+          src_list: [],
           width: 100,
           height: 100
         }
@@ -153,6 +154,8 @@ var pJS = function(tag_id, params){
     mode_repulse_distance: pJS.interactivity.modes.repulse.distance
   };
 
+  pJS.tmp.source_svg_list = []
+  pJS.tmp.count_svg = 0
 
   pJS.fn.retinaInit = function(){
 
@@ -384,21 +387,25 @@ var pJS = function(tag_id, params){
         ratio: sh.image.width / sh.image.height
       }
       if(!this.img.ratio) this.img.ratio = 1;
-      if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined){
-        pJS.fn.vendors.createSvgImg(this);
+      if(pJS.tmp.source_svg_list.length){
+          var random = Math.floor(Math.random() * pJS.tmp.source_svg_list.length)
+          this.img.src = sh.image.src_list[random]
+          pJS.fn.vendors.createSvgImg(this, pJS.tmp.source_svg_list[random]);
+          if(pJS.tmp.pushing){
+            this.img.loaded = false;
+          }
+
+      } else if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined){
+        pJS.fn.vendors.createSvgImg(this, pJS.tmp.source_svg);
         if(pJS.tmp.pushing){
           this.img.loaded = false;
         }
       }
     }
-
-    
-
   };
 
 
   pJS.fn.particle.prototype.draw = function() {
-
     var p = this;
 
     if(p.radius_bubble != undefined){
@@ -660,6 +667,7 @@ var pJS = function(tag_id, params){
     cancelRequestAnimFrame(pJS.fn.checkAnimFrame);
     cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
     pJS.tmp.source_svg = undefined;
+    pJS.tmp.source_svg_list = [];
     pJS.tmp.img_obj = undefined;
     pJS.tmp.count_svg = 0;
     pJS.fn.particlesEmpty();
@@ -1201,10 +1209,9 @@ var pJS = function(tag_id, params){
   };
 
 
-  pJS.fn.vendors.createSvgImg = function(p){
-
+  pJS.fn.vendors.createSvgImg = function(p, source_svg){
     /* set color to svg element */
-    var svgXml = pJS.tmp.source_svg,
+    var svgXml =  source_svg,
         rgbHex = /#([0-9A-F]{3,6})/gi,
         coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
           if(p.color.rgb){
@@ -1219,17 +1226,15 @@ var pJS = function(tag_id, params){
     var svg = new Blob([coloredSvgXml], {type: 'image/svg+xml;charset=utf-8'}),
         DOMURL = window.URL || window.webkitURL || window,
         url = DOMURL.createObjectURL(svg);
-
     /* create particle img obj */
     var img = new Image();
     img.addEventListener('load', function(){
-      p.img.obj = img;
-      p.img.loaded = true;
-      DOMURL.revokeObjectURL(url);
-      pJS.tmp.count_svg++;
+        p.img.obj = img;
+        p.img.loaded = true;
+        DOMURL.revokeObjectURL(url);
+        pJS.tmp.count_svg++;
     });
     img.src = url;
-
   };
 
 
@@ -1270,11 +1275,29 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.loadImg = function(type){
 
     pJS.tmp.img_error = undefined;
+    if(pJS.particles.shape.image.src_list && pJS.particles.shape.image.src_list.length >= 2){
+      // type svg support only
+      var xhrList = []
+      for(var i in pJS.particles.shape.image.src_list){
+          (function(index){
+              xhrList[index] = new XMLHttpRequest();
+              xhrList[index].open('GET', pJS.particles.shape.image.src_list[index]);
+              xhrList[index].onreadystatechange = function(data){
+                if(xhrList[index].readyState == 4 && xhrList[index].status == 200){
+                   pJS.tmp.source_svg_list[index] = data.currentTarget.response
+                   if(index == pJS.particles.shape.image.src_list.length - 1){
+                        pJS.fn.vendors.checkBeforeDraw();
+                   }
+                }
+              }
+              xhrList[index].send()
+          })(i)
+      }
+      return   
+    }
 
     if(pJS.particles.shape.image.src != ''){
-
       if(type == 'svg'){
-
         var xhr = new XMLHttpRequest();
         xhr.open('GET', pJS.particles.shape.image.src);
         xhr.onreadystatechange = function (data) {
@@ -1289,32 +1312,28 @@ var pJS = function(tag_id, params){
           }
         }
         xhr.send();
-
       }else{
-
         var img = new Image();
         img.addEventListener('load', function(){
           pJS.tmp.img_obj = img;
           pJS.fn.vendors.checkBeforeDraw();
         });
         img.src = pJS.particles.shape.image.src;
-
       }
-
-    }else{
-      console.log('Error pJS - No image.src');
-      pJS.tmp.img_error = true;
+    }
+    else{
+      if( ! pJS.particles.shape.image.src_list || pJS.particles.shape.image.src_list.length < 2){
+          console.log('Error pJS - No image.src');
+          pJS.tmp.img_error = true;
+      }
     }
 
   };
 
 
   pJS.fn.vendors.draw = function(){
-
     if(pJS.particles.shape.type == 'image'){
-
       if(pJS.tmp.img_type == 'svg'){
-
         if(pJS.tmp.count_svg >= pJS.particles.number.value){
           pJS.fn.particlesDraw();
           if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
@@ -1323,9 +1342,7 @@ var pJS = function(tag_id, params){
           //console.log('still loading...');
           if(!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
         }
-
       }else{
-
         if(pJS.tmp.img_obj != undefined){
           pJS.fn.particlesDraw();
           if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
@@ -1333,9 +1350,7 @@ var pJS = function(tag_id, params){
         }else{
           if(!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
         }
-
       }
-
     }else{
       pJS.fn.particlesDraw();
       if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
@@ -1348,8 +1363,12 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.checkBeforeDraw = function(){
 
     // if shape is image
+    if(pJS.tmp.source_svg_list.length){
+        pJS.fn.vendors.init();
+        pJS.fn.vendors.draw();
+        return 
+    }
     if(pJS.particles.shape.type == 'image'){
-
       if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg == undefined){
         pJS.tmp.checkAnimFrame = requestAnimFrame(check);
       }else{
@@ -1362,7 +1381,7 @@ var pJS = function(tag_id, params){
         
       }
 
-    }else{
+    }else{    
       pJS.fn.vendors.init();
       pJS.fn.vendors.draw();
     }
@@ -1390,7 +1409,8 @@ var pJS = function(tag_id, params){
 
     if(isInArray('image', pJS.particles.shape.type)){
       var src_split = pJS.particles.shape.image.src.split(".");
-      pJS.tmp.img_type = src_split[ src_split.length - 1 >= 0 ? src_split.length - 1 : '' ];
+      var type = src_split[ src_split.length - 1 >= 0 ? src_split.length - 1 : '' ]
+      pJS.tmp.img_type = type ? type.toLowerCase() : 'svg';
       pJS.fn.vendors.loadImg(pJS.tmp.img_type);
     }else{
       pJS.fn.vendors.checkBeforeDraw();
