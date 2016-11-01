@@ -129,7 +129,8 @@ var pJS = function(tag_id, params){
     fn: {
       interact: {},
       modes: {},
-      vendors:{}
+      vendors: {},
+      custom: {}
     },
     tmp: {}
   };
@@ -751,6 +752,9 @@ var pJS = function(tag_id, params){
   /* ---------- pJS functions - modes events ------------ */
 
   pJS.fn.modes.pushParticles = function(nb, pos){
+    if (pJS.particles.array.length > pJS.particles.maxNumber) {
+      return;
+    }
 
     pJS.tmp.pushing = true;
 
@@ -1402,6 +1406,14 @@ var pJS = function(tag_id, params){
 
   };
 
+  pJS.fn.custom.setPause = function(newState) {
+    pJSDom[0].pJS.particles.move.enable = !newState;
+
+    if (pJSDom[0].pJS.particles.move.enable) {
+      pJSDom[0].pJS.fn.particlesRefresh();
+    }
+  }
+
 
 
 
@@ -1411,9 +1423,6 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.eventsListeners();
 
   pJS.fn.vendors.start();
-
-
-
 };
 
 /* ---------- global functions - vendors ------------ */
@@ -1521,7 +1530,6 @@ window.particlesJS = function(tag_id, params){
   if(canvas != null){
     pJSDom.push(new pJS(tag_id, params));
   }
-
 };
 
 window.particlesJS.load = function(tag_id, path_config_json, callback){
