@@ -619,7 +619,7 @@ var pJS = function(tag_id, params){
 
           /* attract particles */
           if(pJS.particles.move.attract.enable){
-            pJS.fn.interact.attractParticles(p,p2);
+            pJS.fn.interact.attractParticles(i,j);
           }
 
           /* bounce particles */
@@ -707,11 +707,11 @@ var pJS = function(tag_id, params){
   };
 
 
-  pJS.fn.interact.attractParticles  = function(p1, p2){
+  pJS.fn.interact.attractParticles  = function(i, j){
 
     /* condensed particles */
-    var dx = p1.x - p2.x,
-        dy = p1.y - p2.y,
+    var dx = pJS.particles.array[i].x - pJS.particles.array[j].x,
+        dy = pJS.particles.array[i].y - pJS.particles.array[j].y,
         dist = Math.sqrt(dx*dx + dy*dy);
 
     if(dist <= pJS.particles.line_linked.distance){
@@ -719,11 +719,11 @@ var pJS = function(tag_id, params){
       var ax = dx/(pJS.particles.move.attract.rotateX*1000),
           ay = dy/(pJS.particles.move.attract.rotateY*1000);
 
-      p1.vx -= ax;
-      p1.vy -= ay;
+      pJS.particles.array[i].vx -= ax;
+      pJS.particles.array[i].vy -= ay;
 
-      p2.vx += ax;
-      p2.vy += ay;
+      pJS.particles.array[j].vx += ax;
+      pJS.particles.array[j].vy += ay;
 
     }
 
