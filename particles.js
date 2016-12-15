@@ -1035,7 +1035,9 @@ var pJS = function(tag_id, params){
         if(opacity_line > 0){
 
           /* style */
-          var color_line = pJS.particles.line_linked.color_rgb_line;
+          var color_line = pJS.interactivity.modes.grab.line_linked.color_rgb_link_line || pJS.particles.line_linked.color_rgb_line;
+
+          // color: '#fff'
           pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
           pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
           //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
@@ -1383,6 +1385,9 @@ var pJS = function(tag_id, params){
     /* particles.line_linked - convert hex colors to rgb */
     pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
 
+    if (pJS.interactivity.modes.grab.line_linked.color) {
+      pJS.interactivity.modes.grab.line_linked.color_rgb_link_line = hexToRgb(pJS.interactivity.modes.grab.line_linked.color);
+    }
   };
 
 
