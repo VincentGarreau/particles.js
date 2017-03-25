@@ -195,7 +195,7 @@ key | option type / notes | example
 `interactivity.events.onhover.enable` | boolean | `true` / `false`
 `interactivity.events.onhover.mode` | string <br /> array selection | `"grab"` <br /> `"bubble"` <br /> `"repulse"` <br /> `["grab", "bubble"]`
 `interactivity.events.onclick.enable` | boolean | `true` / `false`
-`interactivity.events.onclick.mode` | string <br /> array selection | `"push"` <br /> `"remove"` <br /> `"bubble"` <br /> `"repulse"` <br /> `["push", "repulse"]`
+`interactivity.events.onclick.mode` | string <br /> array selection | `"push"` <br /> `"remove"` <br /> `"bubble"` <br /> `"repulse"` <br /> `"pause"` <br /> `["push", "repulse"]`
 `interactivity.events.resize` | boolean | `true` / `false`
 `interactivity.events.modes.grab.distance` | number | `100`
 `interactivity.events.modes.grab.line_linked.opacity` | number (0 to 1) | `0.75`
