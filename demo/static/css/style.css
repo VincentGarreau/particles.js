@@ -47,7 +47,7 @@ canvas{
 /* ---- stats.js ---- */
 
 .count-particles{
-  background: #000022;
+  background: black;
   position: absolute;
   top: 48px;
   left: 0;
@@ -88,7 +88,7 @@ canvas{
 #particles-js{
   width: 100%;
   height: 100%;
-  background-color: #b61924;
+  background-color: black;
   background-image: url('');
   background-size: cover;
   background-position: 50% 50%;
