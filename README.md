@@ -1,6 +1,14 @@
 ## particles.js
 
-### A lightweight JavaScript library for creating particles.
+> A lightweight JavaScript library for creating particles.
+
+## Getting Started
+
+Install with Bower: 
+
+```
+bower install particles.js --save
+```
 
 ------------------------------
 ### `Demo / Generator`
@@ -21,7 +29,6 @@ Load particles.js and configure the particles:
 **index.html**
 ```html
 <div id="particles-js"></div>
-
 <script src="particles.js"></script>
 ```
 
