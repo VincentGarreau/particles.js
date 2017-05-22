@@ -1,6 +1,6 @@
 {
   "name": "particles.js",
-  "main": "particles.js",
+  "main": "dist/particles.js",
   "homepage": "https://github.com/VincentGarreau/particles.js",
   "authors": [
     "Vincent Garreau <vin.garreau@gmail.com>"
