@@ -7,9 +7,9 @@
 /* v2.0.0
 /* ----------------------------------------------- */
 
-var pJS = function(tag_id, params){
-
-  var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
+function pJS(tag_id, params) {
+  tag_id = tag_id.substr(0, 1).match(/\.|#/) ? tag_id : '#' + tag_id;
+  var canvas_el = document.querySelector(tag_id+' > .particles-js-canvas-el');
 
   /* particles.js variables with default values */
   this.pJS = {
@@ -1413,12 +1413,12 @@ var pJS = function(tag_id, params){
 
 /* ---------- global functions - vendors ------------ */
 
-Object.deepExtend = function(destination, source) {
+Object.deepExtend = function deepExtendFn(destination, source) {
   for (var property in source) {
     if (source[property] && source[property].constructor &&
      source[property].constructor === Object) {
       destination[property] = destination[property] || {};
-      arguments.callee(destination[property], source[property]);
+      deepExtendFn(destination[property], source[property]);
     } else {
       destination[property] = source[property];
     }
@@ -1469,13 +1469,12 @@ function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
+var pJSDom = [];
+
 
 /* ---------- particles.js functions - start ------------ */
 
-window.pJSDom = [];
-
-window.particlesJS = function(tag_id, params){
-
+var particlesJS = function (tag_id, params) {
   //console.log(params);
 
   /* no string id? so it's object params, and set the id with default id */
@@ -1519,7 +1518,7 @@ window.particlesJS = function(tag_id, params){
 
 };
 
-window.particlesJS.load = function(tag_id, path_config_json, callback){
+particlesJS.load = function(tag_id, path_config_json, callback){
 
   /* load json config */
   var xhr = new XMLHttpRequest();
@@ -1528,7 +1527,7 @@ window.particlesJS.load = function(tag_id, path_config_json, callback){
     if(xhr.readyState == 4){
       if(xhr.status == 200){
         var params = JSON.parse(data.currentTarget.response);
-        window.particlesJS(tag_id, params);
+        particlesJS(tag_id, params);
         if(callback) callback();
       }else{
         console.log('Error pJS - XMLHttpRequest status: '+xhr.status);
@@ -1537,5 +1536,12 @@ window.particlesJS.load = function(tag_id, path_config_json, callback){
     }
   };
   xhr.send();
-
 };
+
+particlesJS.destroy = function () {
+  pJSDom.forEach(function (instance) {
+    instance.pJS.fn.vendors.destroypJS();
+  });
+};
+
+export default particlesJS;
