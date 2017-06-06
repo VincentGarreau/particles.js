@@ -125,6 +125,12 @@ var pJS = function(tag_id, params){
       },
       mouse:{}
     },
+    polygon: {
+      debug: true,
+      type: 'inside',
+      url: '/demo/svg/star.svg',
+      raw: null
+    },
     retina_detect: false,
     fn: {
       interact: {},
@@ -590,6 +596,14 @@ var pJS = function(tag_id, params){
           else if (p.x - p.radius < 0) p.vx = -p.vx;
           if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
           else if (p.y - p.radius < 0) p.vy = -p.vy;
+          /* -> check bounce against polygon boundaries */
+          if(pJS.polygon.type !== 'none' && pJS.polygon.raw.length > 0){
+            if(!pJS.fn.vendors.checkInsidePolygon(p)){
+              p.vx = -p.vx;
+              p.vy = -p.vy;
+            };
+          }
+          /* <- check bounce against polygon boundaries */
         break;
       }
 
@@ -613,7 +627,16 @@ var pJS = function(tag_id, params){
 
           /* link particles */
           if(pJS.particles.line_linked.enable){
-            pJS.fn.interact.linkParticles(p,p2);
+            /* -> check if we are usin polygon as mask */
+            if(pJS.polygon.type !== 'none' && pJS.polygon.raw.length > 0){
+              /* check if both particles are inside of polygon */
+              if(pJS.fn.vendors.checkInsidePolygon(p) && pJS.fn.vendors.checkInsidePolygon(p2)){
+                pJS.fn.interact.linkParticles(p,p2);
+              };
+            }else{
+              pJS.fn.interact.linkParticles(p,p2);
+            }
+            /* <- check if we are usin polygon as mask */
           }
 
           /* attract particles */
@@ -645,7 +668,30 @@ var pJS = function(tag_id, params){
     /* draw each particle */
     for(var i = 0; i < pJS.particles.array.length; i++){
       var p = pJS.particles.array[i];
-      p.draw();
+      /* -> check position inside polygon */
+      if(pJS.polygon.type !== 'none' && pJS.polygon.raw.length > 0){
+        if(pJS.fn.vendors.checkInsidePolygon(p)){
+          p.draw();
+        };
+      }else{
+        p.draw();
+      }
+      /* <- check position inside polygon */
+    }
+
+    /* draw polygon shape in debug mode */
+    if(pJS.polygon.debug){
+      var c2 = pJS.canvas.el.getContext('2d');
+      c2.beginPath();
+      c2.moveTo(pJS.polygon.raw[0][0],pJS.polygon.raw[0][1]);
+      for (var i = 1; i < pJS.polygon.raw.length; i++) {
+        c2.lineTo(pJS.polygon.raw[i][0],pJS.polygon.raw[i][1]);
+      }
+      c2.closePath();
+      c2.strokeStyle = "#ffffff";
+      c2.lineWidth = 1;
+      c2.stroke();
+      //c2.fill();
     }
 
   };
@@ -1370,6 +1416,60 @@ var pJS = function(tag_id, params){
   };
 
 
+  pJS.fn.vendors.newXMLHttpRequest = function(){
+    var xmlreq = false;
+    if (window.XMLHttpRequest){
+      xmlreq = new XMLHttpRequest();
+    }else if (window.ActiveXObject){
+      try {
+        xmlreq = new ActiveXObject("Microsoft.XMLHTTP");
+      }catch(e){
+        alert("Error: Unable to create an XMLHttpRequest.");
+      }
+    }
+    return xmlreq;
+  };
+
+
+  pJS.fn.vendors.checkInsidePolygon = function(position){
+    // https://github.com/substack/point-in-polygon
+    // ray-casting algorithm based on
+    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+    var x = position ? position.x : Math.random() * pJS.canvas.w;
+    var y = position ? position.y : Math.random() * pJS.canvas.h;
+    var inside = false;
+    for (var i = 0, j = pJS.polygon.raw.length - 1; i < pJS.polygon.raw.length; j = i++) {
+      var xi = pJS.polygon.raw[i][0], yi = pJS.polygon.raw[i][1];
+      var xj = pJS.polygon.raw[j][0], yj = pJS.polygon.raw[j][1];
+      var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return pJS.polygon.type === 'inside' ? inside : !inside;
+  };
+
+
+  pJS.fn.vendors.parseSvgPathToPolygon = function(svgUrl){
+    // Load SVG from file on server
+    var XMLrequest = pJS.fn.vendors.newXMLHttpRequest(); // new XML request
+    XMLrequest.open("GET", svgUrl, false); // URL of the SVG file on server
+    XMLrequest.send(null); // get the SVG file
+    var path = XMLrequest.responseXML.getElementsByTagName("path")[0];
+    // https://stackoverflow.com/a/15975991
+    var len = path.getTotalLength();
+    var p = path.getPointAtLength(0);
+    var seg = path.getPathSegAtLength(0);
+    var polygonRAW = [];
+    for(var i=1; i<len; i++){
+      p=path.getPointAtLength(i);
+      if (path.getPathSegAtLength(i)>seg) {
+        polygonRAW.push([p.x,p.y]);
+        seg = path.getPathSegAtLength(i);
+      }
+    }
+    return polygonRAW;
+  };
+
+
   pJS.fn.vendors.init = function(){
 
     /* init canvas + particles */
@@ -1388,6 +1488,13 @@ var pJS = function(tag_id, params){
 
   pJS.fn.vendors.start = function(){
 
+    /* If is set the url of svg element, load it and parse into raw polygon data,
+     * works only with single path SVG 
+     */
+    if(pJS.polygon.url){
+      pJS.polygon.raw = pJS.fn.vendors.parseSvgPathToPolygon('/demo/svg/Love_Heart_SVG.svg');
+    }
+    
     if(isInArray('image', pJS.particles.shape.type)){
       pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
       pJS.fn.vendors.loadImg(pJS.tmp.img_type);
