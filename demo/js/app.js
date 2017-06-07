@@ -120,6 +120,14 @@ particlesJS('particles-js',
       }
     },
     "retina_detect": true,
+    "polygon": {
+      "debug": false,
+      "type": 'inside',
+      "move": {
+        "radius": 10
+      },
+      "url": '/demo/svg/deer.svg'
+    },
     "config_demo": {
       "hide_card": false,
       "background_color": "#b61924",

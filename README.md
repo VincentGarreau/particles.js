@@ -143,7 +143,15 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
       }
     }
   },
-  "retina_detect": true
+  "retina_detect": true,
+  "polygon": {
+    "debug": false,
+    "type": 'inside',
+    "move": {
+      "radius": 10
+    },
+    "url": 'demo/svg/deer.svg'
+  }
 }
 ```
 
@@ -207,6 +215,11 @@ key | option type / notes | example
 `interactivity.events.modes.push.particles_nb` | number | `4`
 `interactivity.events.modes.push.particles_nb` | number | `4`
 `retina_detect` | boolean | `true` / `false`
+`polygon.debug` | boolean | `true` / `false`
+`polygon.type` | string | `inside` / `outside` / `inline`
+`polygon.move.radius` | number | `10`
+`polygon.url` | string | `demo/svg/deer.svg`
+`polygon.raw` | array<br /> (generated) | `null`
 
 -------------------------------
 

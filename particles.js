@@ -126,6 +126,15 @@ var pJS = function(tag_id, params){
       mouse:{}
     },
     retina_detect: false,
+    polygon: {
+      debug: false,
+      type: 'none',
+      move: {
+        radius: 10
+      },
+      url: '',
+      raw: null
+    },
     fn: {
       interact: {},
       modes: {},
@@ -240,6 +249,14 @@ var pJS = function(tag_id, params){
 
   pJS.fn.particle = function(color, opacity, position){
 
+    /* if this is particle on polygon line, save initial position,
+     * so we can return to that position or circle around it
+     */
+    if(pJS.polygon.type === 'inline'){
+      this.initial_x = position.x;
+      this.initial_y = position.y;
+    }
+
     /* size */
     this.radius = (pJS.particles.size.random ? Math.random() : 1) * pJS.particles.size.value;
     if(pJS.particles.size.anim.enable){
@@ -251,8 +268,19 @@ var pJS = function(tag_id, params){
     }
 
     /* position */
-    this.x = position ? position.x : Math.random() * pJS.canvas.w;
-    this.y = position ? position.y : Math.random() * pJS.canvas.h;
+    if(pJS.polygon.raw.length > 0){
+      if(position){
+        this.x = position.x;
+        this.y = position.y;
+      }else{
+        var randp = pJS.fn.vendors.randomPointInPolygon();
+        this.x = randp.x;
+        this.y = randp.y;
+      }
+    }else{
+      this.x = position ? position.x : Math.random() * pJS.canvas.w;
+      this.y = position ? position.y : Math.random() * pJS.canvas.h;
+    }
 
     /* check position  - into the canvas */
     if(this.x > pJS.canvas.w - this.radius*2) this.x = this.x - this.radius;
@@ -392,8 +420,6 @@ var pJS = function(tag_id, params){
       }
     }
 
-    
-
   };
 
 
@@ -498,8 +524,16 @@ var pJS = function(tag_id, params){
 
 
   pJS.fn.particlesCreate = function(){
-    for(var i = 0; i < pJS.particles.number.value; i++) {
-      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.value));
+    /* if we are using plygon with config "inline"
+     * disregard particle count and add on particle per point in polygon 
+     */
+    if(pJS.polygon.type === 'inline'){
+      console.log(pJS.polygon);
+      pJS.fn.vendors.drawPointsOnPolygonPath();
+    }else{
+      for(var i = 0; i < pJS.particles.number.value; i++) {
+        pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.value));
+      }
     }
   };
 
@@ -586,10 +620,23 @@ var pJS = function(tag_id, params){
       /* out of canvas modes */
       switch(pJS.particles.move.out_mode){
         case 'bounce':
-          if (p.x + p.radius > pJS.canvas.w) p.vx = -p.vx;
-          else if (p.x - p.radius < 0) p.vx = -p.vx;
-          if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
-          else if (p.y - p.radius < 0) p.vy = -p.vy;
+          /* check bounce against polygon boundaries */
+          if(pJS.polygon.type !== 'none' && pJS.polygon.type !== 'inline'){
+            if(!pJS.fn.vendors.checkInsidePolygon(p)){
+              p.vx = -p.vx + (p.vy/2);
+              p.vy = -p.vy + (p.vx/2);
+            };
+          }else if(pJS.polygon.type === 'inline'){
+            if(Math.sqrt((p.initial_x - p.x)*(p.initial_x - p.x) + (p.initial_y - p.y)*(p.initial_y - p.y)) > pJS.polygon.move.radius){
+              p.vx = -p.vx + (p.vy/2);
+              p.vy = -p.vy + (p.vx/2);
+            };
+          }else{
+            if (p.x + p.radius > pJS.canvas.w) p.vx = -p.vx;
+            else if (p.x - p.radius < 0) p.vx = -p.vx;
+            if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
+            else if (p.y - p.radius < 0) p.vy = -p.vy;
+          }
         break;
       }
 
@@ -641,6 +688,11 @@ var pJS = function(tag_id, params){
 
     /* update each particles param */
     pJS.fn.particlesUpdate();
+
+    /* draw polygon shape in debug mode */
+    if(pJS.polygon.debug){
+      pJS.fn.vendors.drawDebugPolygon();
+    }
 
     /* draw each particle */
     for(var i = 0; i < pJS.particles.array.length; i++){
@@ -1111,47 +1163,13 @@ var pJS = function(tag_id, params){
     if(pJS.interactivity.events.onclick.enable){
 
       pJS.interactivity.el.addEventListener('click', function(){
-
-        pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
-        pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
-        pJS.interactivity.mouse.click_time = new Date().getTime();
-
-        if(pJS.interactivity.events.onclick.enable){
-
-          switch(pJS.interactivity.events.onclick.mode){
-
-            case 'push':
-              if(pJS.particles.move.enable){
-                pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
-              }else{
-                if(pJS.interactivity.modes.push.particles_nb == 1){
-                  pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
-                }
-                else if(pJS.interactivity.modes.push.particles_nb > 1){
-                  pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb);
-                }
-              }
-            break;
-
-            case 'remove':
-              pJS.fn.modes.removeParticles(pJS.interactivity.modes.remove.particles_nb);
-            break;
-
-            case 'bubble':
-              pJS.tmp.bubble_clicking = true;
-            break;
-
-            case 'repulse':
-              pJS.tmp.repulse_clicking = true;
-              pJS.tmp.repulse_count = 0;
-              pJS.tmp.repulse_finish = false;
-              setTimeout(function(){
-                pJS.tmp.repulse_clicking = false;
-              }, pJS.interactivity.modes.repulse.duration*1000)
-            break;
-
+    
+        if(pJS.polygon.type !== 'none' && pJS.polygon.type !== 'inline'){
+          if(pJS.fn.vendors.checkInsidePolygon({x:pJS.interactivity.mouse.pos_x,y:pJS.interactivity.mouse.pos_y})){
+            pJS.fn.vendors.doClickActions();
           }
-
+        }else{
+          pJS.fn.vendors.doClickActions();          
         }
 
       });
@@ -1160,6 +1178,51 @@ var pJS = function(tag_id, params){
 
 
   };
+
+  pJS.fn.vendors.doClickActions = function(){
+    //
+    pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
+    pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
+    pJS.interactivity.mouse.click_time = new Date().getTime();
+
+    if(pJS.interactivity.events.onclick.enable){
+
+      switch(pJS.interactivity.events.onclick.mode){
+
+        case 'push':
+          if(pJS.particles.move.enable){
+            pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
+          }else{
+            if(pJS.interactivity.modes.push.particles_nb == 1){
+              pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
+            }
+            else if(pJS.interactivity.modes.push.particles_nb > 1){
+              pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb);
+            }
+          }
+        break;
+
+        case 'remove':
+          pJS.fn.modes.removeParticles(pJS.interactivity.modes.remove.particles_nb);
+        break;
+
+        case 'bubble':
+          pJS.tmp.bubble_clicking = true;
+        break;
+
+        case 'repulse':
+          pJS.tmp.repulse_clicking = true;
+          pJS.tmp.repulse_count = 0;
+          pJS.tmp.repulse_finish = false;
+          setTimeout(function(){
+            pJS.tmp.repulse_clicking = false;
+          }, pJS.interactivity.modes.repulse.duration*1000)
+        break;
+
+      }
+
+    }
+  }
 
   pJS.fn.vendors.densityAutoParticles = function(){
 
@@ -1370,6 +1433,114 @@ var pJS = function(tag_id, params){
   };
 
 
+  pJS.fn.vendors.newXMLHttpRequest = function(){
+    var xmlreq = false;
+    if (window.XMLHttpRequest){
+      xmlreq = new XMLHttpRequest();
+    }else if (window.ActiveXObject){
+      try {
+        xmlreq = new ActiveXObject("Microsoft.XMLHTTP");
+      }catch(e){
+        alert("Error: Unable to create an XMLHttpRequest.");
+      }
+    }
+    return xmlreq;
+  };
+
+  pJS.fn.vendors.checkInsidePolygon = function(position){
+    // https://github.com/substack/point-in-polygon
+    // ray-casting algorithm based on
+    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+    if(pJS.polygon.type !== 'inline'){
+      if(pJS.polygon.raw.length > 0){
+        var x = position ? position.x : Math.random() * pJS.canvas.w;
+        var y = position ? position.y : Math.random() * pJS.canvas.h;
+        var inside = false;
+        for (var i = 0, j = pJS.polygon.raw.length - 1; i < pJS.polygon.raw.length; j = i++) {
+          var xi = pJS.polygon.raw[i][0], yi = pJS.polygon.raw[i][1];
+          var xj = pJS.polygon.raw[j][0], yj = pJS.polygon.raw[j][1];
+          var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+          if (intersect) inside = !inside;
+        }
+        if(pJS.polygon.type === 'inside'){
+          return inside;
+        }else if(pJS.polygon.type === 'outside'){
+          return !inside;
+        }
+      }else{
+        console.error('No polygon found, you need to specify SVG url in config.');
+        return true;
+      }
+    }else{
+      return true;
+    }
+  };
+
+  pJS.fn.vendors.randomPointInPolygon = function(){
+    var p = {
+      x: Math.random() * pJS.canvas.w,
+      y: Math.random() * pJS.canvas.h
+    }
+    if(pJS.fn.vendors.checkInsidePolygon(p)){
+      return p;
+    }else{
+      return pJS.fn.vendors.randomPointInPolygon();
+    }
+  };
+
+  pJS.fn.vendors.parseSvgPathToPolygon = function(svgUrl){
+    // Load SVG from file on server
+    var XMLrequest = pJS.fn.vendors.newXMLHttpRequest(); // new XML request
+    XMLrequest.open("GET", svgUrl, false); // URL of the SVG file on server
+    XMLrequest.send(null); // get the SVG file
+    //
+    var svg = XMLrequest.responseXML.getElementsByTagName("svg")[0];
+    pJS.polygon.width = svg.getAttribute("width");
+    pJS.polygon.height = svg.getAttribute("height");
+    /* centering of the polygon mask */
+    pJS.polygon.offsetx = pJS.canvas.w/2 - pJS.polygon.width/2;
+    pJS.polygon.offsety = pJS.canvas.h/2 - pJS.polygon.height/2;
+    //
+    var path = XMLrequest.responseXML.getElementsByTagName("path")[0];
+    // https://stackoverflow.com/a/15975991
+    var len = path.getTotalLength();
+    var p = path.getPointAtLength(0);
+    var seg = path.getPathSegAtLength(0);
+    var polygonRAW = [];
+    for(var i=1; i<len; i++){
+      p=path.getPointAtLength(i);
+      if (path.getPathSegAtLength(i)>seg) {
+        polygonRAW.push([p.x + pJS.polygon.offsetx, p.y + pJS.polygon.offsety]);
+        seg = path.getPathSegAtLength(i);
+      }
+    }
+    return polygonRAW;
+  };
+
+  pJS.fn.vendors.drawDebugPolygon = function(){
+    var c2 = pJS.canvas.el.getContext('2d');
+    c2.beginPath();
+    c2.moveTo(pJS.polygon.raw[0][0],pJS.polygon.raw[0][1]);
+    for (var i = 1; i < pJS.polygon.raw.length; i++) {
+      c2.lineTo(pJS.polygon.raw[i][0],pJS.polygon.raw[i][1]);
+    }
+    c2.closePath();
+    c2.strokeStyle = "#ffffff";
+    c2.lineWidth = 0.5;
+    c2.stroke();
+  };
+
+  pJS.fn.vendors.drawPointsOnPolygonPath = function(){
+    for (var i = 0, j = pJS.polygon.raw.length - 1; i < pJS.polygon.raw.length; j = i++) {
+      var position = {
+        x: pJS.polygon.raw[i][0],
+        y: pJS.polygon.raw[i][1]
+      };
+      pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.value, position));
+    }
+  };
+
+
   pJS.fn.vendors.init = function(){
 
     /* init canvas + particles */
@@ -1388,6 +1559,13 @@ var pJS = function(tag_id, params){
 
   pJS.fn.vendors.start = function(){
 
+    /* If is set the url of svg element, load it and parse into raw polygon data,
+     * works only with single path SVG 
+     */
+    if(pJS.polygon.url){
+      pJS.polygon.raw = pJS.fn.vendors.parseSvgPathToPolygon(pJS.polygon.url);
+    }
+    
     if(isInArray('image', pJS.particles.shape.type)){
       pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
       pJS.fn.vendors.loadImg(pJS.tmp.img_type);
