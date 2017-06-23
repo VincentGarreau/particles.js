@@ -123,7 +123,8 @@ var pJS = function(tag_id, params){
           duration: 0.4
         },
         push:{
-          particles_nb: 4
+          particles_nb: 4,
+          particles_max: 9999
         },
         remove:{
           particles_nb: 2
@@ -1144,7 +1145,7 @@ var pJS = function(tag_id, params){
           switch(pJS.interactivity.events.onclick.mode){
 
             case 'push':
-              if(pJS.particles.move.enable){
+              if(pJS.particles.move.enable && pJS.particles.array.length<=pJS.interactivity.modes.push.particles_max){
                 pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
               }else{
                 if(pJS.interactivity.modes.push.particles_nb == 1){
