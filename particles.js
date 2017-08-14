@@ -426,8 +426,11 @@ var pJS = function(tag_id, params){
 
     case 'line':
         pJS.canvas.ctx.moveTo(p.x, p.y)
-        pJS.canvas.ctx.lineTo(p.x-radius, p.y+radius / 0.4)
-        pJS.canvas.ctx.stroke()
+        pJS.canvas.ctx.lineTo(p.x, p.y+radius)
+        pJS.canvas.ctx.strokeStyle = pJS.particles.shape.stroke.color;
+        pJS.canvas.ctx.lineWidth = pJS.particles.shape.stroke.width;
+        pJS.canvas.ctx.stroke() 
+      
       break;
 
       case 'circle':
