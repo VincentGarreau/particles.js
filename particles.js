@@ -424,6 +424,10 @@ var pJS = function(tag_id, params){
 
     switch(p.shape){
 
+      case 'line':
+        pJS.canvas.ctx.fillRect(p.x, p.y, 2, 10)
+      break;
+
       case 'circle':
         pJS.canvas.ctx.arc(p.x, p.y, radius, 0, Math.PI * 2, false);
       break;
