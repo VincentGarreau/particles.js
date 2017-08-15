@@ -159,7 +159,7 @@ key | option type / notes | example
 `particles.color.value` | HEX (string) <br /> RGB (object) <br /> HSL (object) <br /> array selection (HEX) <br /> random (string) | `"#b61924"` <br /> `{r:182, g:25, b:36}` <br />  `{h:356, s:76, l:41}` <br /> `["#b61924", "#333333", "999999"]` <br /> `"random"`
 `particles.shape.type` | string <br /> array selection | `"circle"` <br /> `"edge"` <br /> `"triangle"` <br /> `"polygon"` <br /> `"star"` <br /> `"image"` <br /> `["circle", "triangle", "image"]`
 `particles.shape.stroke.width` | number | `2`
-`particles.shape.stroke.color` | HEX (string) | `"#222222"`
+`particles.shape.stroke.color` | HEX (string) <br /> random (string)| `"#222222"` <br /> `"random"`
 `particles.shape.polygon.nb_slides` | number | `5`
 `particles.shape.image.src` | path link <br /> svg / png / gif / jpg | `"assets/img/yop.svg"` <br /> `"http://mywebsite.com/assets/img/yop.png"`
 `particles.shape.image.width` | number <br />(for aspect ratio) | `100`
@@ -178,7 +178,7 @@ key | option type / notes | example
 `particles.size.anim.sync` | boolean | `true` / `false`
 `particles.line_linked.enable` | boolean | `true` / `false`
 `particles.line_linked.distance` | number | `150`
-`particles.line_linked.color` | HEX (string) | `#ffffff`
+`particles.line_linked.color` | HEX (string)  <br /> random (string)| `#ffffff` <br /> `"random"`
 `particles.line_linked.opacity` | number (0 to 1) | `0.5`
 `particles.line_linked.width` | number | `1.5`
 `particles.move.enable` | boolean | `true` / `false`
@@ -193,7 +193,7 @@ key | option type / notes | example
 `particles.move.attract.rotateY` | number | `1500`
 `interactivity.detect_on` | string | `"canvas", "window"`
 `interactivity.events.onhover.enable` | boolean | `true` / `false`
-`interactivity.events.onhover.mode` | string <br /> array selection | `"grab"` <br /> `"bubble"` <br /> `"repulse"` <br /> `["grab", "bubble"]`
+`interactivity.events.onhover.mode` | string <br /> array selection | `"grab"` <br /> `"bubble"` <br /> `"repulse"` <br /> `"connect"` <br /> `["grab", "bubble"]`
 `interactivity.events.onclick.enable` | boolean | `true` / `false`
 `interactivity.events.onclick.mode` | string <br /> array selection | `"push"` <br /> `"remove"` <br /> `"bubble"` <br /> `"repulse"` <br /> `["push", "repulse"]`
 `interactivity.events.resize` | boolean | `true` / `false`
