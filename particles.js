@@ -1076,8 +1076,8 @@ var pJS = function(tag_id, params){
       pJS.interactivity.el.addEventListener('mousemove', function(e){
 
         if(pJS.interactivity.el == window){
-          var pos_x = e.clientX,
-              pos_y = e.clientY;
+          var pos_x = e.clientX - canvas_el.getBoundingClientRect().left,
+              pos_y = e.clientY - canvas_el.getBoundingClientRect().top;
         }
         else{
           var pos_x = e.offsetX || e.clientX,
