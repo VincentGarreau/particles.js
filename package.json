@@ -1,10 +1,19 @@
 {
-  "name": "particles.js",
+  "name": "@dschau/particles.js",
   "version": "2.0.0",
   "description": "A lightweight JavaScript library for creating particles",
-  "homepage": "http://vincentgarreau.com/particles.js",
+  "homepage": "https://github.com/dschau/particles.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/particles.js",
+  "module": "./src/particles.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "npm run clean",
+    "build": "rollup --config",
+    "clean": "del-cli \"dist/**/*\"",
+    "test": "echo \"Should write some tests\""
   },
   "repository": {
     "type": "git",
@@ -17,12 +26,15 @@
   ],
   "author": "Vincent Garreau",
   "license": "MIT",
-  "files": [
-    "particles.js",
-    "particles.min.js"
-  ],
   "bugs": {
     "url": "https://github.com/VincentGarreau/particles.js/issues"
   },
-  "homepage": "https://github.com/VincentGarreau/particles.js"
+  "devDependencies": {
+    "del-cli": "~1.0.0",
+    "rollup": "~0.41.6"
+  },
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
 }

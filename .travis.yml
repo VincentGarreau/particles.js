@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - stable
+cache:
+  yarn: true
+
+script: yarn test
+
+before_deploy: yarn build
+deploy:
+  provider: npm
+  email: $NPM_EMAIL
+  api_key: $NPM_API_KEY
+  skip_cleanup: true
+  on:
+    tags: true

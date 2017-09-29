@@ -1,3 +1,9 @@
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.particlesJS = factory());
+}(this, (function () { 'use strict';
+
 /* -----------------------------------------------
 /* Author : Vincent Garreau  - vincentgarreau.com
 /* MIT license: http://opensource.org/licenses/MIT
@@ -7,9 +13,9 @@
 /* v2.0.0
 /* ----------------------------------------------- */
 
-var pJS = function(tag_id, params){
-
-  var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
+function pJS(tag_id, params) {
+  tag_id = tag_id.substr(0, 1).match(/\.|#/) ? tag_id : '#' + tag_id;
+  var canvas_el = document.querySelector(tag_id+' > .particles-js-canvas-el');
 
   /* particles.js variables with default values */
   this.pJS = {
@@ -278,14 +284,14 @@ var pJS = function(tag_id, params){
             r: color.value.r,
             g: color.value.g,
             b: color.value.b
-          }
+          };
         }
         if(color.value.h != undefined && color.value.s != undefined && color.value.l != undefined){
           this.color.hsl = {
             h: color.value.h,
             s: color.value.s,
             l: color.value.l
-          }
+          };
         }
       }
 
@@ -295,7 +301,7 @@ var pJS = function(tag_id, params){
         r: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
         g: (Math.floor(Math.random() * (255 - 0 + 1)) + 0),
         b: (Math.floor(Math.random() * (255 - 0 + 1)) + 0)
-      }
+      };
     }
     else if(typeof(color.value) == 'string'){
       this.color = color;
@@ -313,7 +319,7 @@ var pJS = function(tag_id, params){
     }
 
     /* animation - velocity for speed */
-    var velbase = {}
+    var velbase = {};
     switch(pJS.particles.move.direction){
       case 'top':
         velbase = { x:0, y:-1 };
@@ -382,7 +388,7 @@ var pJS = function(tag_id, params){
       this.img = {
         src: sh.image.src,
         ratio: sh.image.width / sh.image.height
-      }
+      };
       if(!this.img.ratio) this.img.ratio = 1;
       if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined){
         pJS.fn.vendors.createSvgImg(this);
@@ -556,14 +562,14 @@ var pJS = function(tag_id, params){
           x_right:  pJS.canvas.w,
           y_top: p.radius,
           y_bottom: pJS.canvas.h
-        }
+        };
       }else{
         var new_pos = {
           x_left: -p.radius,
           x_right: pJS.canvas.w + p.radius,
           y_top: -p.radius,
           y_bottom: pJS.canvas.h + p.radius
-        }
+        };
       }
 
       if(p.x - p.radius > pJS.canvas.w){
@@ -727,7 +733,7 @@ var pJS = function(tag_id, params){
     }
     
 
-  }
+  };
 
 
   pJS.fn.interact.bounceParticles = function(p1, p2){
@@ -745,7 +751,7 @@ var pJS = function(tag_id, params){
       p2.vy = -p2.vy;
     }
 
-  }
+  };
 
 
   /* ---------- pJS functions - modes events ------------ */
@@ -764,7 +770,7 @@ var pJS = function(tag_id, params){
             'y': pos ? pos.pos_y : Math.random() * pJS.canvas.h
           }
         )
-      )
+      );
       if(i == nb-1){
         if(!pJS.particles.move.enable){
           pJS.fn.particlesDraw();
@@ -937,7 +943,7 @@ var pJS = function(tag_id, params){
       var pos = {
         x: p.x + normVec.x * repulseFactor,
         y: p.y + normVec.y * repulseFactor
-      }
+      };
 
       if(pJS.particles.move.out_mode == 'bounce'){
         if(pos.x - p.radius > 0 && pos.x + p.radius < pJS.canvas.w) p.x = pos.x;
@@ -979,7 +985,7 @@ var pJS = function(tag_id, params){
             var pos = {
               x: p.x + p.vx,
               y: p.y + p.vy
-            }
+            };
             if (pos.x + p.radius > pJS.canvas.w) p.vx = -p.vx;
             else if (pos.x - p.radius < 0) p.vx = -p.vx;
             if (pos.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
@@ -1016,7 +1022,7 @@ var pJS = function(tag_id, params){
 
     }
 
-  }
+  };
 
 
   pJS.fn.modes.grabParticle = function(p){
@@ -1147,7 +1153,7 @@ var pJS = function(tag_id, params){
               pJS.tmp.repulse_finish = false;
               setTimeout(function(){
                 pJS.tmp.repulse_clicking = false;
-              }, pJS.interactivity.modes.repulse.duration*1000)
+              }, pJS.interactivity.modes.repulse.duration*1000);
             break;
 
           }
@@ -1287,7 +1293,7 @@ var pJS = function(tag_id, params){
               pJS.tmp.img_error = true;
             }
           }
-        }
+        };
         xhr.send();
 
       }else{
@@ -1409,16 +1415,16 @@ var pJS = function(tag_id, params){
   
 
 
-};
+}
 
 /* ---------- global functions - vendors ------------ */
 
-Object.deepExtend = function(destination, source) {
+Object.deepExtend = function deepExtendFn(destination, source) {
   for (var property in source) {
     if (source[property] && source[property].constructor &&
      source[property].constructor === Object) {
       destination[property] = destination[property] || {};
-      arguments.callee(destination[property], source[property]);
+      deepExtendFn(destination[property], source[property]);
     } else {
       destination[property] = source[property];
     }
@@ -1459,23 +1465,22 @@ function hexToRgb(hex){
       g: parseInt(result[2], 16),
       b: parseInt(result[3], 16)
   } : null;
-};
+}
 
 function clamp(number, min, max) {
   return Math.min(Math.max(number, min), max);
-};
+}
 
 function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
+var pJSDom = [];
+
 
 /* ---------- particles.js functions - start ------------ */
 
-window.pJSDom = [];
-
-window.particlesJS = function(tag_id, params){
-
+var particlesJS = function (tag_id, params) {
   //console.log(params);
 
   /* no string id? so it's object params, and set the id with default id */
@@ -1519,7 +1524,7 @@ window.particlesJS = function(tag_id, params){
 
 };
 
-window.particlesJS.load = function(tag_id, path_config_json, callback){
+particlesJS.load = function(tag_id, path_config_json, callback){
 
   /* load json config */
   var xhr = new XMLHttpRequest();
@@ -1528,7 +1533,7 @@ window.particlesJS.load = function(tag_id, path_config_json, callback){
     if(xhr.readyState == 4){
       if(xhr.status == 200){
         var params = JSON.parse(data.currentTarget.response);
-        window.particlesJS(tag_id, params);
+        particlesJS(tag_id, params);
         if(callback) callback();
       }else{
         console.log('Error pJS - XMLHttpRequest status: '+xhr.status);
@@ -1537,5 +1542,14 @@ window.particlesJS.load = function(tag_id, path_config_json, callback){
     }
   };
   xhr.send();
-
 };
+
+particlesJS.destroy = function () {
+  pJSDom.forEach(function (instance) {
+    instance.pJS.fn.vendors.destroypJS();
+  });
+};
+
+return particlesJS;
+
+})));
