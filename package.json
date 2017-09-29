@@ -13,7 +13,7 @@
     "prebuild": "npm run clean",
     "build": "rollup --config",
     "clean": "del-cli \"dist/**/*\"",
-    "prepublish": "npm run build"
+    "test": "echo \"Should write some tests\""
   },
   "repository": {
     "type": "git",
