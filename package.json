@@ -1,8 +1,8 @@
 {
-  "name": "particles.js",
+  "name": "@dschau/particles.js",
   "version": "2.0.0",
   "description": "A lightweight JavaScript library for creating particles",
-  "homepage": "https://github.com/VincentGarreau/particles.js",
+  "homepage": "https://github.com/dschau/particles.js",
   "files": [
     "dist",
     "src"
@@ -10,9 +10,10 @@
   "main": "./dist/particles.js",
   "module": "./src/particles.js",
   "scripts": {
-    "prebuild": "del-cli \"dist/**/*\"",
+    "prebuild": "npm run clean",
     "build": "rollup --config",
-    "prebpublish": "npm run build"
+    "clean": "del-cli \"dist/**/*\"",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -32,5 +33,8 @@
     "del-cli": "~1.0.0",
     "rollup": "~0.41.6"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -1475,13 +1475,12 @@ function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
+var pJSDom = [];
+
 
 /* ---------- particles.js functions - start ------------ */
 
-var pJSDom = [];
-
-var particlesJS = function(tag_id, params){
-
+var particlesJS = function (tag_id, params) {
   //console.log(params);
 
   /* no string id? so it's object params, and set the id with default id */
@@ -1543,6 +1542,12 @@ particlesJS.load = function(tag_id, path_config_json, callback){
     }
   };
   xhr.send();
+};
+
+particlesJS.destroy = function () {
+  pJSDom.forEach(function (instance) {
+    instance.pJS.fn.vendors.destroypJS();
+  });
 };
 
 return particlesJS;
