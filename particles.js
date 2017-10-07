@@ -21,6 +21,7 @@ var pJS = function(tag_id, params){
     particles: {
       number: {
         value: 400,
+        limit: 500,
         density: {
           enable: true,
           value_area: 800
@@ -753,7 +754,9 @@ var pJS = function(tag_id, params){
   pJS.fn.modes.pushParticles = function(nb, pos){
 
     pJS.tmp.pushing = true;
-
+    if((pJS.particles.array.length + nb) > pJS.particles.number.limit) {
+      pJS.fn.removeParticles((pJS.particles.array.length + nb)- pJS.particles.number.limit);
+    }
     for(var i = 0; i < nb; i++){
       pJS.particles.array.push(
         new pJS.fn.particle(
