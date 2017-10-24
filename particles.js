@@ -228,6 +228,7 @@ var pJS = function(tag_id, params){
 
 
   pJS.fn.canvasPaint = function(){
+    pJS.canvas.ctx.fillStyle = "rgba(255, 255, 255, 0)";
     pJS.canvas.ctx.fillRect(0, 0, pJS.canvas.w, pJS.canvas.h);
   };
 
