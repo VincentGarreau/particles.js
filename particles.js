@@ -133,7 +133,8 @@ var pJS = function(tag_id, params){
         radius: 10
       },
       url: '',
-      raw: null
+      raw: null,
+      path: null
     },
     fn: {
       interact: {},
@@ -164,6 +165,9 @@ var pJS = function(tag_id, params){
 
 
   pJS.fn.retinaInit = function(){
+
+    var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
     if(pJS.retina_detect && window.devicePixelRatio > 1){
       pJS.canvas.pxratio = window.devicePixelRatio; 
@@ -228,6 +232,17 @@ var pJS = function(tag_id, params){
 
         /* density particles enabled */
         pJS.fn.vendors.densityAutoParticles();
+        
+        /* redraw (re-center) polygon particles */
+        if(!pJS.polygon.type !== 'none'){
+          if(pJS.polygon.redrawTimeout) clearTimeout(pJS.polygon.redrawTimeout);
+          pJS.polygon.redrawTimeout = setTimeout(function(){
+            pJS.polygon.raw = pJS.fn.vendors.parseSvgPathToPolygon();
+            pJS.fn.particlesEmpty();
+            pJS.fn.particlesCreate();
+            pJS.fn.particlesDraw();
+          },250);
+        }
 
       });
 
@@ -528,7 +543,6 @@ var pJS = function(tag_id, params){
      * disregard particle count and add on particle per point in polygon 
      */
     if(pJS.polygon.type === 'inline'){
-      console.log(pJS.polygon);
       pJS.fn.vendors.drawPointsOnPolygonPath();
     }else{
       for(var i = 0; i < pJS.particles.number.value; i++) {
@@ -1489,29 +1503,32 @@ var pJS = function(tag_id, params){
   };
 
   pJS.fn.vendors.parseSvgPathToPolygon = function(svgUrl){
+    svgUrl = svgUrl || pJS.polygon.url;
     // Load SVG from file on server
-    var XMLrequest = pJS.fn.vendors.newXMLHttpRequest(); // new XML request
-    XMLrequest.open("GET", svgUrl, false); // URL of the SVG file on server
-    XMLrequest.send(null); // get the SVG file
-    //
-    var svg = XMLrequest.responseXML.getElementsByTagName("svg")[0];
-    pJS.polygon.width = svg.getAttribute("width");
-    pJS.polygon.height = svg.getAttribute("height");
+    if(!pJS.polygon.path || !pJS.polygon.svg){
+      var XMLrequest = pJS.fn.vendors.newXMLHttpRequest(); // new XML request
+      XMLrequest.open("GET", svgUrl, false); // URL of the SVG file on server
+      XMLrequest.send(null); // get the SVG file
+      //
+      pJS.polygon.svg = XMLrequest.responseXML.getElementsByTagName("svg")[0];
+      pJS.polygon.path = XMLrequest.responseXML.getElementsByTagName("path")[0];
+    }
+    pJS.polygon.width = pJS.polygon.svg.getAttribute("width");
+    pJS.polygon.height = pJS.polygon.svg.getAttribute("height");
     /* centering of the polygon mask */
     pJS.polygon.offsetx = pJS.canvas.w/2 - pJS.polygon.width/2;
     pJS.polygon.offsety = pJS.canvas.h/2 - pJS.polygon.height/2;
     //
-    var path = XMLrequest.responseXML.getElementsByTagName("path")[0];
     // https://stackoverflow.com/a/15975991
-    var len = path.getTotalLength();
-    var p = path.getPointAtLength(0);
-    var seg = path.getPathSegAtLength(0);
+    var len = pJS.polygon.path.getTotalLength();
+    var p = pJS.polygon.path.getPointAtLength(0);
+    var seg = pJS.polygon.path.getPathSegAtLength(0);
     var polygonRAW = [];
     for(var i=1; i<len; i++){
-      p=path.getPointAtLength(i);
-      if (path.getPathSegAtLength(i)>seg) {
+      p=pJS.polygon.path.getPointAtLength(i);
+      if (pJS.polygon.path.getPathSegAtLength(i)>seg) {
         polygonRAW.push([p.x + pJS.polygon.offsetx, p.y + pJS.polygon.offsety]);
-        seg = path.getPathSegAtLength(i);
+        seg = pJS.polygon.path.getPathSegAtLength(i);
       }
     }
     return polygonRAW;
