@@ -240,4 +240,6 @@ meteor add newswim:particles
 
 ***Please use this host or your own to load particles.js on your projects***
 
+[![](https://data.jsdelivr.com/v1/package/npm/particles.js/badge)](https://www.jsdelivr.com/package/npm/particles.js)
+
 http://www.jsdelivr.com/#!particles.js
