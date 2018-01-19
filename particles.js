@@ -1501,7 +1501,16 @@ var pJS = function(tag_id, params){
       return pJS.fn.vendors.randomPointInPolygon();
     }
   };
-
+  
+  /**
+   * Depends on SVGPathSeg API polyfill https://github.com/progers/pathseg for Chrome
+   * Deprecate SVGPathElement.getPathSegAtLength removed in:
+   * Chrome for desktop release 62
+   * Chrome for Android release 62
+   * Android WebView release 62
+   * Opera release 49
+   * Opera for Android release 49
+   */
   pJS.fn.vendors.parseSvgPathToPolygon = function(svgUrl){
     svgUrl = svgUrl || pJS.polygon.url;
     // Load SVG from file on server
