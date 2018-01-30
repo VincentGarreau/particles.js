@@ -1038,7 +1038,7 @@ var pJS = function(tag_id, params){
       }
 
     } else if (pJS.interactivity.events.ondiv.enable) {
-      var elem = document.getElementById(pJS.interactivity.events.ondiv.divName);
+      var elem = document.getElementById(pJS.interactivity.events.ondiv.el);
 
       var pos_x = (elem.offsetLeft + elem.offsetWidth / 2),
           pos_y = (elem.offsetTop + elem.offsetHeight / 2),
