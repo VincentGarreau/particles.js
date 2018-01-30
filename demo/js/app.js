@@ -85,6 +85,11 @@ particlesJS('particles-js',
     "interactivity": {
       "detect_on": "canvas",
       "events": {
+        "ondiv": {
+          "enable": true,
+          "mode": "repulse",
+          "el": "repulse-div"
+        },
         "onhover": {
           "enable": true,
           "mode": "repulse",
