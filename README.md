@@ -246,7 +246,7 @@ http://www.jsdelivr.com/#!particles.js
 
 -------------------------------
 
-### `Bugfix by mmacheerpuppy / callumleach.com`
+### `Bugfix by mmacheerpuppy / callumleach.com (feel free to remove once read)`
 
 ***An FPS limiter has been included in the code***
 

@@ -1,6 +1,6 @@
 {
   "particles": {
-    "fps_limit": 20,
+    "fps_limit": 30,
     "number": {
       "value": 80,
       "density": {
