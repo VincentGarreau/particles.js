@@ -1,6 +1,6 @@
 ### Bugfix by mmacheerpuppy / callumleach.com
 
-***An FPS limiter has been included in the code***
+***An FPS limiter has been included in the code to help resolve CPU utilization issues***
 
 This functions by using a setTimeout() method to limit the number of calls to requestAnimationFrame.
 As specified in the documentation this can be set in the JSON.
