@@ -7,8 +7,8 @@ As specified in the documentation this can be set in the JSON.
 
 Happy Coding!
 
-www.github.com/mmacheerpuppy
-www.callumleach.com
+
+
 
 ------------------------------
 
