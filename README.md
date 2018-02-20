@@ -1,3 +1,17 @@
+### `Bugfix by mmacheerpuppy / callumleach.com`
+
+***An FPS limiter has been included in the code***
+
+This functions by using a setTimeout() method to limit the number of calls to requestAnimationFrame.
+As specified in the documentation this can be set in the JSON.
+
+Happy Coding!
+
+www.github.com/mmacheerpuppy
+www.callumleach.com
+
+------------------------------
+
 ## particles.js
 
 ### A lightweight JavaScript library for creating particles.
@@ -245,15 +259,3 @@ meteor add newswim:particles
 http://www.jsdelivr.com/#!particles.js
 
 -------------------------------
-
-### `Bugfix by mmacheerpuppy / callumleach.com (feel free to remove once read)`
-
-***An FPS limiter has been included in the code***
-
-This functions by using a setTimeout() method to limit the number of calls to requestAnimationFrame.
-As specified in the documentation this can be set in the JSON.
-
-Happy Coding!
-
-www.github.com/mmacheerpuppy
-www.callumleach.com
