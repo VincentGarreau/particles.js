@@ -1349,6 +1349,7 @@ var pJS = function(tag_id, params){
             defaultDraw()
         }, 1000 / fps_limit)
     }
+
   };
 
 
