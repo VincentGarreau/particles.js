@@ -1,4 +1,4 @@
-### `Bugfix by mmacheerpuppy / callumleach.com`
+### Bugfix by mmacheerpuppy / callumleach.com
 
 ***An FPS limiter has been included in the code***
 
