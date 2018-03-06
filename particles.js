@@ -1064,6 +1064,8 @@ var pJS = function(tag_id, params){
     /* events target element */
     if(pJS.interactivity.detect_on == 'window'){
       pJS.interactivity.el = window;
+    }else if(pJS.interactivity.detect_on == 'parent'){
+      pJS.interactivity.el = pJS.canvas.el.parentNode;
     }else{
       pJS.interactivity.el = pJS.canvas.el;
     }
@@ -1078,6 +1080,10 @@ var pJS = function(tag_id, params){
         if(pJS.interactivity.el == window){
           var pos_x = e.clientX,
               pos_y = e.clientY;
+        }
+        if(pJS.interactivity.detect_on == 'parent'){
+            var pos_x = e.offsetX + e.srcElement.getBoundingClientRect().left - e.currentTarget.getBoundingClientRect().left,
+                pos_y = e.offsetY + e.srcElement.getBoundingClientRect().top - e.currentTarget.getBoundingClientRect().top;
         }
         else{
           var pos_x = e.offsetX || e.clientX,
