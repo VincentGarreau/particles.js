@@ -127,7 +127,10 @@ var pJS = function(tag_id, params){
     },
     retina_detect: false,
     polygon: {
-      debug: false,
+      debug: {
+        enable: false,
+        color: "#ffffff"
+      },
       type: 'none',
       move: {
         radius: 10
@@ -170,9 +173,9 @@ var pJS = function(tag_id, params){
     var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
     if(pJS.retina_detect && window.devicePixelRatio > 1){
-      pJS.canvas.pxratio = window.devicePixelRatio; 
+      pJS.canvas.pxratio = window.devicePixelRatio;
       pJS.tmp.retina = true;
-    } 
+    }
     else{
       pJS.canvas.pxratio = 1;
       pJS.tmp.retina = false;
@@ -232,7 +235,7 @@ var pJS = function(tag_id, params){
 
         /* density particles enabled */
         pJS.fn.vendors.densityAutoParticles();
-        
+
         /* redraw (re-center) polygon particles */
         if(!pJS.polygon.type !== 'none'){
           if(pJS.polygon.redrawTimeout) clearTimeout(pJS.polygon.redrawTimeout);
@@ -406,7 +409,7 @@ var pJS = function(tag_id, params){
     this.vx_i = this.vx;
     this.vy_i = this.vy;
 
-    
+
 
     /* if shape is image */
 
@@ -443,7 +446,7 @@ var pJS = function(tag_id, params){
     var p = this;
 
     if(p.radius_bubble != undefined){
-      var radius = p.radius_bubble; 
+      var radius = p.radius_bubble;
     }else{
       var radius = p.radius;
     }
@@ -532,15 +535,15 @@ var pJS = function(tag_id, params){
       pJS.canvas.ctx.lineWidth = pJS.particles.shape.stroke.width;
       pJS.canvas.ctx.stroke();
     }
-    
+
     pJS.canvas.ctx.fill();
-    
+
   };
 
 
   pJS.fn.particlesCreate = function(){
     /* if we are using plygon with config "inline"
-     * disregard particle count and add on particle per point in polygon 
+     * disregard particle count and add on particle per point in polygon
      */
     if(pJS.polygon.type === 'inline'){
       pJS.fn.vendors.drawPointsOnPolygonPath();
@@ -704,7 +707,7 @@ var pJS = function(tag_id, params){
     pJS.fn.particlesUpdate();
 
     /* draw polygon shape in debug mode */
-    if(pJS.polygon.debug){
+    if(pJS.polygon.debug.enable){
       pJS.fn.vendors.drawDebugPolygon();
     }
 
@@ -730,7 +733,7 @@ var pJS = function(tag_id, params){
     pJS.tmp.count_svg = 0;
     pJS.fn.particlesEmpty();
     pJS.fn.canvasClear();
-    
+
     /* restart */
     pJS.fn.vendors.start();
 
@@ -750,14 +753,14 @@ var pJS = function(tag_id, params){
 
       var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
 
-      if(opacity_line > 0){        
-        
+      if(opacity_line > 0){
+
         /* style */
         var color_line = pJS.particles.line_linked.color_rgb_line;
         pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
         pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
         //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
-        
+
         /* path */
         pJS.canvas.ctx.beginPath();
         pJS.canvas.ctx.moveTo(p1.x, p1.y);
@@ -791,7 +794,7 @@ var pJS = function(tag_id, params){
       p2.vy += ay;
 
     }
-    
+
 
   }
 
@@ -871,7 +874,7 @@ var pJS = function(tag_id, params){
       if(dist_mouse <= pJS.interactivity.modes.bubble.distance){
 
         if(ratio >= 0 && pJS.interactivity.status == 'mousemove'){
-          
+
           /* size */
           if(pJS.interactivity.modes.bubble.size != pJS.particles.size.value){
 
@@ -920,7 +923,7 @@ var pJS = function(tag_id, params){
       if(pJS.interactivity.status == 'mouseleave'){
         init();
       }
-    
+
     }
 
     /* on click event */
@@ -999,7 +1002,7 @@ var pJS = function(tag_id, params){
           repulseRadius = pJS.interactivity.modes.repulse.distance,
           velocity = 100,
           repulseFactor = clamp((1/repulseRadius)*(-1*Math.pow(dist_mouse/repulseRadius,2)+1)*repulseRadius*velocity, 0, 50);
-      
+
       var pos = {
         x: p.x + normVec.x * repulseFactor,
         y: p.y + normVec.y * repulseFactor
@@ -1012,7 +1015,7 @@ var pJS = function(tag_id, params){
         p.x = pos.x;
         p.y = pos.y;
       }
-    
+
     }
 
 
@@ -1067,7 +1070,7 @@ var pJS = function(tag_id, params){
         // }else{
         //   process();
         // }
-        
+
 
       }else{
 
@@ -1075,7 +1078,7 @@ var pJS = function(tag_id, params){
 
           p.vx = p.vx_i;
           p.vy = p.vy_i;
-        
+
         }
 
       }
@@ -1105,7 +1108,7 @@ var pJS = function(tag_id, params){
           pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
           pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
           //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
-          
+
           /* path */
           pJS.canvas.ctx.beginPath();
           pJS.canvas.ctx.moveTo(p.x, p.y);
@@ -1177,17 +1180,17 @@ var pJS = function(tag_id, params){
     if(pJS.interactivity.events.onclick.enable){
 
       pJS.interactivity.el.addEventListener('click', function(){
-    
+
         if(pJS.polygon.type !== 'none' && pJS.polygon.type !== 'inline'){
           if(pJS.fn.vendors.checkInsidePolygon({x:pJS.interactivity.mouse.pos_x,y:pJS.interactivity.mouse.pos_y})){
             pJS.fn.vendors.doClickActions();
           }
         }else{
-          pJS.fn.vendors.doClickActions();          
+          pJS.fn.vendors.doClickActions();
         }
 
       });
-        
+
     }
 
 
@@ -1436,7 +1439,7 @@ var pJS = function(tag_id, params){
           pJS.fn.vendors.init();
           pJS.fn.vendors.draw();
         }
-        
+
       }
 
     }else{
@@ -1501,7 +1504,7 @@ var pJS = function(tag_id, params){
       return pJS.fn.vendors.randomPointInPolygon();
     }
   };
-  
+
   /**
    * Depends on SVGPathSeg API polyfill https://github.com/progers/pathseg for Chrome
    * Deprecate SVGPathElement.getPathSegAtLength removed in:
@@ -1527,19 +1530,65 @@ var pJS = function(tag_id, params){
     /* centering of the polygon mask */
     pJS.polygon.offsetx = pJS.canvas.w/2 - pJS.polygon.width/2;
     pJS.polygon.offsety = pJS.canvas.h/2 - pJS.polygon.height/2;
-    //
-    // https://stackoverflow.com/a/15975991
-    var len = pJS.polygon.path.getTotalLength();
-    var p = pJS.polygon.path.getPointAtLength(0);
-    var seg = pJS.polygon.path.getPathSegAtLength(0);
+
+
+    var len = pJS.polygon.path.pathSegList.numberOfItems;
     var polygonRAW = [];
-    for(var i=1; i<len; i++){
-      p=pJS.polygon.path.getPointAtLength(i);
-      if (pJS.polygon.path.getPathSegAtLength(i)>seg) {
-        polygonRAW.push([p.x + pJS.polygon.offsetx, p.y + pJS.polygon.offsety]);
-        seg = pJS.polygon.path.getPathSegAtLength(i);
+    var p = {x: 0, y:0};
+    for(var i=0; i<len; i++){
+      var pathSeg = pJS.polygon.path.pathSegList.getItem(i);
+
+      switch (pathSeg.pathSegType) {
+        //
+        // Absolute
+        //
+        case window.SVGPathSeg.PATHSEG_MOVETO_ABS:
+        case window.SVGPathSeg.PATHSEG_LINETO_ABS:
+        case window.SVGPathSeg.PATHSEG_CURVETO_CUBIC_ABS:
+        case window.SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_ABS:
+        case window.SVGPathSeg.PATHSEG_ARC_ABS:
+        case window.SVGPathSeg.PATHSEG_CURVETO_CUBIC_SMOOTH_ABS:
+        case window.SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS:
+          p.x = pathSeg.x;
+          p.y = pathSeg.y;
+
+        case window.SVGPathSeg.PATHSEG_LINETO_HORIZONTAL_ABS:
+          p.x = pathSeg.x;
+          break;
+
+        case window.SVGPathSeg.PATHSEG_LINETO_VERTICAL_ABS:
+          p.y = pathSeg.y;
+          break;
+
+        //
+        // Relative
+        //
+        case window.SVGPathSeg.PATHSEG_LINETO_REL:
+        case window.SVGPathSeg.PATHSEG_MOVETO_REL:
+        case window.SVGPathSeg.PATHSEG_CURVETO_CUBIC_REL:
+        case window.SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_REL:
+        case window.SVGPathSeg.PATHSEG_ARC_REL:
+        case window.SVGPathSeg.PATHSEG_CURVETO_CUBIC_SMOOTH_REL:
+        case window.SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL:
+          p.x += pathSeg.x;
+          p.y += pathSeg.y;
+          break;
+
+        case window.SVGPathSeg.PATHSEG_LINETO_HORIZONTAL_REL:
+          p.x += pathSeg.x;
+          break;
+        case window.SVGPathSeg.PATHSEG_LINETO_VERTICAL_REL:
+          p.y += pathSeg.y;
+          break;
+
+        case window.SVGPathSeg.PATHSEG_UNKNOWN:
+        case window.SVGPathSeg.PATHSEG_CLOSEPATH:
+          continue; // Skip the closing path (and the UNKNOWN)
+          break;
       }
+      polygonRAW.push([p.x + pJS.polygon.offsetx, p.y + pJS.polygon.offsety]);
     }
+
     return polygonRAW;
   };
 
@@ -1551,7 +1600,7 @@ var pJS = function(tag_id, params){
       c2.lineTo(pJS.polygon.raw[i][0],pJS.polygon.raw[i][1]);
     }
     c2.closePath();
-    c2.strokeStyle = "#ffffff";
+    c2.strokeStyle = pJS.polygon.debug.color;
     c2.lineWidth = 0.5;
     c2.stroke();
   };
@@ -1586,12 +1635,12 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.start = function(){
 
     /* If is set the url of svg element, load it and parse into raw polygon data,
-     * works only with single path SVG 
+     * works only with single path SVG
      */
     if(pJS.polygon.url){
       pJS.polygon.raw = pJS.fn.vendors.parseSvgPathToPolygon(pJS.polygon.url);
     }
-    
+
     if(isInArray('image', pJS.particles.shape.type)){
       pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
       pJS.fn.vendors.loadImg(pJS.tmp.img_type);
@@ -1610,7 +1659,7 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.eventsListeners();
 
   pJS.fn.vendors.start();
-  
+
 
 
 };
