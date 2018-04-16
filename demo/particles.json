@@ -106,7 +106,10 @@
   },
   "retina_detect": true,
   "polygon": {
-    "debug": false,
+    "debug": {
+      "enable": true,
+      "color": "#000000"
+    },
     "type": "inline",
     "move": {
       "radius": 20
