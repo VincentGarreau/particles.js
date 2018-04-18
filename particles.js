@@ -40,6 +40,7 @@ var pJS = function(tag_id, params){
         },
         image: {
           src: '',
+          type: '',
           width: 100,
           height: 100
         }
@@ -378,10 +379,15 @@ var pJS = function(tag_id, params){
     }
 
     if(this.shape == 'image'){
-      var sh = pJS.particles.shape;
+      var sh = pJS.particles.shape.image;
+      var index;
+      if (Array.isArray(sh.src)){
+        index = Math.floor(Math.random()*sh.src.length);
+      }
+
       this.img = {
-        src: sh.image.src,
-        ratio: sh.image.width / sh.image.height
+        index: index,
+        ratio: sh.width / sh.height
       }
       if(!this.img.ratio) this.img.ratio = 1;
       if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined){
@@ -473,7 +479,7 @@ var pJS = function(tag_id, params){
         if(pJS.tmp.img_type == 'svg'){
           var img_obj = p.img.obj;
         }else{
-          var img_obj = pJS.tmp.img_obj;
+          var img_obj = pJS.tmp.imageArray[this.img.index];
         }
 
         if(img_obj){
@@ -1291,13 +1297,16 @@ var pJS = function(tag_id, params){
         xhr.send();
 
       }else{
-
-        var img = new Image();
-        img.addEventListener('load', function(){
-          pJS.tmp.img_obj = img;
-          pJS.fn.vendors.checkBeforeDraw();
+        if(Array.isArray(pJS.particles.shape.image.src))
+        pJS.tmp.imageArray=[];
+        pJS.particles.shape.image.src.forEach(source => {
+          var img = new Image();
+          img.addEventListener('load', function(){
+            pJS.tmp.imageArray.push(img);
+            pJS.fn.vendors.checkBeforeDraw();
+          });
+          img.src = source;
         });
-        img.src = pJS.particles.shape.image.src;
 
       }
 
@@ -1326,7 +1335,7 @@ var pJS = function(tag_id, params){
 
       }else{
 
-        if(pJS.tmp.img_obj != undefined){
+        if(pJS.tmp.imageArray != undefined){
           pJS.fn.particlesDraw();
           if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
           else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
@@ -1389,7 +1398,7 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.start = function(){
 
     if(isInArray('image', pJS.particles.shape.type)){
-      pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
+      pJS.tmp.img_type = pJS.particles.shape.image.type;
       pJS.fn.vendors.loadImg(pJS.tmp.img_type);
     }else{
       pJS.fn.vendors.checkBeforeDraw();
