@@ -1,4 +1,4 @@
-### Bugfix by mmacheerpuppy / callumleach.com
+### Bugfix 
 
 ***An FPS limiter has been included in the code to help resolve CPU utilization issues***
 
