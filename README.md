@@ -160,7 +160,7 @@ key | option type / notes | example
 `particles.shape.type` | string <br /> array selection | `"circle"` <br /> `"edge"` <br /> `"triangle"` <br /> `"polygon"` <br /> `"star"` <br /> `"image"` <br /> `["circle", "triangle", "image"]`
 `particles.shape.stroke.width` | number | `2`
 `particles.shape.stroke.color` | HEX (string) | `"#222222"`
-`particles.shape.polygon.nb_slides` | number | `5`
+`particles.shape.polygon.nb_sides` | number | `5`
 `particles.shape.image.src` | path link <br /> svg / png / gif / jpg | `"assets/img/yop.svg"` <br /> `"http://mywebsite.com/assets/img/yop.png"`
 `particles.shape.image.width` | number <br />(for aspect ratio) | `100`
 `particles.shape.image.height` | number <br />(for aspect ratio) | `100`
@@ -205,7 +205,7 @@ key | option type / notes | example
 `interactivity.events.modes.repulse.distance` | number | `200`
 `interactivity.events.modes.repulse.duration` | number <br /> (second) | `1.2`
 `interactivity.events.modes.push.particles_nb` | number | `4`
-`interactivity.events.modes.push.particles_nb` | number | `4`
+`interactivity.events.modes.remove.particles_nb` | number | `4`
 `retina_detect` | boolean | `true` / `false`
 
 -------------------------------
