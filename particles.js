@@ -416,9 +416,9 @@ var pJS = function(tag_id, params){
     }
 
     if(p.color.rgb){
-      var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+opacity+')';
+      var color_value = 'rgb('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+')';
     }else{
-      var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+opacity+')';
+      var color_value = 'hsl('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%)';
     }
 
     pJS.canvas.ctx.fillStyle = color_value;
@@ -479,7 +479,9 @@ var pJS = function(tag_id, params){
         }
 
         if(img_obj){
+          pJS.canvas.ctx.globalAlpha = opacity;
           draw();
+          pJS.canvas.ctx.globalAlpha = 1;
         }
 
       break;
