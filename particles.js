@@ -42,7 +42,8 @@ var pJS = function(tag_id, params){
         image: {
           src: '',
           width: 100,
-          height: 100
+          height: 100,
+          replace_color: true
         }
       },
       opacity: {
@@ -391,7 +392,8 @@ var pJS = function(tag_id, params){
       var sh = pJS.particles.shape;
       this.img = {
         src: sh.image.src,
-        ratio: sh.image.width / sh.image.height
+        ratio: sh.image.width / sh.image.height,
+        replace_color: sh.image.replace_color
       }
       if(!this.img.ratio) this.img.ratio = 1;
       if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined){
@@ -424,9 +426,9 @@ var pJS = function(tag_id, params){
     }
 
     if(p.color.rgb){
-      var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+opacity+')';
+      var color_value = 'rgb('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+')';
     }else{
-      var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+opacity+')';
+      var color_value = 'hsl('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%)';
     }
 
     pJS.canvas.ctx.fillStyle = color_value;
@@ -490,7 +492,9 @@ var pJS = function(tag_id, params){
         }
 
         if(img_obj){
+          pJS.canvas.ctx.globalAlpha = opacity;
           draw();
+          pJS.canvas.ctx.globalAlpha = 1;
         }
 
       break;
@@ -1228,7 +1232,9 @@ var pJS = function(tag_id, params){
 
     /* set color to svg element */
     var svgXml = pJS.tmp.source_svg,
-        rgbHex = /#([0-9A-F]{3,6})/gi,
+        url;
+    if (p.img.replace_color) {
+      var rgbHex = /#([0-9A-F]{3,6})/gi,
         coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
           if(p.color.rgb){
             var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+p.opacity+')';
@@ -1237,19 +1243,23 @@ var pJS = function(tag_id, params){
           }
           return color_value;
         });
+      url = 'data:image/svg+xml;utf8,' + coloredSvgXml;
+    } else {
+      url = 'data:image/svg+xml;utf8,' + svgXml;
+    }
 
     /* prepare to create img with colored svg */
-    var svg = new Blob([coloredSvgXml], {type: 'image/svg+xml;charset=utf-8'}),
-        DOMURL = window.URL || window.webkitURL || window,
-        url = DOMURL.createObjectURL(svg);
+    // var svg = new Blob([coloredSvgXml], {type: 'image/svg+xml;charset=utf-8'}),
+    //     DOMURL = window.URL || window.webkitURL || window,
+    //     url = DOMURL.createObjectURL(svg);
 
     /* create particle img obj */
     var img = new Image();
     img.addEventListener('load', function(){
       p.img.obj = img;
       p.img.loaded = true;
-      DOMURL.revokeObjectURL(url);
-      pJS.tmp.count_svg++;
+      // DOMURL.revokeObjectURL(url);
+      pJS.tmp.count_svg = (pJS.tmp.count_svg || 0) + 1;
     });
     img.src = url;
 
