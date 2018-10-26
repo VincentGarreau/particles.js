@@ -74,7 +74,7 @@ particlesJS('particles-js',
         "random": false,
         "straight": false,
         "bounce": true,
-        "out_mode": "bounce-horizontal",
+        "out_mode": "bounce",
         "attract": {
           "enable": false,
           "rotateX": 600,
