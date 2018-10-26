@@ -550,7 +550,7 @@ var pJS = function(tag_id, params){
       }
 
       /* change particle position if it is out of canvas */
-      if(pJS.particles.move.out_mode == 'bounce'){
+      if(pJS.particles.move.out_mode == 'bounce' || pJS.particles.move.out_mode == 'bounce-vertical'){
         var new_pos = {
           x_left: p.radius,
           x_right:  pJS.canvas.w,
@@ -590,6 +590,14 @@ var pJS = function(tag_id, params){
           else if (p.x - p.radius < 0) p.vx = -p.vx;
           if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
           else if (p.y - p.radius < 0) p.vy = -p.vy;
+        break;
+        case 'bounce-vertical':
+          if (p.y + p.radius > pJS.canvas.h) p.vy = -p.vy;
+          if (p.y - p.radius < 0) p.vy = -p.vy;
+        break;
+        case 'bounce-horizontal':
+          if (p.x + p.radius > pJS.canvas.w) p.vx = -p.vx;
+          else if (p.x - p.radius < 0) p.vx = -p.vx;
         break;
       }
 
@@ -939,7 +947,7 @@ var pJS = function(tag_id, params){
         y: p.y + normVec.y * repulseFactor
       }
 
-      if(pJS.particles.move.out_mode == 'bounce'){
+      if(pJS.particles.move.out_mode == 'bounce' || pJS.particles.move.out_mode == 'bounce-vertical'){
         if(pos.x - p.radius > 0 && pos.x + p.radius < pJS.canvas.w) p.x = pos.x;
         if(pos.y - p.radius > 0 && pos.y + p.radius < pJS.canvas.h) p.y = pos.y;
       }else{
@@ -975,7 +983,7 @@ var pJS = function(tag_id, params){
           p.vx = force * Math.cos(f);
           p.vy = force * Math.sin(f);
 
-          if(pJS.particles.move.out_mode == 'bounce'){
+          if(pJS.particles.move.out_mode == 'bounce' || pJS.particles.move.out_mode == 'bounce-vertical'){
             var pos = {
               x: p.x + p.vx,
               y: p.y + p.vy

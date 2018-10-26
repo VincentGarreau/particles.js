@@ -186,7 +186,7 @@ key | option type / notes | example
 `particles.move.direction` | string | `"none"` <br /> `"top"` <br /> `"top-right"` <br /> `"right"` <br /> `"bottom-right"` <br /> `"bottom"` <br /> `"bottom-left"` <br /> `"left"` <br /> `"top-left"`
 `particles.move.random` | boolean | `true` / `false`
 `particles.move.straight` | boolean | `true` / `false`
-`particles.move.out_mode` | string <br /> (out of canvas) | `"out"` <br /> `"bounce"`
+`particles.move.out_mode` | string <br /> (out of canvas) | `"out"` <br /> `"bounce"` <br /> `"bounce-vertical"` <br /> `"bounce-horizontal"`
 `particles.move.bounce` | boolean <br /> (between particles) | `true` / `false`
 `particles.move.attract.enable` | boolean | `true` / `false`
 `particles.move.attract.rotateX` | number | `3000`

@@ -73,7 +73,8 @@ particlesJS('particles-js',
         "direction": "none",
         "random": false,
         "straight": false,
-        "out_mode": "out",
+        "bounce": true,
+        "out_mode": "bounce-horizontal",
         "attract": {
           "enable": false,
           "rotateX": 600,
@@ -85,7 +86,7 @@ particlesJS('particles-js',
       "detect_on": "canvas",
       "events": {
         "onhover": {
-          "enable": true,
+          "enable": false,
           "mode": "repulse"
         },
         "onclick": {
