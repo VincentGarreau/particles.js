@@ -31,6 +31,17 @@ Load particles.js and configure the particles:
 particlesJS.load('particles-js', 'assets/particles.json', function() {
   console.log('callback - particles.js config loaded');
 });
+
+// Or, to load configuration directly without using an XHR request:
+
+/* particlesJS(@dom-id, @config-object) */
+particlesJS('particles-js', {
+  particles: {
+    number: { value: 100 },
+    color: { value: '#333' },
+    size: { value: 3 }
+  }
+})
 ```
 
 **particles.json**
