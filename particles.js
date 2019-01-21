@@ -1342,7 +1342,7 @@ var pJS = function(tag_id, params){
     // FPS limit logic
     // Check if the fps_limit has been set to a value other than 0 by default (and handle invalid input).
     // If so, use a setTimeout method to apply the fps limit, if not, then unlock the FPS to the default v-sync.
-    var fps_limit = pJS.particles.fps_limit;
+    var fps_limit = pJS.fps_limit;
     if (fps_limit <= 0) {
     } else {
         setTimeout(function () {
