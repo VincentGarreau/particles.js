@@ -10,9 +10,13 @@
 var pJS = function(tag_id, params){
 
   var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
+  var lastFrameTime = 0;
+  var pageHidden = false;
 
   /* particles.js variables with default values */
-  this.pJS = {
+  this.pJS = {        
+    // Default FPS limit implementation (see line 1314 for codified change).
+    fps_limit: 60,
     canvas: {
       el: canvas_el,
       w: canvas_el.offsetWidth,
@@ -213,7 +217,7 @@ var pJS = function(tag_id, params){
           if(!pJS.particles.move.enable){
             pJS.fn.particlesEmpty();
             pJS.fn.particlesCreate();
-            pJS.fn.particlesDraw();
+            pJS.fn.particlesDraw(0);
             pJS.fn.vendors.densityAutoParticles();
           }
 
@@ -503,7 +507,7 @@ var pJS = function(tag_id, params){
     }
   };
 
-  pJS.fn.particlesUpdate = function(){
+  pJS.fn.particlesUpdate = function(delta){
 
     for(var i = 0; i < pJS.particles.array.length; i++){
 
@@ -520,9 +524,9 @@ var pJS = function(tag_id, params){
 
       /* move the particle */
       if(pJS.particles.move.enable){
-        var ms = pJS.particles.move.speed/2;
-        p.x += p.vx * ms;
-        p.y += p.vy * ms;
+        var ms = pJS.particles.move.speed/10;
+        p.x += p.vx * ms * delta;
+        p.y += p.vy * ms * delta;
       }
 
       /* change opacity status */
@@ -634,13 +638,13 @@ var pJS = function(tag_id, params){
 
   };
 
-  pJS.fn.particlesDraw = function(){
+  pJS.fn.particlesDraw = function(delta){
 
     /* clear canvas */
     pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
 
     /* update each particles param */
-    pJS.fn.particlesUpdate();
+    pJS.fn.particlesUpdate(delta);
 
     /* draw each particle */
     for(var i = 0; i < pJS.particles.array.length; i++){
@@ -767,7 +771,7 @@ var pJS = function(tag_id, params){
       )
       if(i == nb-1){
         if(!pJS.particles.move.enable){
-          pJS.fn.particlesDraw();
+          pJS.fn.particlesDraw(0);
         }
         pJS.tmp.pushing = false;
       }
@@ -780,7 +784,7 @@ var pJS = function(tag_id, params){
 
     pJS.particles.array.splice(0, nb);
     if(!pJS.particles.move.enable){
-      pJS.fn.particlesDraw();
+      pJS.fn.particlesDraw(0);
     }
 
   };
@@ -1309,40 +1313,48 @@ var pJS = function(tag_id, params){
   };
 
 
-  pJS.fn.vendors.draw = function(){
+  pJS.fn.vendors.draw = function (timestamp) {
 
-    if(pJS.particles.shape.type == 'image'){
+  	//if (pageHidden) {
+  	//	return;
+  	//}
 
-      if(pJS.tmp.img_type == 'svg'){
-
-        if(pJS.tmp.count_svg >= pJS.particles.number.value){
-          pJS.fn.particlesDraw();
-          if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
-          else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
-        }else{
-          //console.log('still loading...');
-          if(!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
-        }
-
-      }else{
-
-        if(pJS.tmp.img_obj != undefined){
-          pJS.fn.particlesDraw();
-          if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
-          else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
-        }else{
-          if(!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
-        }
-
-      }
-
-    }else{
-      pJS.fn.particlesDraw();
-      if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
-      else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+    // FPS limit logic
+    // If we are too fast, just draw without updating
+    var fps_limit = pJS.fps_limit;
+    if(timestamp < lastFrameTime + (1000 / fps_limit)) {
+    	requestAnimFrame(pJS.fn.vendors.draw);
+    	return;
     }
+    delta = timestamp - lastFrameTime;
+    lastFrameTime = timestamp;
 
+	if (pJS.particles.shape.type == 'image') {  
+        if (pJS.tmp.img_type == 'svg') {
+            if (pJS.tmp.count_svg >= pJS.particles.number.value) {
+                pJS.fn.particlesDraw(delta);
+                if (!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+                else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+            } else {
+                //console.log('still loading...');
+                if (!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+            }
+        } else {
+            if (pJS.tmp.img_obj != undefined) {
+                pJS.fn.particlesDraw(delta);
+                if (!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+                else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+            } else {
+                if (!pJS.tmp.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+            }
+        }
+    } else {
+        pJS.fn.particlesDraw(delta);
+        if (!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+        else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+   }
   };
+
 
 
   pJS.fn.vendors.checkBeforeDraw = function(){
@@ -1364,7 +1376,7 @@ var pJS = function(tag_id, params){
 
     }else{
       pJS.fn.vendors.init();
-      pJS.fn.vendors.draw();
+      pJS.fn.vendors.draw(0);
     }
 
   };
@@ -1408,6 +1420,22 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.start();
   
 
+/* Cancel animation if page is not in focus
+   Browsers will do this anyway, however the
+   Delta time must also be reset, so canceling
+   the old frame and starting a new one is necessary */
+function handleVisibilityChange() {
+  if (document.hidden) {
+    pageHidden = true;
+    cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+  } else  {
+    pageHidden = false;
+    lastFrameTime = performance.now();
+    pJS.fn.vendors.draw(0);
+  }
+}
+
+document.addEventListener("visibilitychange", handleVisibilityChange, false);
 
 };
 
@@ -1435,6 +1463,7 @@ window.requestAnimFrame = (function(){
     function(callback){
       window.setTimeout(callback, 1000 / 60);
     };
+
 })();
 
 window.cancelRequestAnimFrame = ( function() {
@@ -1539,3 +1568,4 @@ window.particlesJS.load = function(tag_id, path_config_json, callback){
   xhr.send();
 
 };
+

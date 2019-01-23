@@ -36,6 +36,7 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
 **particles.json**
 ```javascript
 {
+  "fps_limit": 60,
   "particles": {
     "number": {
       "value": 80,
@@ -153,6 +154,7 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
 
 key | option type / notes | example
 ----|---------|------
+`.fps_limit` | Limits the fps of the animation redraw, set to 0 for no limit | `30`
 `particles.number.value` | number | `40`
 `particles.number.density.enable` | boolean | `true` / `false` 
 `particles.number.density.value_area` | number | `800`
