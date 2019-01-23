@@ -1,6 +1,6 @@
 {
+  "fps_limit": 60,
   "particles": {
-    "fps_limit": 30,
     "number": {
       "value": 80,
       "density": {
@@ -55,7 +55,7 @@
     },
     "move": {
       "enable": true,
-      "speed": 6,
+      "speed": 2,
       "direction": "none",
       "random": false,
       "straight": false,

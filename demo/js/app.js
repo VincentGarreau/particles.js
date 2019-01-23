@@ -14,6 +14,7 @@ particlesJS.load('particles-js', 'particles.json', function() {
 particlesJS('particles-js',
   
   {
+    "fps_limit": 60,
     "particles": {
       "number": {
         "value": 80,
