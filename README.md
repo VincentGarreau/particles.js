@@ -23,6 +23,8 @@ Load particles.js and configure the particles:
 <div id="particles-js"></div>
 
 <script src="particles.js"></script>
+<-- or include it directly via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2"></script>
 ```
 
 **app.js**
