@@ -154,7 +154,7 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
 key | option type / notes | example
 ----|---------|------
 `particles.number.value` | number | `40`
-`particles.number.density.enable` | boolean | `true` / `false` 
+`particles.number.density.enable` | boolean | `true` / `false`
 `particles.number.density.value_area` | number | `800`
 `particles.color.value` | HEX (string) <br /> RGB (object) <br /> HSL (object) <br /> array selection (HEX) <br /> random (string) | `"#b61924"` <br /> `{r:182, g:25, b:36}` <br />  `{h:356, s:76, l:41}` <br /> `["#b61924", "#333333", "999999"]` <br /> `"random"`
 `particles.shape.type` | string <br /> array selection | `"circle"` <br /> `"edge"` <br /> `"triangle"` <br /> `"polygon"` <br /> `"star"` <br /> `"image"` <br /> `["circle", "triangle", "image"]`
@@ -165,14 +165,14 @@ key | option type / notes | example
 `particles.shape.image.width` | number <br />(for aspect ratio) | `100`
 `particles.shape.image.height` | number <br />(for aspect ratio) | `100`
 `particles.opacity.value` | number (0 to 1) | `0.75`
-`particles.opacity.random` | boolean | `true` / `false` 
-`particles.opacity.anim.enable` | boolean | `true` / `false` 
+`particles.opacity.random` | boolean | `true` / `false`
+`particles.opacity.anim.enable` | boolean | `true` / `false`
 `particles.opacity.anim.speed` | number | `3`
 `particles.opacity.anim.opacity_min` | number (0 to 1) | `0.25`
 `particles.opacity.anim.sync` | boolean | `true` / `false`
 `particles.size.value` | number | `20`
-`particles.size.random` | boolean | `true` / `false` 
-`particles.size.anim.enable` | boolean | `true` / `false` 
+`particles.size.random` | boolean | `true` / `false`
+`particles.size.anim.enable` | boolean | `true` / `false`
 `particles.size.anim.speed` | number | `3`
 `particles.size.anim.size_min` | number | `0.25`
 `particles.size.anim.sync` | boolean | `true` / `false`
@@ -186,7 +186,7 @@ key | option type / notes | example
 `particles.move.direction` | string | `"none"` <br /> `"top"` <br /> `"top-right"` <br /> `"right"` <br /> `"bottom-right"` <br /> `"bottom"` <br /> `"bottom-left"` <br /> `"left"` <br /> `"top-left"`
 `particles.move.random` | boolean | `true` / `false`
 `particles.move.straight` | boolean | `true` / `false`
-`particles.move.out_mode` | string <br /> (out of canvas) | `"out"` <br /> `"bounce"`
+`particles.move.out_mode` | string <br /> (out of canvas) | `"out"` <br /> `"bounce"` <br /> `"destroy"`
 `particles.move.bounce` | boolean <br /> (between particles) | `true` / `false`
 `particles.move.attract.enable` | boolean | `true` / `false`
 `particles.move.attract.rotateX` | number | `3000`

@@ -157,9 +157,9 @@ var pJS = function(tag_id, params){
   pJS.fn.retinaInit = function(){
 
     if(pJS.retina_detect && window.devicePixelRatio > 1){
-      pJS.canvas.pxratio = window.devicePixelRatio; 
+      pJS.canvas.pxratio = window.devicePixelRatio;
       pJS.tmp.retina = true;
-    } 
+    }
     else{
       pJS.canvas.pxratio = 1;
       pJS.tmp.retina = false;
@@ -363,7 +363,7 @@ var pJS = function(tag_id, params){
     this.vx_i = this.vx;
     this.vy_i = this.vy;
 
-    
+
 
     /* if shape is image */
 
@@ -378,13 +378,20 @@ var pJS = function(tag_id, params){
     }
 
     if(this.shape == 'image'){
-      var sh = pJS.particles.shape;
+      var image = pJS.particles.shape.image;
+
+      /* assign a random image if image is an array */
+      if(image instanceof Array) image = image[Math.floor(Math.random() * image.length)];
+
       this.img = {
-        src: sh.image.src,
-        ratio: sh.image.width / sh.image.height
-      }
+        src: image.src,
+        ratio: image.width / image.height,
+        obj: image.obj,
+        type: image.type,
+        source_svg: image.source_svg
+      };
       if(!this.img.ratio) this.img.ratio = 1;
-      if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined){
+      if(this.img.type == 'svg' && this.img.source_svg != undefined){
         pJS.fn.vendors.createSvgImg(this);
         if(pJS.tmp.pushing){
           this.img.loaded = false;
@@ -392,7 +399,7 @@ var pJS = function(tag_id, params){
       }
     }
 
-    
+
 
   };
 
@@ -402,7 +409,7 @@ var pJS = function(tag_id, params){
     var p = this;
 
     if(p.radius_bubble != undefined){
-      var radius = p.radius_bubble; 
+      var radius = p.radius_bubble;
     }else{
       var radius = p.radius;
     }
@@ -470,11 +477,7 @@ var pJS = function(tag_id, params){
           );
         }
 
-        if(pJS.tmp.img_type == 'svg'){
-          var img_obj = p.img.obj;
-        }else{
-          var img_obj = pJS.tmp.img_obj;
-        }
+        var img_obj = p.img.obj;
 
         if(img_obj){
           draw();
@@ -491,9 +494,9 @@ var pJS = function(tag_id, params){
       pJS.canvas.ctx.lineWidth = pJS.particles.shape.stroke.width;
       pJS.canvas.ctx.stroke();
     }
-    
+
     pJS.canvas.ctx.fill();
-    
+
   };
 
 
@@ -566,21 +569,36 @@ var pJS = function(tag_id, params){
         }
       }
 
-      if(p.x - p.radius > pJS.canvas.w){
-        p.x = new_pos.x_left;
-        p.y = Math.random() * pJS.canvas.h;
-      }
-      else if(p.x + p.radius < 0){
-        p.x = new_pos.x_right;
-        p.y = Math.random() * pJS.canvas.h;
-      }
-      if(p.y - p.radius > pJS.canvas.h){
-        p.y = new_pos.y_top;
-        p.x = Math.random() * pJS.canvas.w;
-      }
-      else if(p.y + p.radius < 0){
-        p.y = new_pos.y_bottom;
-        p.x = Math.random() * pJS.canvas.w;
+      /* remove the particle from the array if it is out of canvas */
+      if(pJS.particles.move.out_mode == 'destroy'){
+        if(p.x - p.radius > pJS.canvas.w ||
+           p.x + p.radius < 0 ||
+           p.y - p.radius > pJS.canvas.h ||
+           p.y + p.radius < 0){
+          pJS.particles.array.splice(i, 1);
+
+          /* remove the canvas if the arary is empty */
+          if(pJS.particles.array.length == 0){
+            pJS.fn.vendors.destroypJS();
+          }
+        }
+      }else{
+        if(p.x - p.radius > pJS.canvas.w){
+          p.x = new_pos.x_left;
+          p.y = Math.random() * pJS.canvas.h;
+        }
+        else if(p.x + p.radius < 0){
+          p.x = new_pos.x_right;
+          p.y = Math.random() * pJS.canvas.h;
+        }
+        if(p.y - p.radius > pJS.canvas.h){
+          p.y = new_pos.y_top;
+          p.x = Math.random() * pJS.canvas.w;
+        }
+        else if(p.y + p.radius < 0){
+          p.y = new_pos.y_bottom;
+          p.x = Math.random() * pJS.canvas.w;
+        }
       }
 
       /* out of canvas modes */
@@ -659,12 +677,10 @@ var pJS = function(tag_id, params){
     /* init all */
     cancelRequestAnimFrame(pJS.fn.checkAnimFrame);
     cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
-    pJS.tmp.source_svg = undefined;
-    pJS.tmp.img_obj = undefined;
     pJS.tmp.count_svg = 0;
     pJS.fn.particlesEmpty();
     pJS.fn.canvasClear();
-    
+
     /* restart */
     pJS.fn.vendors.start();
 
@@ -684,14 +700,14 @@ var pJS = function(tag_id, params){
 
       var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
 
-      if(opacity_line > 0){        
-        
+      if(opacity_line > 0){
+
         /* style */
         var color_line = pJS.particles.line_linked.color_rgb_line;
         pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
         pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
         //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
-        
+
         /* path */
         pJS.canvas.ctx.beginPath();
         pJS.canvas.ctx.moveTo(p1.x, p1.y);
@@ -725,7 +741,7 @@ var pJS = function(tag_id, params){
       p2.vy += ay;
 
     }
-    
+
 
   }
 
@@ -805,7 +821,7 @@ var pJS = function(tag_id, params){
       if(dist_mouse <= pJS.interactivity.modes.bubble.distance){
 
         if(ratio >= 0 && pJS.interactivity.status == 'mousemove'){
-          
+
           /* size */
           if(pJS.interactivity.modes.bubble.size != pJS.particles.size.value){
 
@@ -854,7 +870,7 @@ var pJS = function(tag_id, params){
       if(pJS.interactivity.status == 'mouseleave'){
         init();
       }
-    
+
     }
 
     /* on click event */
@@ -933,7 +949,7 @@ var pJS = function(tag_id, params){
           repulseRadius = pJS.interactivity.modes.repulse.distance,
           velocity = 100,
           repulseFactor = clamp((1/repulseRadius)*(-1*Math.pow(dist_mouse/repulseRadius,2)+1)*repulseRadius*velocity, 0, 50);
-      
+
       var pos = {
         x: p.x + normVec.x * repulseFactor,
         y: p.y + normVec.y * repulseFactor
@@ -946,7 +962,7 @@ var pJS = function(tag_id, params){
         p.x = pos.x;
         p.y = pos.y;
       }
-    
+
     }
 
 
@@ -1001,7 +1017,7 @@ var pJS = function(tag_id, params){
         // }else{
         //   process();
         // }
-        
+
 
       }else{
 
@@ -1009,7 +1025,7 @@ var pJS = function(tag_id, params){
 
           p.vx = p.vx_i;
           p.vy = p.vy_i;
-        
+
         }
 
       }
@@ -1039,7 +1055,7 @@ var pJS = function(tag_id, params){
           pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
           pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
           //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
-          
+
           /* path */
           pJS.canvas.ctx.beginPath();
           pJS.canvas.ctx.moveTo(p.x, p.y);
@@ -1155,7 +1171,7 @@ var pJS = function(tag_id, params){
         }
 
       });
-        
+
     }
 
 
@@ -1204,7 +1220,7 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.createSvgImg = function(p){
 
     /* set color to svg element */
-    var svgXml = pJS.tmp.source_svg,
+    var svgXml = p.img.source_svg,
         rgbHex = /#([0-9A-F]{3,6})/gi,
         coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
           if(p.color.rgb){
@@ -1267,20 +1283,22 @@ var pJS = function(tag_id, params){
   };
 
 
-  pJS.fn.vendors.loadImg = function(type){
+  pJS.fn.vendors.loadImg = function(image){
 
     pJS.tmp.img_error = undefined;
 
-    if(pJS.particles.shape.image.src != ''){
+    image.type = image.src.substr(image.src.length - 3);
 
-      if(type == 'svg'){
+    if(image.src != ''){
+
+      if(image.type == 'svg'){
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', pJS.particles.shape.image.src);
+        xhr.open('GET', image.src);
         xhr.onreadystatechange = function (data) {
           if(xhr.readyState == 4){
             if(xhr.status == 200){
-              pJS.tmp.source_svg = data.currentTarget.response;
+              image.source_svg = data.currentTarget.response;
               pJS.fn.vendors.checkBeforeDraw();
             }else{
               console.log('Error pJS - Image not found');
@@ -1294,10 +1312,10 @@ var pJS = function(tag_id, params){
 
         var img = new Image();
         img.addEventListener('load', function(){
-          pJS.tmp.img_obj = img;
+          image.obj = img;
           pJS.fn.vendors.checkBeforeDraw();
         });
-        img.src = pJS.particles.shape.image.src;
+        img.src = image.src;
 
       }
 
@@ -1311,9 +1329,9 @@ var pJS = function(tag_id, params){
 
   pJS.fn.vendors.draw = function(){
 
-    if(pJS.particles.shape.type == 'image'){
+    if(isInArray('image', pJS.particles.shape.type)){
 
-      if(pJS.tmp.img_type == 'svg'){
+      if(pJS.tmp.all_svgs){
 
         if(pJS.tmp.count_svg >= pJS.particles.number.value){
           pJS.fn.particlesDraw();
@@ -1325,8 +1343,7 @@ var pJS = function(tag_id, params){
         }
 
       }else{
-
-        if(pJS.tmp.img_obj != undefined){
+        if(pJS.tmp.images_loaded){
           pJS.fn.particlesDraw();
           if(!pJS.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
           else pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
@@ -1348,9 +1365,10 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.checkBeforeDraw = function(){
 
     // if shape is image
-    if(pJS.particles.shape.type == 'image'){
-
-      if(pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg == undefined){
+    if(isInArray('image', pJS.particles.shape.type)){
+      if(pJS.particles.shape.image instanceof Array &&
+          pJS.particles.shape.image.every(function(image){ return image.type == 'svg' && image.source_svg == undefined }) ||
+         pJS.particles.shape.image.type == 'svg' && pJS.particles.shape.image.source_svg == undefined){
         pJS.tmp.checkAnimFrame = requestAnimFrame(check);
       }else{
         //console.log('images loaded! cancel check');
@@ -1359,7 +1377,7 @@ var pJS = function(tag_id, params){
           pJS.fn.vendors.init();
           pJS.fn.vendors.draw();
         }
-        
+
       }
 
     }else{
@@ -1383,14 +1401,28 @@ var pJS = function(tag_id, params){
     /* particles.line_linked - convert hex colors to rgb */
     pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
 
+    pJS.tmp.all_svgs =
+      pJS.particles.shape.image instanceof Array &&
+        pJS.particles.shape.image.every(function(image) { return image.type == 'svg'; }) ||
+      pJS.particles.shape.image.type == 'svg';
+
+    pJS.tmp.images_loaded =
+      pJS.particles.shape.image instanceof Array &&
+        pJS.particles.shape.image.every(function(image) { return image.obj != undefined }) ||
+      pJS.particles.shape.image.obj != undefined;
   };
 
 
   pJS.fn.vendors.start = function(){
 
     if(isInArray('image', pJS.particles.shape.type)){
-      pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
-      pJS.fn.vendors.loadImg(pJS.tmp.img_type);
+      if(pJS.particles.shape.image instanceof Array){
+        pJS.particles.shape.image.forEach(function(image){
+          pJS.fn.vendors.loadImg(image);
+        });
+      }else{
+        pJS.fn.vendors.loadImg(pJS.particles.shape.image);
+      }
     }else{
       pJS.fn.vendors.checkBeforeDraw();
     }
@@ -1406,7 +1438,7 @@ var pJS = function(tag_id, params){
   pJS.fn.vendors.eventsListeners();
 
   pJS.fn.vendors.start();
-  
+
 
 
 };
