@@ -1119,9 +1119,8 @@ var pJS = function(tag_id, params){
 
       });
 
-      /* el on touchmove */
-      pJS.interactivity.el.addEventListener('touchmove', function(e){
-
+      /* el on touch start / move */
+      function touch_start_move(e){
         if(pJS.interactivity.el == window){
           var pos_x = e.touches[0].clientX,
               pos_y = e.touches[0].clientY;
@@ -1140,8 +1139,10 @@ var pJS = function(tag_id, params){
         }
 
         pJS.interactivity.status = 'mousemove';
+      }
 
-      });
+      pJS.interactivity.el.addEventListener('touchstart', touch_start_move);
+      pJS.interactivity.el.addEventListener('touchmove', touch_start_move);
 
       /* el on onmouseleave */
       pJS.interactivity.el.addEventListener('mouseleave', function(e){
@@ -1152,14 +1153,15 @@ var pJS = function(tag_id, params){
 
       });
 
-      /* el on touchend */
-      pJS.interactivity.el.addEventListener('touchend', function(e){
-
+      /* el on touch end / cancel */
+      function touch_end_cancel(){
         pJS.interactivity.mouse.pos_x = null;
         pJS.interactivity.mouse.pos_y = null;
         pJS.interactivity.status = 'mouseleave';
+      }
 
-      });
+      pJS.interactivity.el.addEventListener('touchend', touch_end_cancel);
+      pJS.interactivity.el.addEventListener('touchcancel', touch_end_cancel);
 
     }
 
