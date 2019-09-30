@@ -1092,7 +1092,7 @@ var pJS = function(tag_id, params){
     }
 
 
-    /* detect mouse pos - on hover / click event */
+    /* detect mouse pos - on hover / click / touch event */
     if(pJS.interactivity.events.onhover.enable || pJS.interactivity.events.onclick.enable){
 
       /* el on mousemove */
@@ -1119,8 +1119,41 @@ var pJS = function(tag_id, params){
 
       });
 
+      /* el on touchmove */
+      pJS.interactivity.el.addEventListener('touchmove', function(e){
+
+        if(pJS.interactivity.el == window){
+          var pos_x = e.touches[0].clientX,
+              pos_y = e.touches[0].clientY;
+        }
+        else{
+          var pos_x = e.offsetX || e.touches[0].clientX,
+              pos_y = e.offsetY || e.touches[0].clientY;
+        }
+
+        pJS.interactivity.mouse.pos_x = pos_x;
+        pJS.interactivity.mouse.pos_y = pos_y;
+
+        if(pJS.tmp.retina){
+          pJS.interactivity.mouse.pos_x *= pJS.canvas.pxratio;
+          pJS.interactivity.mouse.pos_y *= pJS.canvas.pxratio;
+        }
+
+        pJS.interactivity.status = 'mousemove';
+
+      });
+
       /* el on onmouseleave */
       pJS.interactivity.el.addEventListener('mouseleave', function(e){
+
+        pJS.interactivity.mouse.pos_x = null;
+        pJS.interactivity.mouse.pos_y = null;
+        pJS.interactivity.status = 'mouseleave';
+
+      });
+
+      /* el on touchend */
+      pJS.interactivity.el.addEventListener('touchend', function(e){
 
         pJS.interactivity.mouse.pos_x = null;
         pJS.interactivity.mouse.pos_y = null;
