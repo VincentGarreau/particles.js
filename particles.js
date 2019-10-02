@@ -1095,39 +1095,15 @@ var pJS = function(tag_id, params){
     /* detect mouse pos - on hover / click / touch event */
     if(pJS.interactivity.events.onhover.enable || pJS.interactivity.events.onclick.enable){
 
-      /* el on mousemove */
-      pJS.interactivity.el.addEventListener('mousemove', function(e){
-
+      /* el on mousemove & touch start / move */
+      function mouse_touch_move(e){
         if(pJS.interactivity.el == window){
-          var pos_x = e.clientX,
-              pos_y = e.clientY;
+          var pos_x = (e.type == 'mousemove') ? e.clientX : e.touches[e.touches.length-1].clientX,
+              pos_y = (e.type == 'mousemove') ? e.clientY : e.touches[e.touches.length-1].clientY;
         }
         else{
-          var pos_x = e.offsetX || e.clientX,
-              pos_y = e.offsetY || e.clientY;
-        }
-
-        pJS.interactivity.mouse.pos_x = pos_x;
-        pJS.interactivity.mouse.pos_y = pos_y;
-
-        if(pJS.tmp.retina){
-          pJS.interactivity.mouse.pos_x *= pJS.canvas.pxratio;
-          pJS.interactivity.mouse.pos_y *= pJS.canvas.pxratio;
-        }
-
-        pJS.interactivity.status = 'mousemove';
-
-      });
-
-      /* el on touch start / move */
-      function touch_start_move(e){
-        if(pJS.interactivity.el == window){
-          var pos_x = e.touches[0].clientX,
-              pos_y = e.touches[0].clientY;
-        }
-        else{
-          var pos_x = e.offsetX || e.touches[0].clientX,
-              pos_y = e.offsetY || e.touches[0].clientY;
+          var pos_x = e.offsetX || (e.type == 'mousemove') ? e.clientX : e.touches[e.touches.length-1].clientX,
+              pos_y = e.offsetY || (e.type == 'mousemove') ? e.clientY : e.touches[e.touches.length-1].clientY;
         }
 
         pJS.interactivity.mouse.pos_x = pos_x;
@@ -1141,81 +1117,81 @@ var pJS = function(tag_id, params){
         pJS.interactivity.status = 'mousemove';
       }
 
-      pJS.interactivity.el.addEventListener('touchstart', touch_start_move);
-      pJS.interactivity.el.addEventListener('touchmove', touch_start_move);
+      pJS.interactivity.el.addEventListener('touchstart', mouse_touch_move);
+      pJS.interactivity.el.addEventListener('touchmove', mouse_touch_move);
+      pJS.interactivity.el.addEventListener('mousemove', mouse_touch_move);
 
-      /* el on onmouseleave */
-      pJS.interactivity.el.addEventListener('mouseleave', function(e){
-
-        pJS.interactivity.mouse.pos_x = null;
-        pJS.interactivity.mouse.pos_y = null;
-        pJS.interactivity.status = 'mouseleave';
-
-      });
-
-      /* el on touch end / cancel */
-      function touch_end_cancel(){
+      /* el on mouseleave & touch end / cancel */
+      function mouse_touch_finish(e){
         pJS.interactivity.mouse.pos_x = null;
         pJS.interactivity.mouse.pos_y = null;
         pJS.interactivity.status = 'mouseleave';
       }
 
-      pJS.interactivity.el.addEventListener('touchend', touch_end_cancel);
-      pJS.interactivity.el.addEventListener('touchcancel', touch_end_cancel);
+      if(!pJS.interactivity.events.onclick.enable){
+        pJS.interactivity.el.addEventListener('touchend', mouse_touch_finish);
+      }
+      pJS.interactivity.el.addEventListener('touchcancel', mouse_touch_finish);
+      pJS.interactivity.el.addEventListener('mouseleave', mouse_touch_finish);
 
     }
 
     /* on click event */
     if(pJS.interactivity.events.onclick.enable){
+        function mouse_touch_click(e){
+            pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
+            pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
 
-      pJS.interactivity.el.addEventListener('click', function(){
+            pJS.interactivity.mouse.click_time = new Date().getTime();
 
-        pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
-        pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
-        pJS.interactivity.mouse.click_time = new Date().getTime();
+            switch(pJS.interactivity.events.onclick.mode){
+                case 'push':
+                  if(pJS.particles.move.enable){
+                    pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
+                  }else{
+                    if(pJS.interactivity.modes.push.particles_nb == 1){
+                      pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
+                    }
+                    else if(pJS.interactivity.modes.push.particles_nb > 1){
+                      pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb);
+                    }
+                  }
+                break;
 
-        if(pJS.interactivity.events.onclick.enable){
+                case 'remove':
+                  pJS.fn.modes.removeParticles(pJS.interactivity.modes.remove.particles_nb);
+                break;
 
-          switch(pJS.interactivity.events.onclick.mode){
+                case 'bubble':
+                  pJS.tmp.bubble_clicking = true;
+                break;
 
-            case 'push':
-              if(pJS.particles.move.enable){
-                pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
-              }else{
-                if(pJS.interactivity.modes.push.particles_nb == 1){
-                  pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
-                }
-                else if(pJS.interactivity.modes.push.particles_nb > 1){
-                  pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb);
-                }
-              }
-            break;
+                case 'repulse':
+                  pJS.tmp.repulse_clicking = true;
+                  pJS.tmp.repulse_count = 0;
+                  pJS.tmp.repulse_finish = false;
+                  setTimeout(function(){
+                    pJS.tmp.repulse_clicking = false;
+                  }, pJS.interactivity.modes.repulse.duration*1000)
+                break;
+            }
+            e.preventDefault();
 
-            case 'remove':
-              pJS.fn.modes.removeParticles(pJS.interactivity.modes.remove.particles_nb);
-            break;
-
-            case 'bubble':
-              pJS.tmp.bubble_clicking = true;
-            break;
-
-            case 'repulse':
-              pJS.tmp.repulse_clicking = true;
-              pJS.tmp.repulse_count = 0;
-              pJS.tmp.repulse_finish = false;
-              setTimeout(function(){
-                pJS.tmp.repulse_clicking = false;
-              }, pJS.interactivity.modes.repulse.duration*1000)
-            break;
-
-          }
-
+            if (e.type == 'touchend')
+            {
+                setTimeout(function(){
+                    pJS.interactivity.mouse.pos_x = null;
+                    pJS.interactivity.mouse.pos_y = null;
+                    pJS.interactivity.status = 'mouseleave';
+                }, 500);
+            }
+            e.preventDefault();
         }
 
-      });
+        pJS.interactivity.el.addEventListener('touchend', mouse_touch_click);
+        pJS.interactivity.el.addEventListener('mouseup', mouse_touch_click);
 
     }
-
 
   };
 
