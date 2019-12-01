@@ -1537,8 +1537,20 @@ window.particlesJS = function(tag_id, params){
 
   /* launch particle.js */
   if(canvas != null){
-    var pjs = new pJS(tag_id, params);
-    pJSDom.push(pjs);
+    let pjs = new pJS(tag_id, params);
+    let found = false;
+
+    for (let idx = 0; idx < pJSDom.length; idx++) {
+
+      if (pJSDom[idx].canvas.tag_id == tag_id) {
+        found = true;
+        pJSDom[idx] = pJS;
+      }
+    }
+
+    if (!found) {
+      pJSDom.push(pjs);
+    }
     return pjs;
   }
 
