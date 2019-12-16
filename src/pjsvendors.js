@@ -1,5 +1,7 @@
 'use strict';
 
+import { isInArray, hexToRgb } from './pjsutils';
+
 export class pJSVendors {
     constructor(pJS) {
         this.pJS = pJS;
@@ -193,7 +195,7 @@ export class pJSVendors {
                             pJS.fn.vendors.checkBeforeDraw();
                         }
                         else {
-                            console.log('Error pJS - Image not found');
+                            console.error('Error pJS - Image not found');
                             pJS.tmp.img_error = true;
                         }
                     }
@@ -210,7 +212,7 @@ export class pJSVendors {
             }
         }
         else {
-            console.log('Error pJS - No image.src');
+            console.error('Error pJS - No image.src');
             pJS.tmp.img_error = true;
         }
     }
@@ -225,25 +227,34 @@ export class pJSVendors {
                     if (!pJS.particles.move.enable)
                         cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
                     else
-                        pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                            pJS.fn.vendors.draw();
+                        });
                 }
                 else {
-                    //console.log('still loading...');
                     if (!pJS.tmp.img_error)
-                        pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                            pJS.fn.vendors.draw();
+                        });
                 }
             }
             else {
                 if (pJS.tmp.img_obj != undefined) {
                     pJS.fn.particles.draw();
                     if (!pJS.particles.move.enable)
-                        cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+                        cancelRequestAnimFrame(function () {
+                            pJS.fn.drawAnimFrame();
+                        });
                     else
-                        pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                            pJS.fn.vendors.draw();
+                        });
                 }
                 else {
                     if (!pJS.tmp.img_error)
-                        pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                            pJS.fn.vendors.draw();
+                        });
                 }
             }
         }
@@ -252,7 +263,9 @@ export class pJSVendors {
             if (!pJS.particles.move.enable)
                 cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
             else
-                pJS.fn.drawAnimFrame = requestAnimFrame(pJS.fn.vendors.draw);
+                pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                    pJS.fn.vendors.draw();
+                });
         }
     }
 
@@ -262,10 +275,11 @@ export class pJSVendors {
         // if shape is image
         if (pJS.particles.shape.type == 'image') {
             if (pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg == undefined) {
-                pJS.tmp.checkAnimFrame = requestAnimFrame(check);
+                pJS.tmp.checkAnimFrame = requestAnimFrame(function () {
+                    check();
+                });
             }
             else {
-                //console.log('images loaded! cancel check');
                 cancelRequestAnimFrame(pJS.tmp.checkAnimFrame);
                 if (!pJS.tmp.img_error) {
                     pJS.fn.vendors.init();

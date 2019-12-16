@@ -1,5 +1,7 @@
 'use strict';
 
+import { hexToRgb } from './pjsutils';
+
 export class pJSParticle {
     /* --------- pJS functions - particles ----------- */
     constructor(pJS, color, opacity, position) {

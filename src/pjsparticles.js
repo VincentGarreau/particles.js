@@ -1,6 +1,7 @@
 'use strict';
 
 import { pJSParticle } from './pjsparticle';
+import { isInArray } from './pjsutils';
 
 export class pJSParticles {
     constructor(pJS) {
@@ -12,7 +13,7 @@ export class pJSParticles {
         var pJS = this.pJS;
 
         for (var i = 0; i < pJS.particles.number.value; i++) {
-            pJS.particles.array.push(new pJSParticle(pJS.particles.color, pJS.particles.opacity.value));
+            pJS.particles.array.push(new pJSParticle(pJS, pJS.particles.color, pJS.particles.opacity.value));
         }
     }
 

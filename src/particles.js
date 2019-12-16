@@ -9,74 +9,48 @@
 'use strict';
 
 import { pJS } from "./pjs";
+import { isInArray, clamp, hexToRgb } from './pjsutils';
 
 /* ---------- global functions - vendors ------------ */
 
 Object.deepExtend = function (destination, source) {
   for (var property in source) {
-    if (source[property] && source[property].constructor &&
-      source[property].constructor === Object) {
-      destination[property] = destination[property] || {};
-      this.deepExtend(destination[property], source[property]);
-    } else {
-      destination[property] = source[property];
-    }
+      if (source[property] && source[property].constructor && source[property].constructor === Object) {
+          destination[property] = destination[property] || {};
+
+          Object.deepExtend(destination[property], source[property]);
+      } else {
+          destination[property] = source[property];
+      }
   }
   return destination;
 };
 
 window.requestAnimFrame = (function () {
   return window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function (callback) {
-      window.setTimeout(callback, 1000 / 60);
-    };
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      function (callback) {
+          window.setTimeout(callback, 1000 / 60);
+      };
 })();
 
 window.cancelRequestAnimFrame = (function () {
   return window.cancelAnimationFrame ||
-    window.webkitCancelRequestAnimationFrame ||
-    window.mozCancelRequestAnimationFrame ||
-    window.oCancelRequestAnimationFrame ||
-    window.msCancelRequestAnimationFrame ||
-    clearTimeout
+      window.webkitCancelRequestAnimationFrame ||
+      window.mozCancelRequestAnimationFrame ||
+      window.oCancelRequestAnimationFrame ||
+      window.msCancelRequestAnimationFrame ||
+      clearTimeout
 })();
-
-function hexToRgb(hex) {
-  // By Tim Down - http://stackoverflow.com/a/5624139/3493650
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-};
-
-function clamp(number, min, max) {
-  return Math.min(Math.max(number, min), max);
-};
-
-function isInArray(value, array) {
-  return array.indexOf(value) > -1;
-}
-
 
 /* ---------- particles.js functions - start ------------ */
 
 window.pJSDom = [];
 
 window.particlesJS = function (tag_id, params) {
-
-  //console.log(params);
-
   /* no string id? so it's object params, and set the id with default id */
   if (typeof (tag_id) != 'string') {
     params = tag_id;
@@ -144,8 +118,8 @@ window.particlesJS.load = function (tag_id, path_config_json, callback) {
         window.particlesJS(tag_id, params);
         if (callback) callback();
       } else {
-        console.log('Error pJS - XMLHttpRequest status: ' + xhr.status);
-        console.log('Error pJS - File config not found');
+        console.error('Error pJS - XMLHttpRequest status: ' + xhr.status);
+        console.error('Error pJS - File config not found');
       }
     }
   };

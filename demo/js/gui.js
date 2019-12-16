@@ -23,6 +23,7 @@
       data_css = pJS_GUI_Export.config_demo;
       delete pJS_GUI_Export.config_demo;
       delete pJS_GUI_Export.canvas;
+      delete pJS_GUI_Export.fn;
       delete pJS_GUI_Export.tmp;
       delete pJS_GUI_Export.particles.array;
       delete pJS_GUI_Export.interactivity.el;
@@ -340,13 +341,16 @@
         return $('.js-box-bottom').fadeOut(200);
       }
     });
-    gui.add(pJS_GUI.fn.vendors, 'exportImg').name('Export image (png)');
-    gui.add(p, 'exportConfigJSON').name('Download current config (json)');
+    gui.add(pJS_GUI.fn.vendors, 'exportImg').name('→ Export image (png)');
+    gui.add(p, 'exportConfigJSON').name('→ Download current config (json)');
     initPage = function () {
       var box_bottom, config, page, panel;
       page = $(pJS_GUI.canvas.el).parent();
       panel = $('.panel');
       config = pJS_GUI.config_demo;
+
+      console.log(config);
+
       box_bottom = $('.js-box-bottom');
       page.css({
         'background-color': config.background_color,

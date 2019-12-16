@@ -1,5 +1,8 @@
 'use strict';
 
+import { isInArray, clamp } from './pjsutils';
+import { pJSParticle } from './pjsparticle';
+
 export class pJSModes {
     constructor(pJS) {
         this.pJS = pJS;
@@ -11,7 +14,7 @@ export class pJSModes {
 
         pJS.tmp.pushing = true;
         for (var i = 0; i < nb; i++) {
-            pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color, pJS.particles.opacity.value, {
+            pJS.particles.array.push(new pJSParticle(pJS, pJS.particles.color, pJS.particles.opacity.value, {
                 'x': pos ? pos.pos_x : Math.random() * pJS.canvas.w,
                 'y': pos ? pos.pos_y : Math.random() * pJS.canvas.h
             }));
