@@ -2,13 +2,13 @@
   "name": "particles.js",
   "version": "2.0.1",
   "description": "A lightweight JavaScript library for creating particles",
-  "homepage": "http://vincentgarreau.com/particles.js",
+  "homepage": "https://github.com/VincentGarreau/particles.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/VincentGarreau/particles.js.git"
+    "url": "git+https://github.com/VincentGarreau/particles.js.git"
   },
   "keywords": [
     "particles",
@@ -24,5 +24,9 @@
   "bugs": {
     "url": "https://github.com/VincentGarreau/particles.js/issues"
   },
-  "homepage": "https://github.com/VincentGarreau/particles.js"
+  "main": "particles.js",
+  "devDependencies": {
+    "webpack": "^4.41.3",
+    "webpack-cli": "^3.3.10"
+  }
 }
