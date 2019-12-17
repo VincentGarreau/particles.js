@@ -52,7 +52,7 @@
       closed: true,
       width: 340
     });
-    window.pJS_GUI = window.pJSDom[0].pJS;
+    window.pJS_GUI = window.pJSDom()[0].pJS;
     window.page_settings = {
       hide_card: false,
       background_color: '#111',

@@ -1,31 +1,37 @@
-## particles.js
+# particles.js
 
-### A lightweight JavaScript library for creating particles.
+## A lightweight JavaScript library for creating particles
 
 ------------------------------
-### `Demo / Generator`
 
-<a href="http://vincentgarreau.com/particles.js/" target="_blank"><img src="https://dl.dropboxusercontent.com/u/19580440/particlesjs-assets/github-screen.jpg" alt="particles.js generator" /></a>
+## `Demo / Generator`
 
-Configure, export, and share your particles.js configuration on CodePen: <br />
-http://vincentgarreau.com/particles.js/
+[![particles.js generator](https://camo.githubusercontent.com/cdc9e740f0c04b77449e476c91e6f7770a6af6e7/687474703a2f2f76696e63656e74676172726561752e636f6d2f7061727469636c65732e6a732f6173736574732f696d672f6769746875622d73637265656e2e6a7067)](http://vincentgarreau.com/particles.js/)
 
-CodePen demo: <br />
-http://codepen.io/VincentGarreau/pen/pnlso
+Configure, export, and share your particles.js configuration on CodePen:
 
--------------------------------
+<http://vincentgarreau.com/particles.js/>
+
+CodePen demo:
+
+<http://codepen.io/VincentGarreau/pen/pnlso>
+
+------------------------------
+
 ### `Usage`
 
 Load particles.js and configure the particles:
 
-**index.html**
+#### index.html
+
 ```html
 <div id="particles-js"></div>
 
 <script src="particles.js"></script>
 ```
 
-**app.js**
+#### app.js
+
 ```javascript
 /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
 particlesJS.load('particles-js', 'assets/particles.json', function() {
@@ -33,7 +39,8 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
 });
 ```
 
-**particles.json**
+#### particles.json
+
 ```javascript
 {
   "particles": {
@@ -109,7 +116,12 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
     "events": {
       "onhover": {
         "enable": false,
-        "mode": "repulse"
+        "mode": "repulse",
+        "parallax": {
+          "enable": true,
+          "force": 60,
+          "smooth": 10
+        }
       },
       "onclick": {
         "enable": true,
@@ -147,14 +159,14 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
 }
 ```
 
--------------------------------
+------------------------------
 
 ### `Options`
 
 key | option type / notes | example
-----|---------|------|------
+----|:---------:|------
 `particles.number.value` | number | `40`
-`particles.number.density.enable` | boolean | `true` / `false` 
+`particles.number.density.enable` | boolean | `true` / `false`
 `particles.number.density.value_area` | number | `800`
 `particles.color.value` | HEX (string) <br /> RGB (object) <br /> HSL (object) <br /> array selection (HEX) <br /> random (string) | `"#b61924"` <br /> `{r:182, g:25, b:36}` <br />  `{h:356, s:76, l:41}` <br /> `["#b61924", "#333333", "999999"]` <br /> `"random"`
 `particles.number.density.value_area` | number | `800`
@@ -166,14 +178,14 @@ key | option type / notes | example
 `particles.shape.image.width` | number <br />(for aspect ratio) | `100`
 `particles.shape.image.height` | number <br />(for aspect ratio) | `100`
 `particles.opacity.value` | number (0 to 1) | `0.75`
-`particles.opacity.random` | boolean | `true` / `false` 
-`particles.opacity.anim.enable` | boolean | `true` / `false` 
+`particles.opacity.random` | boolean | `true` / `false`
+`particles.opacity.anim.enable` | boolean | `true` / `false`
 `particles.opacity.anim.speed` | number | `3`
 `particles.opacity.anim.opacity_min` | number (0 to 1) | `0.25`
 `particles.opacity.anim.sync` | boolean | `true` / `false`
 `particles.size.value` | number | `20`
-`particles.size.random` | boolean | `true` / `false` 
-`particles.size.anim.enable` | boolean | `true` / `false` 
+`particles.size.random` | boolean | `true` / `false`
+`particles.size.anim.enable` | boolean | `true` / `false`
 `particles.size.anim.speed` | number | `3`
 `particles.size.anim.size_min` | number | `0.25`
 `particles.size.anim.sync` | boolean | `true` / `false`
@@ -195,6 +207,9 @@ key | option type / notes | example
 `interactivity.detect_on` | string | `"canvas", "window"`
 `interactivity.events.onhover.enable` | boolean | `true` / `false`
 `interactivity.events.onhover.mode` | string <br /> array selection | `"grab"` <br /> `"bubble"` <br /> `"repulse"` <br /> `["grab", "bubble"]`
+`interactivity.events.onhover.parallax.enable` | boolean | `true` / `false`
+`interactivity.events.onhover.parallax.force` | number | 60
+`interactivity.events.onhover.parallax.smooth` | number | 10
 `interactivity.events.onclick.enable` | boolean | `true` / `false`
 `interactivity.events.onclick.mode` | string <br /> array selection | `"push"` <br /> `"remove"` <br /> `"bubble"` <br /> `"repulse"` <br /> `["push", "repulse"]`
 `interactivity.events.resize` | boolean | `true` / `false`
@@ -209,36 +224,22 @@ key | option type / notes | example
 `interactivity.events.modes.push.particles_nb` | number | `4`
 `retina_detect` | boolean | `true` / `false`
 
--------------------------------
+------------------------------
 
 ### `Packages install`
 
-##### ***npm***
-https://www.npmjs.com/package/particles.js
-```
+#### npm
+
+<https://www.npmjs.com/package/particles.js>
+
+```shell
 npm install particles.js
 ```
 
-##### ***Bower***
-```
-bower install particles.js --save
-```
-
-##### ***Rails Assets***
-```
-gem 'rails-assets-particles.js'
-```
-
-##### ***Meteor***
-https://atmospherejs.com/newswim/particles
-```
-meteor add newswim:particles
-```
-
--------------------------------
+------------------------------
 
 ### `Hosting / CDN`
 
 ***Please use this host or your own to load particles.js on your projects***
 
-http://www.jsdelivr.com/#!particles.js
+<http://www.jsdelivr.com/#!particles.js>

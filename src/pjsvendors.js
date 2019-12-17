@@ -1,6 +1,7 @@
 'use strict';
 
 import { isInArray, hexToRgb } from './pjsutils';
+import { pJSLoader } from './pjsloader';
 
 export class pJSVendors {
     constructor(pJS) {
@@ -149,7 +150,7 @@ export class pJSVendors {
 
         cancelAnimationFrame(pJS.fn.drawAnimFrame);
         canvas_el.remove();
-        pJSDom = null;
+        pJSLoader.pJSDomSet(null);
     }
 
     drawShape(c, startX, startY, sideLength, sideCountNumerator, sideCountDenominator) {

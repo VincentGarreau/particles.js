@@ -23,3 +23,16 @@ export function clamp(number, min, max) {
 export function isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
+
+export function deepExtend(destination, source) {
+    for (var property in source) {
+      if (source[property] && source[property].constructor && source[property].constructor === Object) {
+        destination[property] = destination[property] || {};
+  
+        Object.deepExtend(destination[property], source[property]);
+      } else {
+        destination[property] = source[property];
+      }
+    }
+    return destination;
+  }
