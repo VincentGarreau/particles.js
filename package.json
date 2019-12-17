@@ -26,7 +26,9 @@
   },
   "main": "particles.js",
   "devDependencies": {
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.3",
     "webpack-cli": "^3.3.10"
-  }
+  },
+  "dependencies": {}
 }

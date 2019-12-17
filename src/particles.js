@@ -9,7 +9,6 @@
 'use strict';
 
 import { pJS } from "./pjs";
-import { isInArray, clamp, hexToRgb } from './pjsutils';
 
 /* ---------- global functions - vendors ------------ */
 
