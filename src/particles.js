@@ -6,9 +6,9 @@
 /* How to use? : Check the GitHub README
 /* v2.0.1
 /* ----------------------------------------------- */
-'use strict';
-
 import { pJSLoader } from './pjsloader';
+
+'use strict';
 
 /* ---------- global functions - vendors ------------ */
 

@@ -1,6 +1,6 @@
-'use strict';
-
 import { pJS } from './pjs';
+
+'use strict';
 
 var pJSDom = [];
 

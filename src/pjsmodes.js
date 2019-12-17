@@ -1,7 +1,7 @@
-'use strict';
-
 import { isInArray, hexToRgb, clamp } from './pjsutils';
 import { pJSParticle } from './pjsparticle';
+
+'use strict';
 
 export class pJSModes {
     constructor(pJS) {

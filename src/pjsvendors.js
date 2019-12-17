@@ -1,7 +1,7 @@
-'use strict';
-
 import { isInArray } from './pjsutils';
 import { pJSLoader } from './pjsloader';
+
+'use strict';
 
 export class pJSVendors {
     constructor(pJS) {

@@ -1,6 +1,6 @@
-'use strict';
-
 import { pJSFunctions } from './pjsfunctions';
+
+'use strict';
 
 export class pJS {
     constructor(tag_id, params) {

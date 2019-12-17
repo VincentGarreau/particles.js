@@ -1,6 +1,6 @@
-'use strict';
-
 import { hexToRgb } from './pjsutils';
+
+'use strict';
 
 export class pJSParticle {
     /* --------- pJS functions - particles ----------- */

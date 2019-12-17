@@ -1,7 +1,7 @@
-'use strict';
-
 import { pJSParticle } from './pjsparticle';
 import { isInArray } from './pjsutils';
+
+'use strict';
 
 export class pJSParticles {
     constructor(pJS) {
