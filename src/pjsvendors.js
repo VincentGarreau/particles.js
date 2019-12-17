@@ -1,6 +1,6 @@
 'use strict';
 
-import { isInArray, hexToRgb } from './pjsutils';
+import { isInArray } from './pjsutils';
 import { pJSLoader } from './pjsloader';
 
 export class pJSVendors {
@@ -11,16 +11,17 @@ export class pJSVendors {
     /* ---------- pJS functions - vendors ------------ */
     eventsListeners() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         /* events target element */
-        if (pJS.interactivity.detect_on == 'window') {
+        if (options.interactivity.detect_on == 'window') {
             pJS.interactivity.el = window;
         }
         else {
             pJS.interactivity.el = pJS.canvas.el;
         }
         /* detect mouse pos - on hover / click event */
-        if (pJS.interactivity.events.onhover.enable || pJS.interactivity.events.onclick.enable) {
+        if (options.interactivity.events.onhover.enable || options.interactivity.events.onclick.enable) {
             /* el on mousemove */
             pJS.interactivity.el.addEventListener('mousemove', function (e) {
                 if (pJS.interactivity.el == window) {
@@ -45,28 +46,28 @@ export class pJSVendors {
             });
         }
         /* on click event */
-        if (pJS.interactivity.events.onclick.enable) {
+        if (options.interactivity.events.onclick.enable) {
             pJS.interactivity.el.addEventListener('click', function () {
                 pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
                 pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
                 pJS.interactivity.mouse.click_time = new Date().getTime();
-                if (pJS.interactivity.events.onclick.enable) {
-                    switch (pJS.interactivity.events.onclick.mode) {
+                if (options.interactivity.events.onclick.enable) {
+                    switch (options.interactivity.events.onclick.mode) {
                         case 'push':
-                            if (pJS.particles.move.enable) {
-                                pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
+                            if (options.particles.move.enable) {
+                                pJS.fn.modes.pushParticles(options.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
                             }
                             else {
-                                if (pJS.interactivity.modes.push.particles_nb == 1) {
-                                    pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
+                                if (options.interactivity.modes.push.particles_nb == 1) {
+                                    pJS.fn.modes.pushParticles(options.interactivity.modes.push.particles_nb, pJS.interactivity.mouse);
                                 }
-                                else if (pJS.interactivity.modes.push.particles_nb > 1) {
-                                    pJS.fn.modes.pushParticles(pJS.interactivity.modes.push.particles_nb);
+                                else if (options.interactivity.modes.push.particles_nb > 1) {
+                                    pJS.fn.modes.pushParticles(options.interactivity.modes.push.particles_nb);
                                 }
                             }
                             break;
                         case 'remove':
-                            pJS.fn.modes.removeParticles(pJS.interactivity.modes.remove.particles_nb);
+                            pJS.fn.modes.removeParticles(options.interactivity.modes.remove.particles_nb);
                             break;
                         case 'bubble':
                             pJS.tmp.bubble_clicking = true;
@@ -77,7 +78,7 @@ export class pJSVendors {
                             pJS.tmp.repulse_finish = false;
                             setTimeout(function () {
                                 pJS.tmp.repulse_clicking = false;
-                            }, pJS.interactivity.modes.repulse.duration * 1000);
+                            }, options.interactivity.modes.repulse.duration * 1000);
                             break;
                     }
                 }
@@ -87,15 +88,16 @@ export class pJSVendors {
 
     densityAutoParticles() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
-        if (pJS.particles.number.density.enable) {
+        if (options.particles.number.density.enable) {
             /* calc area */
             var area = pJS.canvas.el.width * pJS.canvas.el.height / 1000;
             if (pJS.tmp.retina) {
                 area = area / (pJS.canvas.pxratio * 2);
             }
             /* calc number of particles based on density area */
-            var nb_particles = area * pJS.particles.number.value / pJS.particles.number.density.value_area;
+            var nb_particles = area * options.particles.number.value / options.particles.number.density.value_area;
             /* add or remove X particles */
             var missing_particles = pJS.particles.array.length - nb_particles;
             if (missing_particles < 0)
@@ -107,6 +109,7 @@ export class pJSVendors {
 
     checkOverlap(p1, position) {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         for (var i = 0; i < pJS.particles.array.length; i++) {
             var p2 = pJS.particles.array[i];
@@ -121,6 +124,7 @@ export class pJSVendors {
 
     createSvgImg(p) {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         /* set color to svg element */
         var svgXml = pJS.tmp.source_svg, rgbHex = /#([0-9A-F]{3,6})/gi, coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
@@ -147,6 +151,7 @@ export class pJSVendors {
 
     destroypJS() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         cancelAnimationFrame(pJS.fn.drawAnimFrame);
         canvas_el.remove();
@@ -155,6 +160,7 @@ export class pJSVendors {
 
     drawShape(c, startX, startY, sideLength, sideCountNumerator, sideCountDenominator) {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         // By Programming Thomas - https://programmingthomas.wordpress.com/2013/04/03/n-sided-shapes/
         var sideCount = sideCountNumerator * sideCountDenominator;
@@ -177,18 +183,20 @@ export class pJSVendors {
 
     exportImg() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         window.open(pJS.canvas.el.toDataURL('image/png'), '_blank');
     }
 
     loadImg(type) {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         pJS.tmp.img_error = undefined;
-        if (pJS.particles.shape.image.src != '') {
+        if (options.particles.shape.image.src != '') {
             if (type == 'svg') {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', pJS.particles.shape.image.src);
+                xhr.open('GET', options.particles.shape.image.src);
                 xhr.onreadystatechange = function (data) {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200) {
@@ -209,7 +217,7 @@ export class pJSVendors {
                     pJS.tmp.img_obj = img;
                     pJS.fn.vendors.checkBeforeDraw();
                 });
-                img.src = pJS.particles.shape.image.src;
+                img.src = options.particles.shape.image.src;
             }
         }
         else {
@@ -220,12 +228,13 @@ export class pJSVendors {
 
     draw() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
-        if (pJS.particles.shape.type == 'image') {
+        if (options.particles.shape.type == 'image') {
             if (pJS.tmp.img_type == 'svg') {
-                if (pJS.tmp.count_svg >= pJS.particles.number.value) {
+                if (pJS.tmp.count_svg >= options.particles.number.value) {
                     pJS.fn.particles.draw();
-                    if (!pJS.particles.move.enable)
+                    if (!options.particles.move.enable)
                         cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
                     else
                         pJS.fn.drawAnimFrame = requestAnimFrame(function () {
@@ -242,7 +251,7 @@ export class pJSVendors {
             else {
                 if (pJS.tmp.img_obj != undefined) {
                     pJS.fn.particles.draw();
-                    if (!pJS.particles.move.enable)
+                    if (!options.particles.move.enable)
                         cancelRequestAnimFrame(function () {
                             pJS.fn.drawAnimFrame();
                         });
@@ -261,7 +270,7 @@ export class pJSVendors {
         }
         else {
             pJS.fn.particles.draw();
-            if (!pJS.particles.move.enable)
+            if (!options.particles.move.enable)
                 cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
             else
                 pJS.fn.drawAnimFrame = requestAnimFrame(function () {
@@ -272,9 +281,10 @@ export class pJSVendors {
 
     checkBeforeDraw() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         // if shape is image
-        if (pJS.particles.shape.type == 'image') {
+        if (options.particles.shape.type == 'image') {
             if (pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg == undefined) {
                 pJS.tmp.checkAnimFrame = requestAnimFrame(function () {
                     check();
@@ -296,6 +306,7 @@ export class pJSVendors {
 
     init() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         /* init canvas + particles */
         pJS.fn.retina.init();
@@ -304,15 +315,14 @@ export class pJSVendors {
         pJS.fn.canvas.paint();
         pJS.fn.particles.create();
         pJS.fn.vendors.densityAutoParticles();
-        /* particles.line_linked - convert hex colors to rgb */
-        pJS.particles.line_linked.color_rgb_line = hexToRgb(pJS.particles.line_linked.color);
     }
 
     start() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
-        if (isInArray('image', pJS.particles.shape.type)) {
-            pJS.tmp.img_type = pJS.particles.shape.image.src.substr(pJS.particles.shape.image.src.length - 3);
+        if (isInArray('image', options.particles.shape.type)) {
+            pJS.tmp.img_type = options.particles.shape.image.src.substr(options.particles.shape.image.src.length - 3);
             pJS.fn.vendors.loadImg(pJS.tmp.img_type);
         }
         else {

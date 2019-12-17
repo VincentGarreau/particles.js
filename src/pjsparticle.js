@@ -6,13 +6,14 @@ export class pJSParticle {
     /* --------- pJS functions - particles ----------- */
     constructor(pJS, color, opacity, position) {
         this.pJS = pJS;
+        let options = pJS.options;
 
         /* size */
-        this.radius = (pJS.particles.size.random ? Math.random() : 1) * pJS.particles.size.value;
-        if (pJS.particles.size.anim.enable) {
+        this.radius = (options.particles.size.random ? Math.random() : 1) * options.particles.size.value;
+        if (options.particles.size.anim.enable) {
             this.size_status = false;
-            this.vs = pJS.particles.size.anim.speed / 100;
-            if (!pJS.particles.size.anim.sync) {
+            this.vs = options.particles.size.anim.speed / 100;
+            if (!options.particles.size.anim.sync) {
                 this.vs = this.vs * Math.random();
             }
         }
@@ -32,14 +33,14 @@ export class pJSParticle {
         this.offsetX = 0;
         this.offsetY = 0;
         /* check position - avoid overlap */
-        if (pJS.particles.move.bounce) {
+        if (options.particles.move.bounce) {
             pJS.fn.vendors.checkOverlap(this, position);
         }
         /* color */
         this.color = {};
         if (typeof (color.value) == 'object') {
             if (color.value instanceof Array) {
-                var color_selected = color.value[Math.floor(Math.random() * pJS.particles.color.value.length)];
+                var color_selected = color.value[Math.floor(Math.random() * options.particles.color.value.length)];
                 this.color.rgb = hexToRgb(color_selected);
             }
             else {
@@ -71,17 +72,17 @@ export class pJSParticle {
             this.color.rgb = hexToRgb(this.color.value);
         }
         /* opacity */
-        this.opacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
-        if (pJS.particles.opacity.anim.enable) {
+        this.opacity = (options.particles.opacity.random ? Math.random() : 1) * options.particles.opacity.value;
+        if (options.particles.opacity.anim.enable) {
             this.opacity_status = false;
-            this.vo = pJS.particles.opacity.anim.speed / 100;
-            if (!pJS.particles.opacity.anim.sync) {
+            this.vo = options.particles.opacity.anim.speed / 100;
+            if (!options.particles.opacity.anim.sync) {
                 this.vo = this.vo * Math.random();
             }
         }
         /* animation - velocity for speed */
         var velbase = {};
-        switch (pJS.particles.move.direction) {
+        switch (options.particles.move.direction) {
             case 'top':
                 velbase = { x: 0, y: -1 };
                 break;
@@ -110,10 +111,10 @@ export class pJSParticle {
                 velbase = { x: 0, y: 0 };
                 break;
         }
-        if (pJS.particles.move.straight) {
+        if (options.particles.move.straight) {
             this.vx = velbase.x;
             this.vy = velbase.y;
-            if (pJS.particles.move.random) {
+            if (options.particles.move.random) {
                 this.vx = this.vx * (Math.random());
                 this.vy = this.vy * (Math.random());
             }
@@ -128,7 +129,7 @@ export class pJSParticle {
         this.vx_i = this.vx;
         this.vy_i = this.vy;
         /* if shape is image */
-        var shape_type = pJS.particles.shape.type;
+        var shape_type = options.particles.shape.type;
         if (typeof (shape_type) == 'object') {
             if (shape_type instanceof Array) {
                 var shape_selected = shape_type[Math.floor(Math.random() * shape_type.length)];
@@ -139,7 +140,7 @@ export class pJSParticle {
             this.shape = shape_type;
         }
         if (this.shape == 'image') {
-            var sh = pJS.particles.shape;
+            let sh = options.particles.shape;
             this.img = {
                 src: sh.image.src,
                 ratio: sh.image.width / sh.image.height
@@ -156,30 +157,37 @@ export class pJSParticle {
     }
 
     draw() {
-        var p = this;
-        var pJS = this.pJS;
+        let p = this;
+        let pJS = this.pJS;
+        let options = pJS.options;
+        let radius;
+        let opacity;
+        let color_value;
 
         if (p.radius_bubble != undefined) {
-            var radius = p.radius_bubble;
+            radius = p.radius_bubble;
         }
         else {
-            var radius = p.radius;
+            radius = p.radius;
         }
         if (p.opacity_bubble != undefined) {
-            var opacity = p.opacity_bubble;
+            opacity = p.opacity_bubble;
         }
         else {
-            var opacity = p.opacity;
+            opacity = p.opacity;
         }
         if (p.color.rgb) {
-            var color_value = 'rgba(' + p.color.rgb.r + ',' + p.color.rgb.g + ',' + p.color.rgb.b + ',' + opacity + ')';
+            color_value = 'rgba(' + p.color.rgb.r + ',' + p.color.rgb.g + ',' + p.color.rgb.b + ',' + opacity + ')';
         }
         else {
-            var color_value = 'hsla(' + p.color.hsl.h + ',' + p.color.hsl.s + '%,' + p.color.hsl.l + '%,' + opacity + ')';
+            color_value = 'hsla(' + p.color.hsl.h + ',' + p.color.hsl.s + '%,' + p.color.hsl.l + '%,' + opacity + ')';
         }
         pJS.canvas.ctx.fillStyle = color_value;
         pJS.canvas.ctx.beginPath();
-        var p_x = p.x + p.offsetX, p_y = p.y + p.offsetY;
+
+        let p_x = p.x + p.offsetX;
+        let p_y = p.y + p.offsetY;
+
         switch (p.shape) {
             case 'circle':
                 pJS.canvas.ctx.arc(p_x, p_y, radius, 0, Math.PI * 2, false);
@@ -191,18 +199,18 @@ export class pJSParticle {
                 pJS.fn.vendors.drawShape(pJS.canvas.ctx, p.x - radius, p.y + radius / 1.66, radius * 2, 3, 2);
                 break;
             case 'polygon':
-                pJS.fn.vendors.drawShape(pJS.canvas.ctx, p.x - radius / (pJS.particles.shape.polygon.nb_sides / 3.5), // startX
+                pJS.fn.vendors.drawShape(pJS.canvas.ctx, p.x - radius / (options.particles.shape.polygon.nb_sides / 3.5), // startX
                     p.y - radius / (2.66 / 3.5), // startY
-                    radius * 2.66 / (pJS.particles.shape.polygon.nb_sides / 3), // sideLength
-                    pJS.particles.shape.polygon.nb_sides, // sideCountNumerator
+                    radius * 2.66 / (options.particles.shape.polygon.nb_sides / 3), // sideLength
+                    options.particles.shape.polygon.nb_sides, // sideCountNumerator
                     1 // sideCountDenominator
                 );
                 break;
             case 'star':
-                pJS.fn.vendors.drawShape(pJS.canvas.ctx, p.x - radius * 2 / (pJS.particles.shape.polygon.nb_sides / 4), // startX
+                pJS.fn.vendors.drawShape(pJS.canvas.ctx, p.x - radius * 2 / (options.particles.shape.polygon.nb_sides / 4), // startX
                     p.y - radius / (2 * 2.66 / 3.5), // startY
-                    radius * 2 * 2.66 / (pJS.particles.shape.polygon.nb_sides / 3), // sideLength
-                    pJS.particles.shape.polygon.nb_sides, // sideCountNumerator
+                    radius * 2 * 2.66 / (options.particles.shape.polygon.nb_sides / 3), // sideLength
+                    options.particles.shape.polygon.nb_sides, // sideCountNumerator
                     2 // sideCountDenominator
                 );
                 break;
@@ -221,12 +229,15 @@ export class pJSParticle {
                 }
                 break;
         }
+
         pJS.canvas.ctx.closePath();
-        if (pJS.particles.shape.stroke.width > 0) {
-            pJS.canvas.ctx.strokeStyle = pJS.particles.shape.stroke.color;
-            pJS.canvas.ctx.lineWidth = pJS.particles.shape.stroke.width;
+
+        if (options.particles.shape.stroke.width > 0) {
+            pJS.canvas.ctx.strokeStyle = options.particles.shape.stroke.color;
+            pJS.canvas.ctx.lineWidth = options.particles.shape.stroke.width;
             pJS.canvas.ctx.stroke();
         }
+
         pJS.canvas.ctx.fill();
     }
 }

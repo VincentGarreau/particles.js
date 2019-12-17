@@ -8,16 +8,18 @@ export class pJSCanvas {
     /* ---------- pJS functions - canvas ------------ */
     init() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         pJS.canvas.ctx = pJS.canvas.el.getContext('2d');
     }
 
     size() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         pJS.canvas.el.width = pJS.canvas.w;
         pJS.canvas.el.height = pJS.canvas.h;
-        if (pJS && pJS.interactivity.events.resize) {
+        if (pJS && options.interactivity.events.resize) {
             window.addEventListener('resize', function () {
                 pJS.canvas.w = pJS.canvas.el.offsetWidth;
                 pJS.canvas.h = pJS.canvas.el.offsetHeight;
@@ -29,7 +31,7 @@ export class pJSCanvas {
                 pJS.canvas.el.width = pJS.canvas.w;
                 pJS.canvas.el.height = pJS.canvas.h;
                 /* repaint canvas on anim disabled */
-                if (!pJS.particles.move.enable) {
+                if (!options.particles.move.enable) {
                     pJS.fn.particles.empty();
                     pJS.fn.particles.create();
                     pJS.fn.particles.draw();
@@ -43,12 +45,14 @@ export class pJSCanvas {
 
     paint() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         pJS.canvas.ctx.fillRect(0, 0, pJS.canvas.w, pJS.canvas.h);
     }
 
     clear() {
         let pJS = this.pJS;
+        let options = pJS.options;
 
         pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
     }

@@ -10,15 +10,17 @@ export class pJSParticles {
 
     /* --------- pJS functions - particles ----------- */
     create() {
-        var pJS = this.pJS;
+        let pJS = this.pJS;
+        let options = pJS.options;
 
-        for (var i = 0; i < pJS.particles.number.value; i++) {
-            pJS.particles.array.push(new pJSParticle(pJS, pJS.particles.color, pJS.particles.opacity.value));
+        for (var i = 0; i < options.particles.number.value; i++) {
+            pJS.particles.array.push(new pJSParticle(pJS, options.particles.color, options.particles.opacity.value));
         }
     }
 
     update() {
-        var pJS = this.pJS;
+        let pJS = this.pJS;
+        let options = pJS.options;
 
         for (var i = 0; i < pJS.particles.array.length; i++) {
             /* the particle */
@@ -31,28 +33,28 @@ export class pJSParticles {
             //     p.vy = f * Math.sin(t);
             // }
             /* move the particle */
-            if (pJS.particles.move.enable) {
-                var ms = pJS.particles.move.speed / 2;
+            if (options.particles.move.enable) {
+                var ms = options.particles.move.speed / 2;
                 p.x += p.vx * ms;
                 p.y += p.vy * ms;
             }
             /* parallax */
-            if (pJS.interactivity.mouse.pos_x && pJS.interactivity.events.onhover.parallax.enable) {
+            if (pJS.interactivity.mouse.pos_x && options.interactivity.events.onhover.parallax.enable) {
                 /* smaller is the particle, longer is the offset distance */
-                var tmp_x = (pJS.interactivity.mouse.pos_x - (window.innerWidth / 2)) * (p.radius / pJS.interactivity.events.onhover.parallax.force);
-                p.offsetX += (tmp_x - p.offsetX) / pJS.interactivity.events.onhover.parallax.smooth; // Easing equation
-                var tmp_y = (pJS.interactivity.mouse.pos_y - (window.innerHeight / 2)) * (p.radius / pJS.interactivity.events.onhover.parallax.force);
-                p.offsetY += (tmp_y - p.offsetY) / pJS.interactivity.events.onhover.parallax.smooth; // Easing equation
+                var tmp_x = (pJS.interactivity.mouse.pos_x - (window.innerWidth / 2)) * (p.radius / options.interactivity.events.onhover.parallax.force);
+                p.offsetX += (tmp_x - p.offsetX) / options.interactivity.events.onhover.parallax.smooth; // Easing equation
+                var tmp_y = (pJS.interactivity.mouse.pos_y - (window.innerHeight / 2)) * (p.radius / options.interactivity.events.onhover.parallax.force);
+                p.offsetY += (tmp_y - p.offsetY) / options.interactivity.events.onhover.parallax.smooth; // Easing equation
             }
             /* change opacity status */
-            if (pJS.particles.opacity.anim.enable) {
+            if (options.particles.opacity.anim.enable) {
                 if (p.opacity_status == true) {
-                    if (p.opacity >= pJS.particles.opacity.value)
+                    if (p.opacity >= options.particles.opacity.value)
                         p.opacity_status = false;
                     p.opacity += p.vo;
                 }
                 else {
-                    if (p.opacity <= pJS.particles.opacity.anim.opacity_min)
+                    if (p.opacity <= options.particles.opacity.anim.opacity_min)
                         p.opacity_status = true;
                     p.opacity -= p.vo;
                 }
@@ -60,14 +62,14 @@ export class pJSParticles {
                     p.opacity = 0;
             }
             /* change size */
-            if (pJS.particles.size.anim.enable) {
+            if (options.particles.size.anim.enable) {
                 if (p.size_status == true) {
-                    if (p.radius >= pJS.particles.size.value)
+                    if (p.radius >= options.particles.size.value)
                         p.size_status = false;
                     p.radius += p.vs;
                 }
                 else {
-                    if (p.radius <= pJS.particles.size.anim.size_min)
+                    if (p.radius <= options.particles.size.anim.size_min)
                         p.size_status = true;
                     p.radius -= p.vs;
                 }
@@ -75,7 +77,7 @@ export class pJSParticles {
                     p.radius = 0;
             }
             /* change particle position if it is out of canvas */
-            if (pJS.particles.move.out_mode == 'bounce') {
+            if (options.particles.move.out_mode == 'bounce') {
                 var new_pos = {
                     x_left: p.radius,
                     x_right: pJS.canvas.w,
@@ -108,7 +110,7 @@ export class pJSParticles {
                 p.x = Math.random() * pJS.canvas.w;
             }
             /* out of canvas modes */
-            switch (pJS.particles.move.out_mode) {
+            switch (options.particles.move.out_mode) {
                 case 'bounce':
                     if ((p.x + p.offsetX) + p.radius > pJS.canvas.w)
                         p.vx = -p.vx;
@@ -121,29 +123,29 @@ export class pJSParticles {
                     break;
             }
             /* events */
-            if (isInArray('grab', pJS.interactivity.events.onhover.mode)) {
+            if (isInArray('grab', options.interactivity.events.onhover.mode)) {
                 pJS.fn.modes.grabParticle(p);
             }
-            if (isInArray('bubble', pJS.interactivity.events.onhover.mode) || isInArray('bubble', pJS.interactivity.events.onclick.mode)) {
+            if (isInArray('bubble', options.interactivity.events.onhover.mode) || isInArray('bubble', options.interactivity.events.onclick.mode)) {
                 pJS.fn.modes.bubbleParticle(p);
             }
-            if (isInArray('repulse', pJS.interactivity.events.onhover.mode) || isInArray('repulse', pJS.interactivity.events.onclick.mode)) {
+            if (isInArray('repulse', options.interactivity.events.onhover.mode) || isInArray('repulse', options.interactivity.events.onclick.mode)) {
                 pJS.fn.modes.repulseParticle(p);
             }
             /* interaction auto between particles */
-            if (pJS.particles.line_linked.enable || pJS.particles.move.attract.enable) {
+            if (options.particles.line_linked.enable || options.particles.move.attract.enable) {
                 for (var j = i + 1; j < pJS.particles.array.length; j++) {
                     var p2 = pJS.particles.array[j];
                     /* link particles */
-                    if (pJS.particles.line_linked.enable) {
+                    if (options.particles.line_linked.enable) {
                         pJS.fn.interact.linkParticles(p, p2);
                     }
                     /* attract particles */
-                    if (pJS.particles.move.attract.enable) {
+                    if (options.particles.move.attract.enable) {
                         pJS.fn.interact.attractParticles(p, p2);
                     }
                     /* bounce particles */
-                    if (pJS.particles.move.bounce) {
+                    if (options.particles.move.bounce) {
                         pJS.fn.interact.bounceParticles(p, p2);
                     }
                 }
@@ -152,27 +154,30 @@ export class pJSParticles {
     }
 
     draw() {
-        var pJS = this.pJS;
+        let pJS = this.pJS;
+        let options = pJS.options;
 
         /* clear canvas */
         pJS.canvas.ctx.clearRect(0, 0, pJS.canvas.w, pJS.canvas.h);
         /* update each particles param */
         pJS.fn.particles.update();
         /* draw each particle */
-        for (var i = 0; i < pJS.particles.array.length; i++) {
-            var p = pJS.particles.array[i];
+        for (let i = 0; i < pJS.particles.array.length; i++) {
+            let p = pJS.particles.array[i];
             p.draw();
         }
     }
 
     empty() {
-        var pJS = this.pJS;
+        let pJS = this.pJS;
+        let options = pJS.options;
 
         pJS.particles.array = [];
     }
 
     refresh() {
-        var pJS = this.pJS;
+        let pJS = this.pJS;
+        let options = pJS.options;
 
         /* init all */
         cancelRequestAnimFrame(pJS.fn.checkAnimFrame);
