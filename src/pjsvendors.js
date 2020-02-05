@@ -23,7 +23,7 @@ export class pJSVendors {
         /* detect mouse pos - on hover / click event */
         if (options.interactivity.events.onhover.enable || options.interactivity.events.onclick.enable) {
             /* el on mousemove */
-            pJS.interactivity.el.addEventListener('mousemove', function (e) {
+            pJS.interactivity.el.addEventListener('mousemove', e => {
                 let pos_x;
                 let pos_y;
 
@@ -46,7 +46,7 @@ export class pJSVendors {
                 pJS.interactivity.status = 'mousemove';
             });
             /* el on onmouseleave */
-            pJS.interactivity.el.addEventListener('mouseleave', function (e) {
+            pJS.interactivity.el.addEventListener('mouseleave', e => {
                 pJS.interactivity.mouse.pos_x = null;
                 pJS.interactivity.mouse.pos_y = null;
                 pJS.interactivity.status = 'mouseleave';
@@ -54,7 +54,7 @@ export class pJSVendors {
         }
         /* on click event */
         if (options.interactivity.events.onclick.enable) {
-            pJS.interactivity.el.addEventListener('click', function () {
+            pJS.interactivity.el.addEventListener('click', () => {
                 pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
                 pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
                 pJS.interactivity.mouse.click_time = new Date().getTime();
@@ -83,7 +83,7 @@ export class pJSVendors {
                             pJS.repulse_clicking = true;
                             pJS.repulse_count = 0;
                             pJS.repulse_finish = false;
-                            setTimeout(function () {
+                            setTimeout(() => {
                                 pJS.repulse_clicking = false;
                             }, options.interactivity.modes.repulse.duration * 1000);
                             break;
@@ -142,7 +142,7 @@ export class pJSVendors {
         /* set color to svg element */
         let svgXml = pJS.source_svg;
         let rgbHex = /#([0-9A-F]{3,6})/gi;
-        let coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
+        let coloredSvgXml = svgXml.replace(rgbHex, (m, r, g, b) => {
             let color_value;
             if (p.color.rgb) {
                 color_value = 'rgba(' + p.color.rgb.r + ',' + p.color.rgb.g + ',' + p.color.rgb.b + ',' + p.opacity + ')';
@@ -156,7 +156,7 @@ export class pJSVendors {
         let svg = new Blob([coloredSvgXml], { type: 'image/svg+xml;charset=utf-8' }), DOMURL = window.URL || window.webkitURL || window, url = DOMURL.createObjectURL(svg);
         /* create particle img obj */
         let img = new Image();
-        img.addEventListener('load', function () {
+        img.addEventListener('load', () => {
             p.img.obj = img;
             p.img.loaded = true;
             DOMURL.revokeObjectURL(url);
@@ -224,7 +224,7 @@ export class pJSVendors {
             else {
                 let img = new Image();
 
-                img.addEventListener('load', function () {
+                img.addEventListener('load', () => {
                     pJS.img_obj = img;
                     pJS.fn.vendors.checkBeforeDraw();
                 });
@@ -249,13 +249,13 @@ export class pJSVendors {
                     if (!options.particles.move.enable)
                         cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
                     else
-                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
                             pJS.fn.vendors.draw();
                         });
                 }
                 else {
                     if (!pJS.img_error)
-                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
                             pJS.fn.vendors.draw();
                         });
                 }
@@ -264,17 +264,17 @@ export class pJSVendors {
                 if (pJS.img_obj != undefined) {
                     pJS.fn.particles.draw();
                     if (!options.particles.move.enable)
-                        cancelRequestAnimFrame(function () {
+                        cancelRequestAnimFrame(() => {
                             pJS.fn.drawAnimFrame();
                         });
                     else
-                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
                             pJS.fn.vendors.draw();
                         });
                 }
                 else {
                     if (!pJS.img_error)
-                        pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
                             pJS.fn.vendors.draw();
                         });
                 }
@@ -285,7 +285,7 @@ export class pJSVendors {
             if (!options.particles.move.enable)
                 cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
             else
-                pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+                pJS.fn.drawAnimFrame = requestAnimFrame(() => {
                     pJS.fn.vendors.draw();
                 });
         }
@@ -298,7 +298,7 @@ export class pJSVendors {
         // if shape is image
         if (options.particles.shape.type == 'image') {
             if (pJS.img_type == 'svg' && pJS.source_svg == undefined) {
-                pJS.checkAnimFrame = requestAnimFrame(function () {
+                pJS.checkAnimFrame = requestAnimFrame(() => {
                     check();
                 });
             }

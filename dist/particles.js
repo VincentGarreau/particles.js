@@ -99,7 +99,7 @@ function hexToRgb(hex) {
   // By Tim Down - http://stackoverflow.com/a/5624139/3493650
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
     return r + r + g + g + b + b;
   });
   let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -810,7 +810,7 @@ class pjsvendors_pJSVendors {
 
     if (options.interactivity.events.onhover.enable || options.interactivity.events.onclick.enable) {
       /* el on mousemove */
-      pJS.interactivity.el.addEventListener('mousemove', function (e) {
+      pJS.interactivity.el.addEventListener('mousemove', e => {
         let pos_x;
         let pos_y;
 
@@ -834,7 +834,7 @@ class pjsvendors_pJSVendors {
       });
       /* el on onmouseleave */
 
-      pJS.interactivity.el.addEventListener('mouseleave', function (e) {
+      pJS.interactivity.el.addEventListener('mouseleave', e => {
         pJS.interactivity.mouse.pos_x = null;
         pJS.interactivity.mouse.pos_y = null;
         pJS.interactivity.status = 'mouseleave';
@@ -844,7 +844,7 @@ class pjsvendors_pJSVendors {
 
 
     if (options.interactivity.events.onclick.enable) {
-      pJS.interactivity.el.addEventListener('click', function () {
+      pJS.interactivity.el.addEventListener('click', () => {
         pJS.interactivity.mouse.click_pos_x = pJS.interactivity.mouse.pos_x;
         pJS.interactivity.mouse.click_pos_y = pJS.interactivity.mouse.pos_y;
         pJS.interactivity.mouse.click_time = new Date().getTime();
@@ -876,7 +876,7 @@ class pjsvendors_pJSVendors {
               pJS.repulse_clicking = true;
               pJS.repulse_count = 0;
               pJS.repulse_finish = false;
-              setTimeout(function () {
+              setTimeout(() => {
                 pJS.repulse_clicking = false;
               }, options.interactivity.modes.repulse.duration * 1000);
               break;
@@ -933,7 +933,7 @@ class pjsvendors_pJSVendors {
 
     let svgXml = pJS.source_svg;
     let rgbHex = /#([0-9A-F]{3,6})/gi;
-    let coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
+    let coloredSvgXml = svgXml.replace(rgbHex, (m, r, g, b) => {
       let color_value;
 
       if (p.color.rgb) {
@@ -954,7 +954,7 @@ class pjsvendors_pJSVendors {
     /* create particle img obj */
 
     let img = new Image();
-    img.addEventListener('load', function () {
+    img.addEventListener('load', () => {
       p.img.obj = img;
       p.img.loaded = true;
       DOMURL.revokeObjectURL(url);
@@ -1020,7 +1020,7 @@ class pjsvendors_pJSVendors {
         }
       } else {
         let img = new Image();
-        img.addEventListener('load', function () {
+        img.addEventListener('load', () => {
           pJS.img_obj = img;
           pJS.fn.vendors.checkBeforeDraw();
         });
@@ -1040,31 +1040,31 @@ class pjsvendors_pJSVendors {
       if (pJS.img_type == 'svg') {
         if (pJS.count_svg >= options.particles.number.value) {
           pJS.fn.particles.draw();
-          if (!options.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);else pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+          if (!options.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);else pJS.fn.drawAnimFrame = requestAnimFrame(() => {
             pJS.fn.vendors.draw();
           });
         } else {
-          if (!pJS.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+          if (!pJS.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(() => {
             pJS.fn.vendors.draw();
           });
         }
       } else {
         if (pJS.img_obj != undefined) {
           pJS.fn.particles.draw();
-          if (!options.particles.move.enable) cancelRequestAnimFrame(function () {
+          if (!options.particles.move.enable) cancelRequestAnimFrame(() => {
             pJS.fn.drawAnimFrame();
-          });else pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+          });else pJS.fn.drawAnimFrame = requestAnimFrame(() => {
             pJS.fn.vendors.draw();
           });
         } else {
-          if (!pJS.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+          if (!pJS.img_error) pJS.fn.drawAnimFrame = requestAnimFrame(() => {
             pJS.fn.vendors.draw();
           });
         }
       }
     } else {
       pJS.fn.particles.draw();
-      if (!options.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);else pJS.fn.drawAnimFrame = requestAnimFrame(function () {
+      if (!options.particles.move.enable) cancelRequestAnimFrame(pJS.fn.drawAnimFrame);else pJS.fn.drawAnimFrame = requestAnimFrame(() => {
         pJS.fn.vendors.draw();
       });
     }
@@ -1076,7 +1076,7 @@ class pjsvendors_pJSVendors {
 
     if (options.particles.shape.type == 'image') {
       if (pJS.img_type == 'svg' && pJS.source_svg == undefined) {
-        pJS.checkAnimFrame = requestAnimFrame(function () {
+        pJS.checkAnimFrame = requestAnimFrame(() => {
           check();
         });
       } else {
@@ -1176,7 +1176,7 @@ class pJSCanvas {
     pJS.canvas.el.height = pJS.canvas.h;
 
     if (pJS && options.interactivity.events.resize) {
-      window.addEventListener('resize', function () {
+      window.addEventListener('resize', () => {
         pJS.canvas.w = pJS.canvas.el.offsetWidth;
         pJS.canvas.h = pJS.canvas.el.offsetHeight;
         /* resize canvas */

@@ -5,7 +5,7 @@ export function hexToRgb(hex) {
     // By Tim Down - http://stackoverflow.com/a/5624139/3493650
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => {
         return r + r + g + g + b + b;
     });
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

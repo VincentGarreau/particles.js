@@ -20,7 +20,7 @@ export class pJSCanvas {
         pJS.canvas.el.width = pJS.canvas.w;
         pJS.canvas.el.height = pJS.canvas.h;
         if (pJS && options.interactivity.events.resize) {
-            window.addEventListener('resize', function () {
+            window.addEventListener('resize', () => {
                 pJS.canvas.w = pJS.canvas.el.offsetWidth;
                 pJS.canvas.h = pJS.canvas.el.offsetHeight;
                 /* resize canvas */
