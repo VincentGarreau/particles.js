@@ -4,7 +4,7 @@ import { pJSFunctions } from './pjsfunctions';
 
 export class pJS {
     constructor(tag_id, params) {
-        var canvas_el = document.querySelector('#' + tag_id + ' > .particles-js-canvas-el');
+        let canvas_el = document.querySelector('#' + tag_id + ' > .particles-js-canvas-el');
 
         /* particles.js variables with default values */
         this.pJS = {
@@ -19,7 +19,6 @@ export class pJS {
             interactivity: {
                 mouse: {}
             },
-            tmp: {},
             options: {
                 particles: {
                     number: {
@@ -147,20 +146,10 @@ export class pJS {
             Object.deepExtend(options, params);
         }
 
-        pJS.tmp.obj = {
-            size_value: options.particles.size.value,
-            size_anim_speed: options.particles.size.anim.speed,
-            move_speed: options.particles.move.speed,
-            line_linked_distance: options.particles.line_linked.distance,
-            line_linked_width: options.particles.line_linked.width,
-            mode_grab_distance: options.interactivity.modes.grab.distance,
-            mode_bubble_distance: options.interactivity.modes.bubble.distance,
-            mode_bubble_size: options.interactivity.modes.bubble.size,
-            mode_repulse_distance: options.interactivity.modes.repulse.distance
-        };
-
         /* ---------- pJS - start ------------ */
         pJS.fn.vendors.eventsListeners();
+
+        //TODO: Start è async
         pJS.fn.vendors.start();
     }
 }

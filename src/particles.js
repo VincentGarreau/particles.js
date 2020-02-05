@@ -13,7 +13,7 @@ import { pJSLoader } from './pjsloader';
 /* ---------- global functions - vendors ------------ */
 
 Object.deepExtend = function (destination, source) {
-  for (var property in source) {
+  for (let property in source) {
     if (source[property] && source[property].constructor && source[property].constructor === Object) {
       destination[property] = destination[property] || {};
 
@@ -51,8 +51,8 @@ window.particlesJS = function(tag_id, params) {
   pJSLoader.load(tag_id, params);
 };
 
-window.particlesJS.load = function(tag_id, path_config_json, callback) {
-  pJSLoader.loadJSON(tag_id, path_config_json, callback);
+window.particlesJS.load = async function(tag_id, path_config_json, callback) {
+  await pJSLoader.loadJSON(tag_id, path_config_json, callback);
 }
 
 window.pJSDom = function () {

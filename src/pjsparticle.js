@@ -40,7 +40,8 @@ export class pJSParticle {
         this.color = {};
         if (typeof (color.value) == 'object') {
             if (color.value instanceof Array) {
-                var color_selected = color.value[Math.floor(Math.random() * options.particles.color.value.length)];
+                let color_selected = color.value[Math.floor(Math.random() * options.particles.color.value.length)];
+
                 this.color.rgb = hexToRgb(color_selected);
             }
             else {
@@ -81,7 +82,8 @@ export class pJSParticle {
             }
         }
         /* animation - velocity for speed */
-        var velbase = {};
+        let velbase = {};
+
         switch (options.particles.move.direction) {
             case 'top':
                 velbase = { x: 0, y: -1 };
@@ -123,22 +125,25 @@ export class pJSParticle {
             this.vx = velbase.x + Math.random() - 0.5;
             this.vy = velbase.y + Math.random() - 0.5;
         }
-        // var theta = 2.0 * Math.PI * Math.random();
+        // let theta = 2.0 * Math.PI * Math.random();
+
         // this.vx = Math.cos(theta);
         // this.vy = Math.sin(theta);
+
         this.vx_i = this.vx;
         this.vy_i = this.vy;
         /* if shape is image */
-        var shape_type = options.particles.shape.type;
+        let shape_type = options.particles.shape.type;
+
         if (typeof (shape_type) == 'object') {
             if (shape_type instanceof Array) {
-                var shape_selected = shape_type[Math.floor(Math.random() * shape_type.length)];
+                let shape_selected = shape_type[Math.floor(Math.random() * shape_type.length)];
                 this.shape = shape_selected;
             }
-        }
-        else {
+        } else {
             this.shape = shape_type;
         }
+
         if (this.shape == 'image') {
             let sh = options.particles.shape;
             this.img = {
@@ -147,9 +152,9 @@ export class pJSParticle {
             };
             if (!this.img.ratio)
                 this.img.ratio = 1;
-            if (pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg != undefined) {
+            if (pJS.img_type == 'svg' && pJS.source_svg != undefined) {
                 pJS.fn.vendors.createSvgImg(this);
-                if (pJS.tmp.pushing) {
+                if (pJS.pushing) {
                     this.img.loaded = false;
                 }
             }
@@ -218,11 +223,14 @@ export class pJSParticle {
                 function draw() {
                     pJS.canvas.ctx.drawImage(img_obj, p.x - radius, p.y - radius, radius * 2, radius * 2 / p.img.ratio);
                 }
-                if (pJS.tmp.img_type == 'svg') {
-                    var img_obj = p.img.obj;
+
+                let img_obj;
+
+                if (pJS.img_type == 'svg') {
+                    img_obj = p.img.obj;
                 }
                 else {
-                    var img_obj = pJS.tmp.img_obj;
+                    img_obj = pJS.img_obj;
                 }
                 if (img_obj) {
                     draw();

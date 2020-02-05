@@ -18,11 +18,13 @@ export class pJSInteract {
 
         /* draw a line between p1 and p2 if the distance between them is under the config distance */
         if (dist <= options.particles.line_linked.distance) {
-            var opacity_line = options.particles.line_linked.opacity - (dist / (1 / options.particles.line_linked.opacity)) / options.particles.line_linked.distance;
+            let opacity_line = options.particles.line_linked.opacity - (dist / (1 / options.particles.line_linked.opacity)) / options.particles.line_linked.distance;
             if (opacity_line > 0) {
                 /* style */
                 options.particles.line_linked.color_rgb = options.particles.line_linked.color_rgb || hexToRgb(options.particles.line_linked.color);
-                var color_line = options.particles.line_linked.color_rgb;
+
+                let color_line = options.particles.line_linked.color_rgb;
+
                 pJS.canvas.ctx.strokeStyle = 'rgba(' + color_line.r + ',' + color_line.g + ',' + color_line.b + ',' + opacity_line + ')';
                 pJS.canvas.ctx.lineWidth = options.particles.line_linked.width;
                 //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
@@ -46,7 +48,8 @@ export class pJSInteract {
         let dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist <= options.particles.line_linked.distance) {
-            var ax = dx / (options.particles.move.attract.rotateX * 1000), ay = dy / (options.particles.move.attract.rotateY * 1000);
+            let ax = dx / (options.particles.move.attract.rotateX * 1000), ay = dy / (options.particles.move.attract.rotateY * 1000);
+            
             p1.vx -= ax;
             p1.vy -= ay;
             p2.vx += ax;

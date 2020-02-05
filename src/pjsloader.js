@@ -7,7 +7,7 @@ var pJSDom = [];
 export class pJSLoader {
   static pJSDom() {
     if (!pJSDom) {
-        pJSLoader.pJSDomSet([]);
+      pJSLoader.pJSDomSet([]);
     }
 
     return pJSDom;
@@ -30,7 +30,7 @@ export class pJSLoader {
     }
 
     /* pJS elements */
-    var pJS_tag = document.getElementById(tag_id),
+    let pJS_tag = document.getElementById(tag_id),
       pJS_canvas_class = 'particles-js-canvas-el',
       exist_canvas = pJS_tag.getElementsByClassName(pJS_canvas_class);
 
@@ -42,7 +42,8 @@ export class pJSLoader {
     }
 
     /* create canvas element */
-    var canvas_el = document.createElement('canvas');
+    let canvas_el = document.createElement('canvas');
+
     canvas_el.className = pJS_canvas_class;
 
     /* set size canvas */
@@ -50,7 +51,7 @@ export class pJSLoader {
     canvas_el.style.height = "100%";
 
     /* append canvas */
-    var canvas = document.getElementById(tag_id).appendChild(canvas_el);
+    let canvas = document.getElementById(tag_id).appendChild(canvas_el);
 
     /* launch particle.js */
     if (canvas != null) {
@@ -72,22 +73,20 @@ export class pJSLoader {
     }
   }
 
-  static loadJSON(tag_id, path_config_json, callback) {
+  static async loadJSON(tag_id, path_config_json, callback) {
     /* load json config */
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', path_config_json);
-    xhr.onreadystatechange = function (data) {
-      if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-          var params = JSON.parse(data.currentTarget.response);
-          pJSLoader.load(tag_id, params);
-          if (callback) callback();
-        } else {
-          console.error('Error pJS - XMLHttpRequest status: ' + xhr.status);
-          console.error('Error pJS - File config not found');
-        }
-      }
-    };
-    xhr.send();
-  }
-}
+    let response = await fetch(path_config_json);
+
+    if (response.ok) {
+      let params = await response.json();
+
+      pJSLoader.load(tag_id, params);
+
+      if (callback)
+        callback();
+    } else {
+      console.error('Error pJS - fetch status: ' + response.status);
+      console.error('Error pJS - File config not found');
+    }
+  };
+};

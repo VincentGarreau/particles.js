@@ -24,18 +24,25 @@ export class pJSVendors {
         if (options.interactivity.events.onhover.enable || options.interactivity.events.onclick.enable) {
             /* el on mousemove */
             pJS.interactivity.el.addEventListener('mousemove', function (e) {
+                let pos_x;
+                let pos_y;
+
                 if (pJS.interactivity.el == window) {
-                    var pos_x = e.clientX, pos_y = e.clientY;
+                    pos_x = e.clientX;
+                    pos_y = e.clientY;
+                } else {
+                    pos_x = e.offsetX || e.clientX;
+                    pos_y = e.offsetY || e.clientY;
                 }
-                else {
-                    var pos_x = e.offsetX || e.clientX, pos_y = e.offsetY || e.clientY;
-                }
+
                 pJS.interactivity.mouse.pos_x = pos_x;
                 pJS.interactivity.mouse.pos_y = pos_y;
-                if (pJS.tmp.retina) {
+
+                if (pJS.retina) {
                     pJS.interactivity.mouse.pos_x *= pJS.canvas.pxratio;
                     pJS.interactivity.mouse.pos_y *= pJS.canvas.pxratio;
                 }
+
                 pJS.interactivity.status = 'mousemove';
             });
             /* el on onmouseleave */
@@ -70,14 +77,14 @@ export class pJSVendors {
                             pJS.fn.modes.removeParticles(options.interactivity.modes.remove.particles_nb);
                             break;
                         case 'bubble':
-                            pJS.tmp.bubble_clicking = true;
+                            pJS.bubble_clicking = true;
                             break;
                         case 'repulse':
-                            pJS.tmp.repulse_clicking = true;
-                            pJS.tmp.repulse_count = 0;
-                            pJS.tmp.repulse_finish = false;
+                            pJS.repulse_clicking = true;
+                            pJS.repulse_count = 0;
+                            pJS.repulse_finish = false;
                             setTimeout(function () {
-                                pJS.tmp.repulse_clicking = false;
+                                pJS.repulse_clicking = false;
                             }, options.interactivity.modes.repulse.duration * 1000);
                             break;
                     }
@@ -92,14 +99,17 @@ export class pJSVendors {
 
         if (options.particles.number.density.enable) {
             /* calc area */
-            var area = pJS.canvas.el.width * pJS.canvas.el.height / 1000;
-            if (pJS.tmp.retina) {
+            let area = pJS.canvas.el.width * pJS.canvas.el.height / 1000;
+
+            if (pJS.retina) {
                 area = area / (pJS.canvas.pxratio * 2);
             }
             /* calc number of particles based on density area */
-            var nb_particles = area * options.particles.number.value / options.particles.number.density.value_area;
+            let nb_particles = area * options.particles.number.value / options.particles.number.density.value_area;
+
             /* add or remove X particles */
-            var missing_particles = pJS.particles.array.length - nb_particles;
+            let missing_particles = pJS.particles.array.length - nb_particles;
+
             if (missing_particles < 0)
                 pJS.fn.modes.pushParticles(Math.abs(missing_particles));
             else
@@ -111,9 +121,12 @@ export class pJSVendors {
         let pJS = this.pJS;
         let options = pJS.options;
 
-        for (var i = 0; i < pJS.particles.array.length; i++) {
-            var p2 = pJS.particles.array[i];
-            var dx = p1.x - p2.x, dy = p1.y - p2.y, dist = Math.sqrt(dx * dx + dy * dy);
+        for (let i = 0; i < pJS.particles.array.length; i++) {
+            let p2 = pJS.particles.array[i];
+            let dx = p1.x - p2.x;
+            let dy = p1.y - p2.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+
             if (dist <= p1.radius + p2.radius) {
                 p1.x = position ? position.x : Math.random() * pJS.canvas.w;
                 p1.y = position ? position.y : Math.random() * pJS.canvas.h;
@@ -127,24 +140,27 @@ export class pJSVendors {
         let options = pJS.options;
 
         /* set color to svg element */
-        var svgXml = pJS.tmp.source_svg, rgbHex = /#([0-9A-F]{3,6})/gi, coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
+        let svgXml = pJS.source_svg;
+        let rgbHex = /#([0-9A-F]{3,6})/gi;
+        let coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
+            let color_value;
             if (p.color.rgb) {
-                var color_value = 'rgba(' + p.color.rgb.r + ',' + p.color.rgb.g + ',' + p.color.rgb.b + ',' + p.opacity + ')';
+                color_value = 'rgba(' + p.color.rgb.r + ',' + p.color.rgb.g + ',' + p.color.rgb.b + ',' + p.opacity + ')';
             }
             else {
-                var color_value = 'hsla(' + p.color.hsl.h + ',' + p.color.hsl.s + '%,' + p.color.hsl.l + '%,' + p.opacity + ')';
+                color_value = 'hsla(' + p.color.hsl.h + ',' + p.color.hsl.s + '%,' + p.color.hsl.l + '%,' + p.opacity + ')';
             }
             return color_value;
         });
         /* prepare to create img with colored svg */
-        var svg = new Blob([coloredSvgXml], { type: 'image/svg+xml;charset=utf-8' }), DOMURL = window.URL || window.webkitURL || window, url = DOMURL.createObjectURL(svg);
+        let svg = new Blob([coloredSvgXml], { type: 'image/svg+xml;charset=utf-8' }), DOMURL = window.URL || window.webkitURL || window, url = DOMURL.createObjectURL(svg);
         /* create particle img obj */
-        var img = new Image();
+        let img = new Image();
         img.addEventListener('load', function () {
             p.img.obj = img;
             p.img.loaded = true;
             DOMURL.revokeObjectURL(url);
-            pJS.tmp.count_svg++;
+            pJS.count_svg++;
         });
         img.src = url;
     }
@@ -163,15 +179,15 @@ export class pJSVendors {
         let options = pJS.options;
 
         // By Programming Thomas - https://programmingthomas.wordpress.com/2013/04/03/n-sided-shapes/
-        var sideCount = sideCountNumerator * sideCountDenominator;
-        var decimalSides = sideCountNumerator / sideCountDenominator;
-        var interiorAngleDegrees = (180 * (decimalSides - 2)) / decimalSides;
-        var interiorAngle = Math.PI - Math.PI * interiorAngleDegrees / 180; // convert to radians
+        let sideCount = sideCountNumerator * sideCountDenominator;
+        let decimalSides = sideCountNumerator / sideCountDenominator;
+        let interiorAngleDegrees = (180 * (decimalSides - 2)) / decimalSides;
+        let interiorAngle = Math.PI - Math.PI * interiorAngleDegrees / 180; // convert to radians
         c.save();
         c.beginPath();
         c.translate(startX, startY);
         c.moveTo(0, 0);
-        for (var i = 0; i < sideCount; i++) {
+        for (let i = 0; i < sideCount; i++) {
             c.lineTo(sideLength, 0);
             c.translate(sideLength, 0);
             c.rotate(interiorAngle);
@@ -188,41 +204,37 @@ export class pJSVendors {
         window.open(pJS.canvas.el.toDataURL('image/png'), '_blank');
     }
 
-    loadImg(type) {
+    async loadImg(type) {
         let pJS = this.pJS;
         let options = pJS.options;
 
-        pJS.tmp.img_error = undefined;
+        pJS.img_error = undefined;
         if (options.particles.shape.image.src != '') {
             if (type == 'svg') {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', options.particles.shape.image.src);
-                xhr.onreadystatechange = function (data) {
-                    if (xhr.readyState == 4) {
-                        if (xhr.status == 200) {
-                            pJS.tmp.source_svg = data.currentTarget.response;
-                            pJS.fn.vendors.checkBeforeDraw();
-                        }
-                        else {
-                            console.error('Error pJS - Image not found');
-                            pJS.tmp.img_error = true;
-                        }
-                    }
-                };
-                xhr.send();
+                let response = await fetch(options.particles.shape.image.src);
+
+                if (response.ok) {
+                    pJS.source_svg = await response.blob();
+                    pJS.fn.vendors.checkBeforeDraw();
+                } else {
+                    console.error('Error pJS - Image not found');
+                    pJS.img_error = true;
+                }
             }
             else {
-                var img = new Image();
+                let img = new Image();
+
                 img.addEventListener('load', function () {
-                    pJS.tmp.img_obj = img;
+                    pJS.img_obj = img;
                     pJS.fn.vendors.checkBeforeDraw();
                 });
+
                 img.src = options.particles.shape.image.src;
             }
         }
         else {
             console.error('Error pJS - No image.src');
-            pJS.tmp.img_error = true;
+            pJS.img_error = true;
         }
     }
 
@@ -231,8 +243,8 @@ export class pJSVendors {
         let options = pJS.options;
 
         if (options.particles.shape.type == 'image') {
-            if (pJS.tmp.img_type == 'svg') {
-                if (pJS.tmp.count_svg >= options.particles.number.value) {
+            if (pJS.img_type == 'svg') {
+                if (pJS.count_svg >= options.particles.number.value) {
                     pJS.fn.particles.draw();
                     if (!options.particles.move.enable)
                         cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
@@ -242,14 +254,14 @@ export class pJSVendors {
                         });
                 }
                 else {
-                    if (!pJS.tmp.img_error)
+                    if (!pJS.img_error)
                         pJS.fn.drawAnimFrame = requestAnimFrame(function () {
                             pJS.fn.vendors.draw();
                         });
                 }
             }
             else {
-                if (pJS.tmp.img_obj != undefined) {
+                if (pJS.img_obj != undefined) {
                     pJS.fn.particles.draw();
                     if (!options.particles.move.enable)
                         cancelRequestAnimFrame(function () {
@@ -261,7 +273,7 @@ export class pJSVendors {
                         });
                 }
                 else {
-                    if (!pJS.tmp.img_error)
+                    if (!pJS.img_error)
                         pJS.fn.drawAnimFrame = requestAnimFrame(function () {
                             pJS.fn.vendors.draw();
                         });
@@ -285,14 +297,14 @@ export class pJSVendors {
 
         // if shape is image
         if (options.particles.shape.type == 'image') {
-            if (pJS.tmp.img_type == 'svg' && pJS.tmp.source_svg == undefined) {
-                pJS.tmp.checkAnimFrame = requestAnimFrame(function () {
+            if (pJS.img_type == 'svg' && pJS.source_svg == undefined) {
+                pJS.checkAnimFrame = requestAnimFrame(function () {
                     check();
                 });
             }
             else {
-                cancelRequestAnimFrame(pJS.tmp.checkAnimFrame);
-                if (!pJS.tmp.img_error) {
+                cancelRequestAnimFrame(pJS.checkAnimFrame);
+                if (!pJS.img_error) {
                     pJS.fn.vendors.init();
                     pJS.fn.vendors.draw();
                 }
@@ -317,13 +329,13 @@ export class pJSVendors {
         pJS.fn.vendors.densityAutoParticles();
     }
 
-    start() {
+    async start() {
         let pJS = this.pJS;
         let options = pJS.options;
 
         if (isInArray('image', options.particles.shape.type)) {
-            pJS.tmp.img_type = options.particles.shape.image.src.substr(options.particles.shape.image.src.length - 3);
-            pJS.fn.vendors.loadImg(pJS.tmp.img_type);
+            pJS.img_type = options.particles.shape.image.src.substr(options.particles.shape.image.src.length - 3);
+            await pJS.fn.vendors.loadImg(pJS.img_type);
         }
         else {
             pJS.fn.vendors.checkBeforeDraw();

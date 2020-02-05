@@ -13,7 +13,7 @@ export class pJSParticles {
         let pJS = this.pJS;
         let options = pJS.options;
 
-        for (var i = 0; i < options.particles.number.value; i++) {
+        for (let i = 0; i < options.particles.number.value; i++) {
             pJS.particles.array.push(new pJSParticle(pJS, options.particles.color, options.particles.opacity.value));
         }
     }
@@ -22,28 +22,31 @@ export class pJSParticles {
         let pJS = this.pJS;
         let options = pJS.options;
 
-        for (var i = 0; i < pJS.particles.array.length; i++) {
+        for (let i = 0; i < pJS.particles.array.length; i++) {
             /* the particle */
-            var p = pJS.particles.array[i];
-            // var d = ( dx = pJS.interactivity.mouse.click_pos_x - p.x ) * dx + ( dy = pJS.interactivity.mouse.click_pos_y - p.y ) * dy;
-            // var f = -BANG_SIZE / d;
+            let p = pJS.particles.array[i];
+            // let d = ( dx = pJS.interactivity.mouse.click_pos_x - p.x ) * dx + ( dy = pJS.interactivity.mouse.click_pos_y - p.y ) * dy;
+            // let f = -BANG_SIZE / d;
             // if ( d < BANG_SIZE ) {
-            //     var t = Math.atan2( dy, dx );
+            //     let t = Math.atan2( dy, dx );
             //     p.vx = f * Math.cos(t);
             //     p.vy = f * Math.sin(t);
             // }
             /* move the particle */
             if (options.particles.move.enable) {
-                var ms = options.particles.move.speed / 2;
+                let ms = options.particles.move.speed / 2;
                 p.x += p.vx * ms;
                 p.y += p.vy * ms;
             }
             /* parallax */
             if (pJS.interactivity.mouse.pos_x && options.interactivity.events.onhover.parallax.enable) {
                 /* smaller is the particle, longer is the offset distance */
-                var tmp_x = (pJS.interactivity.mouse.pos_x - (window.innerWidth / 2)) * (p.radius / options.interactivity.events.onhover.parallax.force);
+                let tmp_x = (pJS.interactivity.mouse.pos_x - (window.innerWidth / 2)) * (p.radius / options.interactivity.events.onhover.parallax.force);
+
                 p.offsetX += (tmp_x - p.offsetX) / options.interactivity.events.onhover.parallax.smooth; // Easing equation
-                var tmp_y = (pJS.interactivity.mouse.pos_y - (window.innerHeight / 2)) * (p.radius / options.interactivity.events.onhover.parallax.force);
+
+                let tmp_y = (pJS.interactivity.mouse.pos_y - (window.innerHeight / 2)) * (p.radius / options.interactivity.events.onhover.parallax.force);
+
                 p.offsetY += (tmp_y - p.offsetY) / options.interactivity.events.onhover.parallax.smooth; // Easing equation
             }
             /* change opacity status */
@@ -77,8 +80,10 @@ export class pJSParticles {
                     p.radius = 0;
             }
             /* change particle position if it is out of canvas */
+            let new_pos;
+
             if (options.particles.move.out_mode == 'bounce') {
-                var new_pos = {
+                new_pos = {
                     x_left: p.radius,
                     x_right: pJS.canvas.w,
                     y_top: p.radius,
@@ -86,7 +91,7 @@ export class pJSParticles {
                 };
             }
             else {
-                var new_pos = {
+                new_pos = {
                     x_left: -p.radius - p.offsetX,
                     x_right: pJS.canvas.w + p.radius + p.offsetX,
                     y_top: -p.radius - p.offsetY,
@@ -134,8 +139,8 @@ export class pJSParticles {
             }
             /* interaction auto between particles */
             if (options.particles.line_linked.enable || options.particles.move.attract.enable) {
-                for (var j = i + 1; j < pJS.particles.array.length; j++) {
-                    var p2 = pJS.particles.array[j];
+                for (let j = i + 1; j < pJS.particles.array.length; j++) {
+                    let p2 = pJS.particles.array[j];
                     /* link particles */
                     if (options.particles.line_linked.enable) {
                         pJS.fn.interact.linkParticles(p, p2);
@@ -175,19 +180,19 @@ export class pJSParticles {
         pJS.particles.array = [];
     }
 
-    refresh() {
+    async refresh() {
         let pJS = this.pJS;
         let options = pJS.options;
 
         /* init all */
         cancelRequestAnimFrame(pJS.fn.checkAnimFrame);
         cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
-        pJS.tmp.source_svg = undefined;
-        pJS.tmp.img_obj = undefined;
-        pJS.tmp.count_svg = 0;
+        pJS.source_svg = undefined;
+        pJS.img_obj = undefined;
+        pJS.count_svg = 0;
         pJS.fn.particles.empty();
         pJS.fn.canvas.clear();
         /* restart */
-        pJS.fn.vendors.start();
+        await pJS.fn.vendors.start();
     }
 }

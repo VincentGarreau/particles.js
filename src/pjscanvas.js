@@ -24,7 +24,7 @@ export class pJSCanvas {
                 pJS.canvas.w = pJS.canvas.el.offsetWidth;
                 pJS.canvas.h = pJS.canvas.el.offsetHeight;
                 /* resize canvas */
-                if (pJS.tmp.retina) {
+                if (pJS.retina) {
                     pJS.canvas.w *= pJS.canvas.pxratio;
                     pJS.canvas.h *= pJS.canvas.pxratio;
                 }
