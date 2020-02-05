@@ -1,5 +1,5 @@
 {
-  "name": "particles.js",
+  "name": "particles.ts",
   "version": "1.0.0",
   "description": "A lightweight JavaScript library for creating particles",
   "homepage": "https://github.com/matteobruni/particles.js",
