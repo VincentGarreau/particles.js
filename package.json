@@ -1,28 +1,48 @@
 {
-  "name": "particles.js",
-  "version": "2.0.0",
-  "description": "A lightweight JavaScript library for creating particles",
-  "homepage": "http://vincentgarreau.com/particles.js",
+  "name": "tsparticles",
+  "version": "1.0.0",
+  "description": "Port of Vincent Garreau' particles.js which was originally a port of Vincent Garreau' particles.js, written in Typescript.",
+  "homepage": "https://github.com/matteobruni/particles.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/VincentGarreau/particles.js.git"
+    "url": "git+https://github.com/matteobruni/particles.js.git"
   },
   "keywords": [
     "particles",
     "particle",
     "canvas"
   ],
-  "author": "Vincent Garreau",
+  "author": "Matteo Bruni",
   "license": "MIT",
   "files": [
     "particles.js",
     "particles.min.js"
   ],
   "bugs": {
-    "url": "https://github.com/VincentGarreau/particles.js/issues"
+    "url": "https://github.com/matteobruni/particles.js/issues"
   },
-  "homepage": "https://github.com/VincentGarreau/particles.js"
+  "main": "particles.js",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-typescript": "^7.8.3",
+    "@babel/runtime": "^7.8.4",
+    "babel-loader": "^8.0.6",
+    "terser-webpack-plugin": "^2.3.4",
+    "typescript": "^3.7.5",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.41.3",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {}
 }
