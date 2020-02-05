@@ -1,7 +1,9 @@
 'use strict';
 
 export class pJSCanvas {
-    constructor(pJS) {
+    pJS: any;
+
+    constructor(pJS: any) {
         this.pJS = pJS;
     }
 

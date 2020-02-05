@@ -1,7 +1,9 @@
 'use strict';
 
 export class pJSRetina {
-    constructor(pJS) {
+    pJS: any;
+
+    constructor(pJS: any) {
         this.pJS = pJS;
     }
 

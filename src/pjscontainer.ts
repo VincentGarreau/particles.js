@@ -1,17 +1,22 @@
 import { pJSFunctions } from './pjsfunctions';
+import { pJSUtils } from './pjsutils';
+import { pJS } from './pjsinterfaces';
 
 'use strict';
 
-export class pJS {
-    constructor(tag_id, params) {
-        let canvas_el = document.querySelector('#' + tag_id + ' > .particles-js-canvas-el');
+export class pJSContainer {
+    pJS: pJS;
+
+    constructor(tag_id: string, params: any) {
+        let canvas_el = document.querySelector('#' + tag_id + ' > .particles-js-canvas-el') as HTMLElement;
 
         /* particles.js variables with default values */
         this.pJS = {
             canvas: {
                 el: canvas_el,
                 w: canvas_el.offsetWidth,
-                h: canvas_el.offsetHeight
+                h: canvas_el.offsetHeight,
+                tag_id: tag_id
             },
             particles: {
                 array: []
@@ -142,8 +147,8 @@ export class pJS {
 
         /* params settings */
         if (params) {
-            Object.deepExtend(pJS, params);
-            Object.deepExtend(options, params);
+            pJSUtils.deepExtend(pJS, params);
+            pJSUtils.deepExtend(options, params);
         }
 
         /* ---------- pJS - start ------------ */

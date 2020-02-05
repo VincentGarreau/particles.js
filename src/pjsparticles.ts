@@ -1,10 +1,12 @@
 import { pJSParticle } from './pjsparticle';
-import { isInArray } from './pjsutils';
+import { pJSUtils } from './pjsutils';
 
 'use strict';
 
 export class pJSParticles {
-    constructor(pJS) {
+    pJS: any;
+
+    constructor(pJS: any) {
         this.pJS = pJS;
     }
 
@@ -128,13 +130,13 @@ export class pJSParticles {
                     break;
             }
             /* events */
-            if (isInArray('grab', options.interactivity.events.onhover.mode)) {
+            if (pJSUtils.isInArray('grab', options.interactivity.events.onhover.mode)) {
                 pJS.fn.modes.grabParticle(p);
             }
-            if (isInArray('bubble', options.interactivity.events.onhover.mode) || isInArray('bubble', options.interactivity.events.onclick.mode)) {
+            if (pJSUtils.isInArray('bubble', options.interactivity.events.onhover.mode) || pJSUtils.isInArray('bubble', options.interactivity.events.onclick.mode)) {
                 pJS.fn.modes.bubbleParticle(p);
             }
-            if (isInArray('repulse', options.interactivity.events.onhover.mode) || isInArray('repulse', options.interactivity.events.onclick.mode)) {
+            if (pJSUtils.isInArray('repulse', options.interactivity.events.onhover.mode) || pJSUtils.isInArray('repulse', options.interactivity.events.onclick.mode)) {
                 pJS.fn.modes.repulseParticle(p);
             }
             /* interaction auto between particles */
@@ -185,8 +187,8 @@ export class pJSParticles {
         let options = pJS.options;
 
         /* init all */
-        cancelRequestAnimFrame(pJS.fn.checkAnimFrame);
-        cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+        window["cancelRequestAnimFrame"](pJS.fn.checkAnimFrame);
+        window["cancelRequestAnimFrame"](pJS.fn.drawAnimFrame);
         pJS.source_svg = undefined;
         pJS.img_obj = undefined;
         pJS.count_svg = 0;

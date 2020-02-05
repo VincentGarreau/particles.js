@@ -1,14 +1,17 @@
-import { hexToRgb } from './pjsutils';
+import { pJSUtils } from './pjsutils';
+import { pJS, pJSOptions } from './pjsinterfaces'; 
 
 'use strict';
 
 export class pJSInteract {
-    constructor(pJS) {
+    pJS: pJS;
+
+    constructor(pJS: pJS) {
         this.pJS = pJS;
     }
 
     /* ---------- pJS functions - particles interaction ------------ */
-    linkParticles(p1, p2) {
+    linkParticles(p1: any, p2: any) {
         let pJS = this.pJS;
         let options = pJS.options;
 
@@ -21,11 +24,14 @@ export class pJSInteract {
             let opacity_line = options.particles.line_linked.opacity - (dist / (1 / options.particles.line_linked.opacity)) / options.particles.line_linked.distance;
             if (opacity_line > 0) {
                 /* style */
-                options.particles.line_linked.color_rgb = options.particles.line_linked.color_rgb || hexToRgb(options.particles.line_linked.color);
+                options.particles.line_linked.color_rgb = options.particles.line_linked.color_rgb || pJSUtils.hexToRgb(options.particles.line_linked.color);
 
                 let color_line = options.particles.line_linked.color_rgb;
 
-                pJS.canvas.ctx.strokeStyle = 'rgba(' + color_line.r + ',' + color_line.g + ',' + color_line.b + ',' + opacity_line + ')';
+                if (color_line) {
+                    pJS.canvas.ctx.strokeStyle = 'rgba(' + color_line.r + ',' + color_line.g + ',' + color_line.b + ',' + opacity_line + ')';
+                }
+
                 pJS.canvas.ctx.lineWidth = options.particles.line_linked.width;
                 //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
                 /* path */
@@ -38,7 +44,7 @@ export class pJSInteract {
         }
     }
 
-    attractParticles(p1, p2) {
+    attractParticles(p1: any, p2: any) {
         let pJS = this.pJS;
         let options = pJS.options;
 
@@ -57,7 +63,7 @@ export class pJSInteract {
         }
     }
 
-    bounceParticles(p1, p2) {
+    bounceParticles(p1: any, p2: any) {
         let dx = p1.x - p2.x;
         let dy = p1.y - p2.y;
         let dist = Math.sqrt(dx * dx + dy * dy);

@@ -10,20 +10,23 @@ import { pJSLoader } from './pjsloader';
 
 'use strict';
 
-/* ---------- global functions - vendors ------------ */
-
-Object.deepExtend = function (destination, source) {
-  for (let property in source) {
-    if (source[property] && source[property].constructor && source[property].constructor === Object) {
-      destination[property] = destination[property] || {};
-
-      Object.deepExtend(destination[property], source[property]);
-    } else {
-      destination[property] = source[property];
-    }
+declare global {
+  interface Window {
+    requestAnimFrame: any;
+    mozRequestAnimationFrame: any,
+    oRequestAnimationFrame: any,
+    msRequestAnimationFrame: any,
+    cancelRequestAnimFrame: any,
+    webkitCancelRequestAnimationFrame: any,
+    mozCancelRequestAnimationFrame: any,
+    oCancelRequestAnimationFrame: any,
+    msCancelRequestAnimationFrame: any,
+    particlesJS: any,
+    pJSDom: any
   }
-  return destination;
-};
+}
+
+/* ---------- global functions - vendors ------------ */
 
 window.requestAnimFrame = (function () {
   return window.requestAnimationFrame ||
@@ -31,7 +34,7 @@ window.requestAnimFrame = (function () {
     window.mozRequestAnimationFrame ||
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
-    function (callback) {
+    function (callback: () => void) {
       window.setTimeout(callback, 1000 / 60);
     };
 })();
@@ -47,11 +50,11 @@ window.cancelRequestAnimFrame = (function () {
 
 /* ---------- particles.js functions - start ------------ */
 
-window.particlesJS = function(tag_id, params) {
+window.particlesJS = (tag_id: string, params: any) => {
   pJSLoader.load(tag_id, params);
 };
 
-window.particlesJS.load = async function(tag_id, path_config_json, callback) {
+window.particlesJS.load = async (tag_id: string, path_config_json: string, callback: () => void) => {
   await pJSLoader.loadJSON(tag_id, path_config_json, callback);
 }
 

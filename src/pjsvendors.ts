@@ -1,10 +1,12 @@
-import { isInArray } from './pjsutils';
+import { pJSUtils } from './pjsutils';
 import { pJSLoader } from './pjsloader';
 
 'use strict';
 
 export class pJSVendors {
-    constructor(pJS) {
+    pJS: any;
+
+    constructor(pJS: any) {
         this.pJS = pJS;
     }
 
@@ -23,7 +25,7 @@ export class pJSVendors {
         /* detect mouse pos - on hover / click event */
         if (options.interactivity.events.onhover.enable || options.interactivity.events.onclick.enable) {
             /* el on mousemove */
-            pJS.interactivity.el.addEventListener('mousemove', e => {
+            pJS.interactivity.el.addEventListener('mousemove', (e: any) => {
                 let pos_x;
                 let pos_y;
 
@@ -46,7 +48,7 @@ export class pJSVendors {
                 pJS.interactivity.status = 'mousemove';
             });
             /* el on onmouseleave */
-            pJS.interactivity.el.addEventListener('mouseleave', e => {
+            pJS.interactivity.el.addEventListener('mouseleave', (e: any) => {
                 pJS.interactivity.mouse.pos_x = null;
                 pJS.interactivity.mouse.pos_y = null;
                 pJS.interactivity.status = 'mouseleave';
@@ -117,7 +119,7 @@ export class pJSVendors {
         }
     }
 
-    checkOverlap(p1, position) {
+    checkOverlap(p1: any, position: any) {
         let pJS = this.pJS;
         let options = pJS.options;
 
@@ -135,14 +137,14 @@ export class pJSVendors {
         }
     }
 
-    createSvgImg(p) {
+    createSvgImg(p: any) {
         let pJS = this.pJS;
         let options = pJS.options;
 
         /* set color to svg element */
         let svgXml = pJS.source_svg;
         let rgbHex = /#([0-9A-F]{3,6})/gi;
-        let coloredSvgXml = svgXml.replace(rgbHex, (m, r, g, b) => {
+        let coloredSvgXml = svgXml.replace(rgbHex, (m: number, r: number, g: number, b: number) => {
             let color_value;
             if (p.color.rgb) {
                 color_value = 'rgba(' + p.color.rgb.r + ',' + p.color.rgb.g + ',' + p.color.rgb.b + ',' + p.opacity + ')';
@@ -153,13 +155,13 @@ export class pJSVendors {
             return color_value;
         });
         /* prepare to create img with colored svg */
-        let svg = new Blob([coloredSvgXml], { type: 'image/svg+xml;charset=utf-8' }), DOMURL = window.URL || window.webkitURL || window, url = DOMURL.createObjectURL(svg);
+        let svg = new Blob([coloredSvgXml], { type: 'image/svg+xml;charset=utf-8' }), DOMURL = window.URL || window.webkitURL || window, url = URL.createObjectURL(svg);
         /* create particle img obj */
         let img = new Image();
         img.addEventListener('load', () => {
             p.img.obj = img;
             p.img.loaded = true;
-            DOMURL.revokeObjectURL(url);
+            URL.revokeObjectURL(url);
             pJS.count_svg++;
         });
         img.src = url;
@@ -170,11 +172,11 @@ export class pJSVendors {
         let options = pJS.options;
 
         cancelAnimationFrame(pJS.fn.drawAnimFrame);
-        canvas_el.remove();
-        pJSLoader.pJSDomSet(null);
+        pJS.canvas.el.remove();
+        pJSLoader.pJSDomSet([]);
     }
 
-    drawShape(c, startX, startY, sideLength, sideCountNumerator, sideCountDenominator) {
+    drawShape(c: any, startX: number, startY: number, sideLength: number, sideCountNumerator: number, sideCountDenominator: number) {
         let pJS = this.pJS;
         let options = pJS.options;
 
@@ -204,7 +206,7 @@ export class pJSVendors {
         window.open(pJS.canvas.el.toDataURL('image/png'), '_blank');
     }
 
-    async loadImg(type) {
+    async loadImg(type: any) {
         let pJS = this.pJS;
         let options = pJS.options;
 
@@ -247,15 +249,15 @@ export class pJSVendors {
                 if (pJS.count_svg >= options.particles.number.value) {
                     pJS.fn.particles.draw();
                     if (!options.particles.move.enable)
-                        cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+                        window["cancelRequestAnimFrame"](pJS.fn.drawAnimFrame);
                     else
-                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
+                        pJS.fn.drawAnimFrame = window["requestAnimFrame"](() => {
                             pJS.fn.vendors.draw();
                         });
                 }
                 else {
                     if (!pJS.img_error)
-                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
+                        pJS.fn.drawAnimFrame = window["requestAnimFrame"](() => {
                             pJS.fn.vendors.draw();
                         });
                 }
@@ -264,17 +266,17 @@ export class pJSVendors {
                 if (pJS.img_obj != undefined) {
                     pJS.fn.particles.draw();
                     if (!options.particles.move.enable)
-                        cancelRequestAnimFrame(() => {
+                        window["cancelRequestAnimFrame"](() => {
                             pJS.fn.drawAnimFrame();
                         });
                     else
-                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
+                        pJS.fn.drawAnimFrame = window["requestAnimFrame"](() => {
                             pJS.fn.vendors.draw();
                         });
                 }
                 else {
                     if (!pJS.img_error)
-                        pJS.fn.drawAnimFrame = requestAnimFrame(() => {
+                        pJS.fn.drawAnimFrame = window["requestAnimFrame"](() => {
                             pJS.fn.vendors.draw();
                         });
                 }
@@ -283,9 +285,9 @@ export class pJSVendors {
         else {
             pJS.fn.particles.draw();
             if (!options.particles.move.enable)
-                cancelRequestAnimFrame(pJS.fn.drawAnimFrame);
+                window["cancelRequestAnimFrame"](pJS.fn.drawAnimFrame);
             else
-                pJS.fn.drawAnimFrame = requestAnimFrame(() => {
+                pJS.fn.drawAnimFrame = window["requestAnimFrame"](() => {
                     pJS.fn.vendors.draw();
                 });
         }
@@ -298,12 +300,13 @@ export class pJSVendors {
         // if shape is image
         if (options.particles.shape.type == 'image') {
             if (pJS.img_type == 'svg' && pJS.source_svg == undefined) {
-                pJS.checkAnimFrame = requestAnimFrame(() => {
-                    check();
+                pJS.checkAnimFrame = window["requestAnimFrame"](() => {
+                    //TODO: Questo check non è da nessuna parte
+                    //check();
                 });
             }
             else {
-                cancelRequestAnimFrame(pJS.checkAnimFrame);
+                window["cancelRequestAnimFrame"](pJS.checkAnimFrame);
                 if (!pJS.img_error) {
                     pJS.fn.vendors.init();
                     pJS.fn.vendors.draw();
@@ -333,7 +336,7 @@ export class pJSVendors {
         let pJS = this.pJS;
         let options = pJS.options;
 
-        if (isInArray('image', options.particles.shape.type)) {
+        if (pJSUtils.isInArray('image', options.particles.shape.type)) {
             pJS.img_type = options.particles.shape.image.src.substr(options.particles.shape.image.src.length - 3);
             await pJS.fn.vendors.loadImg(pJS.img_type);
         }

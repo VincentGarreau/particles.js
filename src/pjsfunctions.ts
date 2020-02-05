@@ -4,11 +4,20 @@ import { pJSVendors } from './pjsvendors';
 import { pJSRetina } from './pjsretina';
 import { pJSCanvas } from './pjscanvas';
 import { pJSParticles } from './pjsparticles';
+import { pJS } from './pjsinterfaces';
 
 'use strict';
 
 export class pJSFunctions {
-    constructor(pJS) {
+    pJS: pJS;
+    interact: pJSInteract;
+    modes: pJSModes;
+    vendors: pJSVendors;
+    retina: pJSRetina;
+    canvas: pJSCanvas;
+    particles: pJSParticles;
+
+    constructor(pJS: pJS) {
         this.pJS = pJS;
 
         this.interact = new pJSInteract(pJS);

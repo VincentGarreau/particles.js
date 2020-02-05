@@ -1,10 +1,31 @@
-import { hexToRgb } from './pjsutils';
+import { pJSUtils } from './pjsutils';
 
 'use strict';
 
 export class pJSParticle {
+    pJS: any;
+    radius: number;
+    size_status?: boolean;
+    vs?: number;
+    x: number;
+    y: number;
+    offsetX: number;
+    offsetY: number;
+    color: any;
+    opacity: number;
+    opacity_status?: boolean;
+    vo?: number;
+    vx: number;
+    vy: number;
+    vx_i: number;
+    vy_i: number;
+    shape?: string;
+    img: any;
+    radius_bubble?: number;
+    opacity_bubble?: number;
+
     /* --------- pJS functions - particles ----------- */
-    constructor(pJS, color, opacity, position) {
+    constructor(pJS: any, color: any, opacity: number, position?: any) {
         this.pJS = pJS;
         let options = pJS.options;
 
@@ -42,7 +63,7 @@ export class pJSParticle {
             if (color.value instanceof Array) {
                 let color_selected = color.value[Math.floor(Math.random() * options.particles.color.value.length)];
 
-                this.color.rgb = hexToRgb(color_selected);
+                this.color.rgb = pJSUtils.hexToRgb(color_selected);
             }
             else {
                 if (color.value.r != undefined && color.value.g != undefined && color.value.b != undefined) {
@@ -70,7 +91,7 @@ export class pJSParticle {
         }
         else if (typeof (color.value) == 'string') {
             this.color = color;
-            this.color.rgb = hexToRgb(this.color.value);
+            this.color.rgb = pJSUtils.hexToRgb(this.color.value);
         }
         /* opacity */
         this.opacity = (options.particles.opacity.random ? Math.random() : 1) * options.particles.opacity.value;
@@ -82,7 +103,7 @@ export class pJSParticle {
             }
         }
         /* animation - velocity for speed */
-        let velbase = {};
+        let velbase = {} as any;
 
         switch (options.particles.move.direction) {
             case 'top':
@@ -113,6 +134,7 @@ export class pJSParticle {
                 velbase = { x: 0, y: 0 };
                 break;
         }
+
         if (options.particles.move.straight) {
             this.vx = velbase.x;
             this.vy = velbase.y;
@@ -165,7 +187,7 @@ export class pJSParticle {
         let p = this;
         let pJS = this.pJS;
         let options = pJS.options;
-        let radius;
+        let radius: any;
         let opacity;
         let color_value;
 
@@ -220,11 +242,7 @@ export class pJSParticle {
                 );
                 break;
             case 'image':
-                function draw() {
-                    pJS.canvas.ctx.drawImage(img_obj, p.x - radius, p.y - radius, radius * 2, radius * 2 / p.img.ratio);
-                }
-
-                let img_obj;
+                let img_obj: any;
 
                 if (pJS.img_type == 'svg') {
                     img_obj = p.img.obj;
@@ -233,7 +251,7 @@ export class pJSParticle {
                     img_obj = pJS.img_obj;
                 }
                 if (img_obj) {
-                    draw();
+                    this.subDraw(img_obj, radius);
                 }
                 break;
         }
@@ -247,5 +265,13 @@ export class pJSParticle {
         }
 
         pJS.canvas.ctx.fill();
+    }
+
+    subDraw(img_obj: any, radius: number) {
+        let p = this;
+        let pJS = this.pJS;
+        let options = pJS.options;
+
+        pJS.canvas.ctx.drawImage(img_obj, p.x - radius, p.y - radius, radius * 2, radius * 2 / p.img.ratio);
     }
 }

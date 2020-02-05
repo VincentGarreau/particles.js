@@ -9,7 +9,7 @@
       var data, data_css, pJS_GUI_Export, pJS_GUI_tmp, ratio;
       pJS_GUI_Export = {};
       pJS_GUI_tmp = window.pJS_GUI;
-      Object.deepExtend(pJS_GUI_Export, pJS_GUI_tmp);
+      pJSUtils.deepExtend(pJS_GUI_Export, pJS_GUI_tmp);
       ratio = pJS_GUI_tmp.canvas.pxratio;
       pJS_GUI_Export.particles.size.value = pJS_GUI_tmp.particles.size.value / ratio;
       pJS_GUI_Export.particles.size.anim.speed = pJS_GUI_tmp.particles.size.anim.speed / ratio;
