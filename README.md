@@ -6,6 +6,8 @@
 
 ## `Demo / Generator`
 
+<a href="http://vincentgarreau.com/particles.js/" target="_blank"><img src="http://vincentgarreau.com/particles.js/assets/img/github-screen.jpg" alt="particles.js generator" /></a>
+
 [![particles.js generator](https://camo.githubusercontent.com/cdc9e740f0c04b77449e476c91e6f7770a6af6e7/687474703a2f2f76696e63656e74676172726561752e636f6d2f7061727469636c65732e6a732f6173736574732f696d672f6769746875622d73637265656e2e6a7067)](http://vincentgarreau.com/particles.js/)
 
 Configure, export, and share your particles.js configuration on CodePen:
@@ -140,7 +142,7 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
         "distance": 800,
         "size": 80,
         "duration": 2,
-        "opacity": 8,
+        "opacity": 0.8,
         "speed": 3
       },
       "repulse": {
@@ -169,7 +171,6 @@ key | option type / notes | example
 `particles.number.density.enable` | boolean | `true` / `false`
 `particles.number.density.value_area` | number | `800`
 `particles.color.value` | HEX (string) <br /> RGB (object) <br /> HSL (object) <br /> array selection (HEX) <br /> random (string) | `"#b61924"` <br /> `{r:182, g:25, b:36}` <br />  `{h:356, s:76, l:41}` <br /> `["#b61924", "#333333", "999999"]` <br /> `"random"`
-`particles.number.density.value_area` | number | `800`
 `particles.shape.type` | string <br /> array selection | `"circle"` <br /> `"edge"` <br /> `"triangle"` <br /> `"polygon"` <br /> `"star"` <br /> `"image"` <br /> `["circle", "triangle", "image"]`
 `particles.shape.stroke.width` | number | `2`
 `particles.shape.stroke.color` | HEX (string) | `"#222222"`
