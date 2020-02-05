@@ -1,7 +1,7 @@
 {
-  "name": "particles.ts",
+  "name": "tsparticles",
   "version": "1.0.0",
-  "description": "A lightweight JavaScript library for creating particles",
+  "description": "Port of Vincent Garreau' particles.js which was originally a port of Vincent Garreau' particles.js, written in Typescript.",
   "homepage": "https://github.com/matteobruni/particles.js",
   "scripts": {
     "type-check": "tsc --noEmit",
