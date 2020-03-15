@@ -428,7 +428,7 @@ var pJS = function(tag_id, params){
     }
 
     if(p.color.rgb){
-      var shapeOp = p.outlineOpacity+0.5;
+      var shapeOp = p.outlineOpacity;
       var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+shapeOp+')';
     }else{
       var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+shapeOp+')';
@@ -554,7 +554,7 @@ var pJS = function(tag_id, params){
           if(p.lineOpacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
           p.lineOpacity -= p.vo;
           p.shapeOpacity += p.vo;
-          p.outlineOpacity -= p.vo;
+          p.outlineOpacity -= p.vo*0.1;
         }
         if(p.opacity < 0) p.opacity = 0;
       }
@@ -758,7 +758,7 @@ var pJS = function(tag_id, params){
     var dx = p1.x - p2.x,
         dy = p1.y - p2.y,
         dist = Math.sqrt(dx*dx + dy*dy),
-        dist_p = p1.radius+p2.radius+(pJS.particles.shape.stroke.width);
+        dist_p = p1.radius+p2.radius;
 
     if(dist <= dist_p){
       p1.vx = -p1.vx;
@@ -1608,7 +1608,7 @@ particlesJS('particles-js',
       }
     },
     "size": {
-      "value": 10,
+      "value": 25,
       "random": false,
       "anim": {
         "enable": false,
@@ -1832,8 +1832,8 @@ particlesJS('particles-js-3',
       "random": false,
       "anim": {
         "enable": true,
-        "speed": 2,
-        "opacity_min": 0.4,
+        "speed": 1,
+        "opacity_min": 0.5,
         "sync": false
       }
     },
@@ -1856,7 +1856,7 @@ particlesJS('particles-js-3',
     },
     "move": {
       "enable": true,
-      "speed": 0.6,
+      "speed": 0.4,
       "direction": "none",
       "random": false,
       "straight": false,
