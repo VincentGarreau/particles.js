@@ -279,6 +279,7 @@ var pJS = function(tag_id, params){
     if(typeof(color.value) == 'object'){
 
       if(color.value instanceof Array){
+        //CFE follow color color_selected
         var color_selected = color.value[Math.floor(Math.random() * pJS.particles.color.value.length)];
         this.color.rgb = hexToRgb(color_selected);
       }else{
@@ -315,6 +316,8 @@ var pJS = function(tag_id, params){
     // LIVE LINE CFE THIS IS WHERE OPACITY UPDATES FOR PACTICLES
     this.opacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
     this.lineOpacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
+    this.outlineOpacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
+    this.shapeOpacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
     if(pJS.particles.opacity.anim.enable){
       this.opacity_status = false;
       this.vo = pJS.particles.opacity.anim.speed / 100;
@@ -425,9 +428,10 @@ var pJS = function(tag_id, params){
     }
 
     if(p.color.rgb){
-      var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+opacity+')';
+      var shapeOp = p.outlineOpacity+0.5;
+      var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+shapeOp+')';
     }else{
-      var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+opacity+')';
+      var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+shapeOp+')';
     }
 
     pJS.canvas.ctx.fillStyle = color_value;
@@ -501,6 +505,7 @@ var pJS = function(tag_id, params){
       pJS.canvas.ctx.strokeStyle = pJS.particles.shape.stroke.color;
       pJS.canvas.ctx.lineWidth = pJS.particles.shape.stroke.width;
       pJS.canvas.ctx.stroke();
+      //CFE stroke color for shae draw
     }
 
     pJS.canvas.ctx.fill();
@@ -543,9 +548,13 @@ var pJS = function(tag_id, params){
         if(p.opacity_status == true) {
           if(p.lineOpacity >= pJS.particles.opacity.value) p.opacity_status = false;
           p.lineOpacity += p.vo;
+          p.shapeOpacity += p.vo;
+          p.outlineOpacity += p.vo;
         }else {
           if(p.lineOpacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
           p.lineOpacity -= p.vo;
+          p.shapeOpacity += p.vo;
+          p.outlineOpacity -= p.vo;
         }
         if(p.opacity < 0) p.opacity = 0;
       }
@@ -1617,7 +1626,7 @@ particlesJS('particles-js',
     },
     "move": {
       "enable": true,
-      "speed": 4,
+      "speed": 2,
       "direction": "none",
       "random": true,
       "straight": false,
@@ -1823,8 +1832,8 @@ particlesJS('particles-js-3',
       "random": false,
       "anim": {
         "enable": true,
-        "speed": 10,
-        "opacity_min": 0.1,
+        "speed": 2,
+        "opacity_min": 0.4,
         "sync": false
       }
     },
@@ -1840,14 +1849,14 @@ particlesJS('particles-js-3',
     },
     "line_linked": {
       "enable": true,
-      "distance": 300,
+      "distance": 1000,
       "color": "#1F497D",
       "opacity": 1,
       "width": 2
     },
     "move": {
       "enable": true,
-      "speed": 2,
+      "speed": 0.6,
       "direction": "none",
       "random": false,
       "straight": false,
@@ -1855,7 +1864,7 @@ particlesJS('particles-js-3',
       "bounce": true,
       "attract": {
         "enable": true,
-        "rotateX": 9001,
+        "rotateX": 1000,
         "rotateY": 9001
       }
     }
