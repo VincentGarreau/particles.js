@@ -3,7 +3,6 @@
 <body>
 
 <!-- particles.js container -->
-<div id="particles-js-NEW"></div>
 <div id="particles-js"></div>
 <div id="particles-js-2"></div>
 <div id="particles-js-3"></div>
@@ -750,7 +749,7 @@ var pJS = function(tag_id, params){
     var dx = p1.x - p2.x,
         dy = p1.y - p2.y,
         dist = Math.sqrt(dx*dx + dy*dy),
-        dist_p = p1.radius+p2.radius;
+        dist_p = p1.radius+p2.radius+(pJS.particles.shape.stroke.width);
 
     if(dist <= dist_p){
       p1.vx = -p1.vx;
@@ -1559,25 +1558,26 @@ particlesJS.load('particles-js', 'particles.json', function() {
 
 /* Otherwise just put the config content (json): */
 
-particlesJS('particles-js-NEW',
+// STARTER
+particlesJS('particles-js',
 
 {
   "particles": {
     "number": {
-      "value": 10,
+      "value": 1,
       "density": {
         "enable": false,
         "value_area": 2209.6133965703634
       }
     },
     "color": {
-      "value": "#00bcd4"
+      "value": "#e91e63"
     },
     "shape": {
       "type": "circle",
       "stroke": {
-        "width": 0,
-          "color": "#00bcd4"
+        "width": 9,
+          "color": "#1F497D"
       },
       "polygon": {
         "nb_sides": 5
@@ -1593,7 +1593,7 @@ particlesJS('particles-js-NEW',
       "random": false,
       "anim": {
         "enable": true,
-        "speed": 1,
+        "speed": 2,
         "opacity_min": 0.1,
         "sync": false
       }
@@ -1603,30 +1603,30 @@ particlesJS('particles-js-NEW',
       "random": false,
       "anim": {
         "enable": false,
-        "speed": 40,
+        "speed": 1,
         "size_min": 0.1,
         "sync": false
       }
     },
     "line_linked": {
       "enable": true,
-      "distance": 2000000,
-      "color": "#00bcd4",
+      "distance": 300,
+      "color": "#8bc34a",
       "opacity": 1,
-      "width": 3
+      "width": 2
     },
     "move": {
       "enable": true,
-      "speed": 2,
+      "speed": 4,
       "direction": "none",
-      "random": false,
+      "random": true,
       "straight": false,
       "out_mode": "bounce",
-      "bounce": false,
+      "bounce": true,
       "attract": {
-        "enable": false,
-        "rotateX": 600,
-        "rotateY": 1200
+        "enable": true,
+        "rotateX": 400,
+        "rotateY": 400
       }
     }
   },
@@ -1673,24 +1673,235 @@ particlesJS('particles-js-NEW',
 }
 );
 
-particlesJS('particles-js',
-
-  {"particles":{"number":{"value":1,"density":{"enable":false,"value_area":2209.6133965703634}},"color":{"value":"#e91e63"},"shape":{"type":"circle","stroke":{"width":0,"color":"#e91e63"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":1,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":10,"random":false,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":2000000,"color":"#223765","opacity":1,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"out_mode":"bounce","bounce":false,"attract":{"enable":true,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"grab"},"onclick":{"enable":false,"mode":"repulse"},"resize":true},"modes":{"grab":{"distance":1500,"line_linked":{"opacity":0.2221088827100576}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}
-
-);
-
+// BUSINESS
 particlesJS('particles-js-2',
 
-  {"particles":{"number":{"value":4,"density":{"enable":false,"value_area":2209.6133965703634}},"color":{"value":"#8bc34a"},"shape":{"type":"circle","stroke":{"width":0,"color":"#8bc34a"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":1,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":10,"random":false,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":2000000,"color":"#223765","opacity":1,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"out_mode":"bounce","bounce":false,"attract":{"enable":true,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"grab"},"onclick":{"enable":false,"mode":"repulse"},"resize":true},"modes":{"grab":{"distance":1500,"line_linked":{"opacity":0.2221088827100576}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}
-
+{
+  "particles": {
+    "number": {
+      "value": 4,
+      "density": {
+        "enable": false,
+        "value_area": 2209.6133965703634
+      }
+    },
+    "color": {
+      "value": "#8bc34a"
+    },
+    "shape": {
+      "type": "circle",
+      "stroke": {
+        "width": 9,
+          "color": "#1F497D"
+      },
+      "polygon": {
+        "nb_sides": 5
+      },
+      "image": {
+        "src": "img/github.svg",
+        "width": 100,
+        "height": 100
+      }
+    },
+    "opacity": {
+      "value": 1,
+      "random": false,
+      "anim": {
+        "enable": true,
+        "speed": 2,
+        "opacity_min": 0.1,
+        "sync": false
+      }
+    },
+    "size": {
+      "value": 10,
+      "random": false,
+      "anim": {
+        "enable": false,
+        "speed": 1,
+        "size_min": 0.1,
+        "sync": false
+      }
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 300,
+      "color": "#8bc34a",
+      "opacity": 1,
+      "width": 2
+    },
+    "move": {
+      "enable": true,
+      "speed": 1,
+      "direction": "none",
+      "random": false,
+      "straight": false,
+      "out_mode": "bounce",
+      "bounce": true,
+      "attract": {
+        "enable": true,
+        "rotateX": 400,
+        "rotateY": 400
+      }
+    }
+  },
+  "interactivity": {
+    "detect_on": "canvas",
+    "events": {
+      "onhover": {
+        "enable": false,
+        "mode": "grab"
+      },
+      "onclick": {
+        "enable": false,
+        "mode": "repulse"
+      },
+      "resize": true
+    },
+    "modes": {
+      "grab": {
+        "distance": 1500,
+        "line_linked": {
+          "opacity": 0.2221088827100576
+        }
+      },
+      "bubble": {
+        "distance": 400,
+        "size": 40,
+        "duration": 2,
+        "opacity": 8,
+        "speed": 3
+      },
+      "repulse": {
+        "distance": 200,
+        "duration": 0.4
+      },
+      "push": {
+        "particles_nb": 4
+      },
+      "remove": {
+        "particles_nb": 2
+      }
+    }
+  },
+  "retina_detect": true
+}
 );
 
+//ENTERPRISE
 particlesJS('particles-js-3',
 
-  {"particles":{"number":{"value":10,"density":{"enable":false,"value_area":2209.6133965703634}},"color":{"value":"#00bcd4"},"shape":{"type":"circle","stroke":{"width":0,"color":"#00bcd4"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":1,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":10,"random":false,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":2000000,"color":"#223765","opacity":1,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"out_mode":"bounce","bounce":false,"attract":{"enable":true,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"grab"},"onclick":{"enable":false,"mode":"repulse"},"resize":true},"modes":{"grab":{"distance":1500,"line_linked":{"opacity":0.2221088827100576}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}
-
+{
+  "particles": {
+    "number": {
+      "value": 10,
+      "density": {
+        "enable": false,
+        "value_area": 2209.6133965703634
+      }
+    },
+    "color": {
+      "value": "#00bcd4"
+    },
+    "shape": {
+      "type": "circle",
+      "stroke": {
+        "width": 9,
+          "color": "#1F497D"
+      },
+      "polygon": {
+        "nb_sides": 5
+      },
+      "image": {
+        "src": "img/github.svg",
+        "width": 100,
+        "height": 100
+      }
+    },
+    "opacity": {
+      "value": 1,
+      "random": false,
+      "anim": {
+        "enable": true,
+        "speed": 10,
+        "opacity_min": 0.1,
+        "sync": false
+      }
+    },
+    "size": {
+      "value": 10,
+      "random": false,
+      "anim": {
+        "enable": false,
+        "speed": 1,
+        "size_min": 0.1,
+        "sync": false
+      }
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 300,
+      "color": "#1F497D",
+      "opacity": 1,
+      "width": 2
+    },
+    "move": {
+      "enable": true,
+      "speed": 2,
+      "direction": "none",
+      "random": false,
+      "straight": false,
+      "out_mode": "bounce",
+      "bounce": true,
+      "attract": {
+        "enable": true,
+        "rotateX": 9001,
+        "rotateY": 9001
+      }
+    }
+  },
+  "interactivity": {
+    "detect_on": "canvas",
+    "events": {
+      "onhover": {
+        "enable": false,
+        "mode": "grab"
+      },
+      "onclick": {
+        "enable": false,
+        "mode": "repulse"
+      },
+      "resize": true
+    },
+    "modes": {
+      "grab": {
+        "distance": 1500,
+        "line_linked": {
+          "opacity": 0.2221088827100576
+        }
+      },
+      "bubble": {
+        "distance": 400,
+        "size": 40,
+        "duration": 2,
+        "opacity": 8,
+        "speed": 3
+      },
+      "repulse": {
+        "distance": 200,
+        "duration": 0.4
+      },
+      "push": {
+        "particles_nb": 4
+      },
+      "remove": {
+        "particles_nb": 2
+      }
+    }
+  },
+  "retina_detect": true
+}
 );
-
 
 </script>
 
