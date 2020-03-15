@@ -3,8 +3,10 @@
 <body>
 
 <!-- particles.js container -->
+<div id="particles-js-NEW"></div>
 <div id="particles-js"></div>
-
+<div id="particles-js-2"></div>
+<div id="particles-js-3"></div>
 <!-- scripts -->
 <script>/* -----------------------------------------------
 /* Author : Vincent Garreau  - vincentgarreau.com
@@ -18,6 +20,7 @@
 var pJS = function(tag_id, params){
 
   var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
+  var CFE_opacity = 0.5;
 
   /* particles.js variables with default values */
   this.pJS = {
@@ -311,6 +314,7 @@ var pJS = function(tag_id, params){
     }
 
     /* opacity */
+    // LIVE LINE CFE THIS IS WHERE OPACITY CHANGES
     this.opacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
     if(pJS.particles.opacity.anim.enable){
       this.opacity_status = false;
@@ -538,6 +542,9 @@ var pJS = function(tag_id, params){
         if(p.opacity_status == true) {
           if(p.opacity >= pJS.particles.opacity.value) p.opacity_status = false;
           p.opacity += p.vo;
+          CFE_opacity += p.vo;
+          // CFE INSTEAD OF P OPACITY WE NEED LINE OPACITY HERE
+          // CHECK GLOBAL LOCAL IF NOT WORKING
         }else {
           if(p.opacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
           p.opacity -= p.vo;
@@ -692,11 +699,12 @@ var pJS = function(tag_id, params){
 
       var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
 
-      if(opacity_line > 0){
+      // if(opacity_line > 0){
 
         /* style */
         var color_line = pJS.particles.line_linked.color_rgb_line;
-        pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
+        // BLINK LINE FINAL COLOR CFE
+        pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+p1.opacity+')';
         pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
         //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
 
@@ -707,7 +715,7 @@ var pJS = function(tag_id, params){
         pJS.canvas.ctx.stroke();
         pJS.canvas.ctx.closePath();
 
-      }
+      // }
 
     }
 
@@ -1551,6 +1559,120 @@ particlesJS.load('particles-js', 'particles.json', function() {
 
 /* Otherwise just put the config content (json): */
 
+particlesJS('particles-js-NEW',
+
+{
+  "particles": {
+    "number": {
+      "value": 10,
+      "density": {
+        "enable": false,
+        "value_area": 2209.6133965703634
+      }
+    },
+    "color": {
+      "value": "#00bcd4"
+    },
+    "shape": {
+      "type": "circle",
+      "stroke": {
+        "width": 0,
+          "color": "#00bcd4"
+      },
+      "polygon": {
+        "nb_sides": 5
+      },
+      "image": {
+        "src": "img/github.svg",
+        "width": 100,
+        "height": 100
+      }
+    },
+    "opacity": {
+      "value": 1,
+      "random": false,
+      "anim": {
+        "enable": true,
+        "speed": 1,
+        "opacity_min": 0.1,
+        "sync": false
+      }
+    },
+    "size": {
+      "value": 10,
+      "random": false,
+      "anim": {
+        "enable": false,
+        "speed": 40,
+        "size_min": 0.1,
+        "sync": false
+      }
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 2000000,
+      "color": "#00bcd4",
+      "opacity": 1,
+      "width": 3
+    },
+    "move": {
+      "enable": true,
+      "speed": 2,
+      "direction": "none",
+      "random": false,
+      "straight": false,
+      "out_mode": "bounce",
+      "bounce": false,
+      "attract": {
+        "enable": false,
+        "rotateX": 600,
+        "rotateY": 1200
+      }
+    }
+  },
+  "interactivity": {
+    "detect_on": "canvas",
+    "events": {
+      "onhover": {
+        "enable": false,
+        "mode": "grab"
+      },
+      "onclick": {
+        "enable": false,
+        "mode": "repulse"
+      },
+      "resize": true
+    },
+    "modes": {
+      "grab": {
+        "distance": 1500,
+        "line_linked": {
+          "opacity": 0.2221088827100576
+        }
+      },
+      "bubble": {
+        "distance": 400,
+        "size": 40,
+        "duration": 2,
+        "opacity": 8,
+        "speed": 3
+      },
+      "repulse": {
+        "distance": 200,
+        "duration": 0.4
+      },
+      "push": {
+        "particles_nb": 4
+      },
+      "remove": {
+        "particles_nb": 2
+      }
+    }
+  },
+  "retina_detect": true
+}
+);
+
 particlesJS('particles-js',
 
   {"particles":{"number":{"value":1,"density":{"enable":false,"value_area":2209.6133965703634}},"color":{"value":"#e91e63"},"shape":{"type":"circle","stroke":{"width":0,"color":"#e91e63"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":1,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":10,"random":false,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":2000000,"color":"#223765","opacity":1,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"out_mode":"bounce","bounce":false,"attract":{"enable":true,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"grab"},"onclick":{"enable":false,"mode":"repulse"},"resize":true},"modes":{"grab":{"distance":1500,"line_linked":{"opacity":0.2221088827100576}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}
@@ -1568,6 +1690,8 @@ particlesJS('particles-js-3',
   {"particles":{"number":{"value":10,"density":{"enable":false,"value_area":2209.6133965703634}},"color":{"value":"#00bcd4"},"shape":{"type":"circle","stroke":{"width":0,"color":"#00bcd4"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":1,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":10,"random":false,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":2000000,"color":"#223765","opacity":1,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"out_mode":"bounce","bounce":false,"attract":{"enable":true,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"grab"},"onclick":{"enable":false,"mode":"repulse"},"resize":true},"modes":{"grab":{"distance":1500,"line_linked":{"opacity":0.2221088827100576}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}
 
 );
+
+
 </script>
 
 </body>
