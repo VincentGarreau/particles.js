@@ -20,7 +20,6 @@
 var pJS = function(tag_id, params){
 
   var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
-  var CFE_opacity = 0.5;
 
   /* particles.js variables with default values */
   this.pJS = {
@@ -314,8 +313,9 @@ var pJS = function(tag_id, params){
     }
 
     /* opacity */
-    // LIVE LINE CFE THIS IS WHERE OPACITY CHANGES
+    // LIVE LINE CFE THIS IS WHERE OPACITY UPDATES FOR PACTICLES
     this.opacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
+    this.lineOpacity = (pJS.particles.opacity.random ? Math.random() : 1) * pJS.particles.opacity.value;
     if(pJS.particles.opacity.anim.enable){
       this.opacity_status = false;
       this.vo = pJS.particles.opacity.anim.speed / 100;
@@ -538,16 +538,15 @@ var pJS = function(tag_id, params){
       }
 
       /* change opacity status */
+      // CFE INSTEAD OF P OPACITY WE NEED JUST LINE OPACITY HERE
+      // OR KEEP X.OPACITY but change X's opacity control
       if(pJS.particles.opacity.anim.enable) {
         if(p.opacity_status == true) {
-          if(p.opacity >= pJS.particles.opacity.value) p.opacity_status = false;
-          p.opacity += p.vo;
-          CFE_opacity += p.vo;
-          // CFE INSTEAD OF P OPACITY WE NEED LINE OPACITY HERE
-          // CHECK GLOBAL LOCAL IF NOT WORKING
+          if(p.lineOpacity >= pJS.particles.opacity.value) p.opacity_status = false;
+          p.lineOpacity += p.vo;
         }else {
-          if(p.opacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
-          p.opacity -= p.vo;
+          if(p.lineOpacity <= pJS.particles.opacity.anim.opacity_min) p.opacity_status = true;
+          p.lineOpacity -= p.vo;
         }
         if(p.opacity < 0) p.opacity = 0;
       }
@@ -704,7 +703,7 @@ var pJS = function(tag_id, params){
         /* style */
         var color_line = pJS.particles.line_linked.color_rgb_line;
         // BLINK LINE FINAL COLOR CFE
-        pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+p1.opacity+')';
+        pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+((p1.lineOpacity + p2.lineOpacity)/2) +')';
         pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
         //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
 
@@ -1224,6 +1223,7 @@ var pJS = function(tag_id, params){
         rgbHex = /#([0-9A-F]{3,6})/gi,
         coloredSvgXml = svgXml.replace(rgbHex, function (m, r, g, b) {
           if(p.color.rgb){
+            //changing doesnt seem to do anything CFE P.OPACITY INFULENCING COLOR
             var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+p.opacity+')';
           }else{
             var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+p.opacity+')';
