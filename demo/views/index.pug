@@ -1,0 +1,71 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(name="description", content= "tsParticles")
+        meta(name="author", content= "Matteo Bruni")
+        meta(name="apple-mobile-web-app-capable", content="yes")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
+
+        meta(name="twitter:card", content="summary_large_image")
+        meta(name="twitter:creator", content="@HollowMatt_ITA")
+        meta(name="twitter:image:src", content="https://particles.matteobruni.it/images/demo.png")
+        meta(property="og:title", content="tsParticles - A lightweight TypeScript library for creating particles")
+        meta(property="og:site_name", content="tsParticles")
+        meta(property="og:url", content="https://particles.matteobruni.it/")
+        meta(property="og:description", content="A lightweight TypeScript library for creating particles.")
+        meta(property="og:image", content="https://particles.matteobruni.it/images/demo.png")
+
+        title tsParticles
+        link(href="/fontawesome/css/all.css", rel="stylesheet", type="text/css")
+        link(href="/jsoneditor/jsoneditor.css", rel="stylesheet", type="text/css")
+        link(href="/stylesheets/main.css", rel="stylesheet", type="text/css")
+
+    body
+        div#header
+            // stats - count particles
+            div#filler
+            div#docs
+                a(href="/docs") API Documentation
+
+        div#container
+            div#editor-container
+                div#inputs
+                    button#btnUpdate(type="button") Refresh Particles
+                    select#presets
+                        option(value="background") Background Mask
+                        option(value="bubble") Bubble
+                        option(value="chars") Chars
+                        option(value="collisions") Collisions
+                        option(value="connect") Connect
+                        option(value="default") Default
+                        option(value="fontawesome") Font Awesome
+                        option(value="hollowknight") Hollow Knight
+                        option(value="images") Multiple Images
+                        option(value="mask") Polygon Mask
+                        option(value="nasa") NASA
+                        option(value="nyancat") Nyan Cat
+                        option(value="nyancat2") Nyan Cat 2
+                        option(value="polygons") Polygon Shape
+                        option(value="reactDefaults") React Defaults
+                        //option(value="shadow") Shadow
+                        option(value="slow") Slow on Hover
+                        option(value="snow") Snow
+                        option(value="star") Star
+                        option(value="test") Test
+                        option(value="trail") Trails
+                        option(value="virus") Virus
+
+                div#editor
+            div#tsparticles-container
+                div#tsparticles
+                div.count-particles
+                    |
+                    span.js-count-particles --
+                    | particles
+
+        script(src="/fontawesome/js/all.js")
+        script(src="/jsoneditor/jsoneditor.js")
+        script(src="/three/examples/js/libs/stats.min.js")
+        script(src="/tsparticles/tsparticles.js")
+        script(src="/javascripts/demo.js")

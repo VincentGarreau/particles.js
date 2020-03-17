@@ -1,0 +1,84 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+- staging
+- dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Npm@1
+  displayName: npm ci
+  inputs:
+    command: 'ci'
+
+- task: Npm@1
+  displayName: npm run build
+  inputs:
+    command: 'custom'
+    customCommand: 'run build'
+    
+- task: npmAuthenticate@0
+  displayName: npm authenticate
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    workingFile: '.npmrc'
+    customEndpoint: 'npmjs'
+
+- task: Npm@1
+  displayName: npm publish
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    command: 'publish'
+    publishEndpoint: 'npmjs'
+
+- task: CopyFiles@2
+  displayName: Copying files to Artifacts
+  inputs:
+    Contents: |
+      dist/**
+      docs/**
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: NuGetCommand@2
+  displayName: 'Nuget Pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.nuspec'
+    versioningScheme: 'off'
+
+- task: NuGetCommand@2
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Nuget Publish'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publishing Artifacts
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'tsparticles'
+    publishLocation: 'Container'
+
+- task: GitHubRelease@1
+  displayName: 'Github Release'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    gitHubConnection: 'github.com_matteobruni'
+    repositoryName: 'matteobruni/tsparticles'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    assets: '$(Build.ArtifactStagingDirectory)/dist/*'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'

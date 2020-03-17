@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>tsParticles</id>
+    <version>1.10.3</version>
+    <title>tsparticles</title>
+    <authors>Matteo Bruni</authors>
+    <owners>Matteo Bruni</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://particles.matteobruni.it/</projectUrl>
+    <description>Porting of Vincent Garreau's particles.js, converted in TypeScript.</description>
+  </metadata>
+  <files>
+    <file src="dist\**" target="Content/Scripts/tsparticles" />
+  </files>
+</package>
