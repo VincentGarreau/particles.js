@@ -85,6 +85,10 @@ yarn add tsparticles
 
 [![jsDelivr](https://data.jsdelivr.com/v1/package/npm/tsparticles/badge)](https://www.jsdelivr.com/package/npm/tsparticles)
 
+#### cdnjs
+
+[![Cdnjs](https://img.shields.io/cdnjs/v/tsparticles)](https://cdnjs.com/libraries/tsparticles)
+
 ### ***Usage***
 
 Load tsParticles and configure the particles:
