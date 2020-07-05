@@ -1516,6 +1516,7 @@ window.particlesJS = function(tag_id, params){
   if(canvas != null){
     pJSDom.push(new pJS(tag_id, params));
   }
+  console.log("Particles started");
 
 };
 
