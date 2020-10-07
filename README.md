@@ -241,3 +241,4 @@ meteor add newswim:particles
 ***Please use this host or your own to load particles.js on your projects***
 
 http://www.jsdelivr.com/#!particles.js
+[![Run on Repl.it](https://repl.it/badge/github/VincentGarreau/particles.js)](https://repl.it/github/VincentGarreau/particles.js)
