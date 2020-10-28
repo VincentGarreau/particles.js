@@ -1494,6 +1494,11 @@ window.particlesJS = function(tag_id, params){
       pJS_canvas_class = 'particles-js-canvas-el',
       exist_canvas = pJS_tag.getElementsByClassName(pJS_canvas_class);
 
+  /* disable pointer events on canvas if clicks are disabled */
+  if (!params.interactivity.events.onclick.enable) {
+    pJS_tag.style.pointerEvents = 'none';
+  }
+
   /* remove canvas if exists into the pJS target tag */
   if(exist_canvas.length){
     while(exist_canvas.length > 0){
