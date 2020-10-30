@@ -57,7 +57,7 @@ particlesJS.load('particles-js', 'assets/particles.json', function() {
         "nb_sides": 5
       },
       "image": {
-        "src": "img/github.svg",
+        "src": "svg/github.svg",
         "width": 100,
         "height": 100
       }
