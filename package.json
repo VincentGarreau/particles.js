@@ -21,6 +21,7 @@
     "particles.js",
     "particles.min.js"
   ],
+  "main": "particles.min.js",
   "bugs": {
     "url": "https://github.com/VincentGarreau/particles.js/issues"
   },
