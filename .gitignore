@@ -1,1 +1,3 @@
-particles.min.js
+.parcel-cache
+node_modules/
+.idea/

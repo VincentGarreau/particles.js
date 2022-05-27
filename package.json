@@ -1,11 +1,15 @@
 {
   "name": "particles.js",
-  "version": "2.0.0",
-  "description": "A lightweight JavaScript library for creating particles",
-  "homepage": "http://vincentgarreau.com/particles.js",
+  "version": "2.1.0",
+  "description": "A lightweight JavaScript library for creating particles, modified to add module support",
+  "homepage": "https://github.com/VincentGarreau/particles.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "parcel watch",
+    "build": "parcel build"
   },
+  "source": "particles.js",
+  "main": "dist/particles-common.js",
+  "module": "dist/particles-esmodule.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/VincentGarreau/particles.js.git"
@@ -19,10 +23,12 @@
   "license": "MIT",
   "files": [
     "particles.js",
-    "particles.min.js"
+    "dist/*.js"
   ],
   "bugs": {
     "url": "https://github.com/VincentGarreau/particles.js/issues"
   },
-  "homepage": "https://github.com/VincentGarreau/particles.js"
+  "devDependencies": {
+    "parcel": "^2.6.0"
+  }
 }
