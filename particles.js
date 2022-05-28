@@ -1499,11 +1499,31 @@ function isInArray(value, array) {
 
 /* ---------- particles.js functions - start ------------ */
 
-let pJSDom = [];
+export let pJSDom = [];
+
+/**
+ * Based on https://codepen.io/Soullighter/pen/VRjqrV
+ * @param {string} hex color
+ */
+export function setParticleColor(hex) {
+  if (pJSDom.length > 0) {
+    let rgbColor = hexToRgb(hex);
+    pJSDom[0].pJS.particles.line_linked.color_rgb_line = rgbColor;
+
+    modifyParticles(p => {
+      p.color.value = hex;
+      p.color.rgb = rgbColor;
+    });
+  }
+}
+
+export function modifyParticles(modifier){
+  if (pJSDom.length > 0) {
+    pJSDom[0].pJS.particles.array.forEach(modifier)
+  }
+}
 
 export function particlesJS(tag_id, params){
-
-  //console.log(params);
 
   /* no string id? so it's object params, and set the id with default id */
   if(typeof(tag_id) != 'string'){

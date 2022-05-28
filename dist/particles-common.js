@@ -3,6 +3,9 @@ function $parcel$export(e, n, v, s) {
 }
 
 $parcel$export(module.exports, "pJS", () => $d1a534ad62a5c4c8$export$47684f97fe2830db);
+$parcel$export(module.exports, "pJSDom", () => $d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8);
+$parcel$export(module.exports, "setParticleColor", () => $d1a534ad62a5c4c8$export$a84195d18e286453);
+$parcel$export(module.exports, "modifyParticles", () => $d1a534ad62a5c4c8$export$a44bdd20d2c1d681);
 $parcel$export(module.exports, "particlesJS", () => $d1a534ad62a5c4c8$export$bf4d4b4e7a8db89a);
 $parcel$export(module.exports, "particlesJSLoad", () => $d1a534ad62a5c4c8$export$e5860254b396deef);
 function $d1a534ad62a5c4c8$export$47684f97fe2830db(tag_id, params) {
@@ -772,7 +775,7 @@ function $d1a534ad62a5c4c8$export$47684f97fe2830db(tag_id, params) {
     pJS1.fn.vendors.destroypJS = function() {
         cancelAnimationFrame(pJS1.fn.drawAnimFrame);
         canvas_el.remove();
-        $d1a534ad62a5c4c8$var$pJSDom = null;
+        $d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8 = null;
     };
     pJS1.fn.vendors.drawShape = function(c, startX, startY, sideLength, sideCountNumerator, sideCountDenominator) {
         // By Programming Thomas - https://programmingthomas.wordpress.com/2013/04/03/n-sided-shapes/
@@ -937,9 +940,21 @@ function $d1a534ad62a5c4c8$var$clamp(number, min, max) {
 function $d1a534ad62a5c4c8$var$isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
-/* ---------- particles.js functions - start ------------ */ let $d1a534ad62a5c4c8$var$pJSDom = [];
+let $d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8 = [];
+function $d1a534ad62a5c4c8$export$a84195d18e286453(hex) {
+    if ($d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8.length > 0) {
+        let rgbColor = $d1a534ad62a5c4c8$var$hexToRgb(hex);
+        $d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8[0].pJS.particles.line_linked.color_rgb_line = rgbColor;
+        $d1a534ad62a5c4c8$export$a44bdd20d2c1d681((p)=>{
+            p.color.value = hex;
+            p.color.rgb = rgbColor;
+        });
+    }
+}
+function $d1a534ad62a5c4c8$export$a44bdd20d2c1d681(modifier) {
+    if ($d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8.length > 0) $d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8[0].pJS.particles.array.forEach(modifier);
+}
 function $d1a534ad62a5c4c8$export$bf4d4b4e7a8db89a(tag_id, params) {
-    //console.log(params);
     /* no string id? so it's object params, and set the id with default id */ if (typeof tag_id != "string") {
         params = tag_id;
         tag_id = "particles-js";
@@ -952,7 +967,7 @@ function $d1a534ad62a5c4c8$export$bf4d4b4e7a8db89a(tag_id, params) {
     /* set size canvas */ canvas_el.style.width = "100%";
     canvas_el.style.height = "100%";
     /* append canvas */ var canvas = document.getElementById(tag_id).appendChild(canvas_el);
-    /* launch particle.js */ if (canvas != null) $d1a534ad62a5c4c8$var$pJSDom.push(new $d1a534ad62a5c4c8$export$47684f97fe2830db(tag_id, params));
+    /* launch particle.js */ if (canvas != null) $d1a534ad62a5c4c8$export$133e7c9a2a8d0ed8.push(new $d1a534ad62a5c4c8$export$47684f97fe2830db(tag_id, params));
 }
 function $d1a534ad62a5c4c8$export$e5860254b396deef(tag_id, path_config_json, callback) {
     /* load json config */ var xhr = new XMLHttpRequest();

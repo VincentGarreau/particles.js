@@ -765,7 +765,7 @@ function $803c8d72044680d8$export$47684f97fe2830db(tag_id, params) {
     pJS1.fn.vendors.destroypJS = function() {
         cancelAnimationFrame(pJS1.fn.drawAnimFrame);
         canvas_el.remove();
-        $803c8d72044680d8$var$pJSDom = null;
+        $803c8d72044680d8$export$133e7c9a2a8d0ed8 = null;
     };
     pJS1.fn.vendors.drawShape = function(c, startX, startY, sideLength, sideCountNumerator, sideCountDenominator) {
         // By Programming Thomas - https://programmingthomas.wordpress.com/2013/04/03/n-sided-shapes/
@@ -930,9 +930,21 @@ function $803c8d72044680d8$var$clamp(number, min, max) {
 function $803c8d72044680d8$var$isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
-/* ---------- particles.js functions - start ------------ */ let $803c8d72044680d8$var$pJSDom = [];
+let $803c8d72044680d8$export$133e7c9a2a8d0ed8 = [];
+function $803c8d72044680d8$export$a84195d18e286453(hex) {
+    if ($803c8d72044680d8$export$133e7c9a2a8d0ed8.length > 0) {
+        let rgbColor = $803c8d72044680d8$var$hexToRgb(hex);
+        $803c8d72044680d8$export$133e7c9a2a8d0ed8[0].pJS.particles.line_linked.color_rgb_line = rgbColor;
+        $803c8d72044680d8$export$a44bdd20d2c1d681((p)=>{
+            p.color.value = hex;
+            p.color.rgb = rgbColor;
+        });
+    }
+}
+function $803c8d72044680d8$export$a44bdd20d2c1d681(modifier) {
+    if ($803c8d72044680d8$export$133e7c9a2a8d0ed8.length > 0) $803c8d72044680d8$export$133e7c9a2a8d0ed8[0].pJS.particles.array.forEach(modifier);
+}
 function $803c8d72044680d8$export$bf4d4b4e7a8db89a(tag_id, params) {
-    //console.log(params);
     /* no string id? so it's object params, and set the id with default id */ if (typeof tag_id != "string") {
         params = tag_id;
         tag_id = "particles-js";
@@ -945,7 +957,7 @@ function $803c8d72044680d8$export$bf4d4b4e7a8db89a(tag_id, params) {
     /* set size canvas */ canvas_el.style.width = "100%";
     canvas_el.style.height = "100%";
     /* append canvas */ var canvas = document.getElementById(tag_id).appendChild(canvas_el);
-    /* launch particle.js */ if (canvas != null) $803c8d72044680d8$var$pJSDom.push(new $803c8d72044680d8$export$47684f97fe2830db(tag_id, params));
+    /* launch particle.js */ if (canvas != null) $803c8d72044680d8$export$133e7c9a2a8d0ed8.push(new $803c8d72044680d8$export$47684f97fe2830db(tag_id, params));
 }
 function $803c8d72044680d8$export$e5860254b396deef(tag_id, path_config_json, callback) {
     /* load json config */ var xhr = new XMLHttpRequest();
@@ -966,5 +978,5 @@ function $803c8d72044680d8$export$e5860254b396deef(tag_id, path_config_json, cal
 }
 
 
-export {$803c8d72044680d8$export$47684f97fe2830db as pJS, $803c8d72044680d8$export$bf4d4b4e7a8db89a as particlesJS, $803c8d72044680d8$export$e5860254b396deef as particlesJSLoad};
+export {$803c8d72044680d8$export$47684f97fe2830db as pJS, $803c8d72044680d8$export$133e7c9a2a8d0ed8 as pJSDom, $803c8d72044680d8$export$a84195d18e286453 as setParticleColor, $803c8d72044680d8$export$a44bdd20d2c1d681 as modifyParticles, $803c8d72044680d8$export$bf4d4b4e7a8db89a as particlesJS, $803c8d72044680d8$export$e5860254b396deef as particlesJSLoad};
 //# sourceMappingURL=particles-esmodule.js.map
