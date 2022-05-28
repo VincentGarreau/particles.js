@@ -1,4 +1,10 @@
-## particles.js
+## particles.js module support
+As an ESModule / commonjs module.
+
+> The difference between the original version of particles.js and this one is the usage web tools.
+> This version allows the library to be imported as an ES or commonJS module, where the original was meant for usage in plain javascript and html. 
+
+This version can only be used with build tools where particles.js is either requried or imported into your scripts.
 
 ### A lightweight JavaScript library for creating particles.
 
@@ -14,25 +20,27 @@ CodePen demo: <br />
 http://codepen.io/VincentGarreau/pen/pnlso
 
 -------------------------------
+
+### Installation
+Where particlesjs is installed from this git repo.
+```shell
+npm i https://github.com/DriesMeerman/particles.js
+```
+
 ### `Usage`
 
-Load particles.js and configure the particles:
-
-**index.html**
 ```html
-<div id="particles-js"></div>
-
-<script src="particles.js"></script>
+<div id="particles"></div>
 ```
 
-**app.js**
-```javascript
-/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-particlesJS.load('particles-js', 'assets/particles.json', function() {
-  console.log('callback - particles.js config loaded');
-});
+```js
+import {particlesJS} from 'particles.js'
+let config = {...}; // object containing config in the form described below
+new particlesJS('particles', config);
 ```
 
+
+#### Config
 **particles.json**
 ```javascript
 {
@@ -209,35 +217,3 @@ key | option type / notes | example
 `retina_detect` | boolean | `true` / `false`
 
 -------------------------------
-
-### `Packages install`
-
-##### ***npm***
-https://www.npmjs.com/package/particles.js
-```
-npm install particles.js
-```
-
-##### ***Bower***
-```
-bower install particles.js --save
-```
-
-##### ***Rails Assets***
-```
-gem 'rails-assets-particles.js'
-```
-
-##### ***Meteor***
-https://atmospherejs.com/newswim/particles
-```
-meteor add newswim:particles
-```
-
--------------------------------
-
-### `Hosting / CDN`
-
-***Please use this host or your own to load particles.js on your projects***
-
-http://www.jsdelivr.com/#!particles.js

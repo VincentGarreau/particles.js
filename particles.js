@@ -6,8 +6,10 @@
 /* How to use? : Check the GitHub README
 /* v2.0.0
 /* ----------------------------------------------- */
+// Forked for esmodule usage: https://github.com/DriesMeerman/particles.js
+// Author Dries Meerman
 
-var pJS = function(tag_id, params){
+export function pJS(tag_id, params){
 
   var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
 
@@ -1413,20 +1415,45 @@ var pJS = function(tag_id, params){
 
 /* ---------- global functions - vendors ------------ */
 
-Object.deepExtend = function(destination, source) {
-  for (var property in source) {
-    if (source[property] && source[property].constructor &&
-     source[property].constructor === Object) {
-      destination[property] = destination[property] || {};
-      arguments.callee(destination[property], source[property]);
-    } else {
-      destination[property] = source[property];
+// https://gist.github.com/fshost/4146993
+// extend one object with another object's property's (default is deep extend)
+// this works with circular references and is faster than other deep extend methods
+// http://jsperf.com/comparing-custom-deep-extend-to-jquery-deep-extend/2
+function extend(target, source, shallow) {
+  var array = '[object Array]',
+      object = '[object Object]',
+      targetMeta, sourceMeta,
+      setMeta = function (value) {
+        var meta,
+            jclass = {}.toString.call(value);
+        if (value === undefined) return 0;
+        if (typeof value !== 'object') return false;
+        if (jclass === array) {
+          return 1;
+        }
+        if (jclass === object) return 2;
+      };
+  for (var key in source) {
+    if (source.hasOwnProperty(key)) {
+      targetMeta = setMeta(target[key]);
+      sourceMeta = setMeta(source[key]);
+      if (source[key] !== target[key]) {
+        if (!shallow && sourceMeta && targetMeta && targetMeta === sourceMeta) {
+          target[key] = extend(target[key], source[key], true);
+        } else if (sourceMeta !== 0) {
+          target[key] = source[key];
+        }
+      }
     }
+    else break; // ownProperties are always first (see jQuery's isPlainObject function)
   }
-  return destination;
-};
+  return target;
+}
 
-window.requestAnimFrame = (function(){
+Object.deepExtend = extend;
+
+
+let requestAnimFrame = (function(){
   return  window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.mozRequestAnimationFrame    ||
@@ -1437,7 +1464,7 @@ window.requestAnimFrame = (function(){
     };
 })();
 
-window.cancelRequestAnimFrame = ( function() {
+let cancelRequestAnimFrame = ( function() {
   return window.cancelAnimationFrame         ||
     window.webkitCancelRequestAnimationFrame ||
     window.mozCancelRequestAnimationFrame    ||
@@ -1472,11 +1499,31 @@ function isInArray(value, array) {
 
 /* ---------- particles.js functions - start ------------ */
 
-window.pJSDom = [];
+export let pJSDom = [];
 
-window.particlesJS = function(tag_id, params){
+/**
+ * Based on https://codepen.io/Soullighter/pen/VRjqrV
+ * @param {string} hex color
+ */
+export function setParticleColor(hex) {
+  if (pJSDom.length > 0) {
+    let rgbColor = hexToRgb(hex);
+    pJSDom[0].pJS.particles.line_linked.color_rgb_line = rgbColor;
 
-  //console.log(params);
+    modifyParticles(p => {
+      p.color.value = hex;
+      p.color.rgb = rgbColor;
+    });
+  }
+}
+
+export function modifyParticles(modifier){
+  if (pJSDom.length > 0) {
+    pJSDom[0].pJS.particles.array.forEach(modifier)
+  }
+}
+
+export function particlesJS(tag_id, params){
 
   /* no string id? so it's object params, and set the id with default id */
   if(typeof(tag_id) != 'string'){
@@ -1519,7 +1566,7 @@ window.particlesJS = function(tag_id, params){
 
 };
 
-window.particlesJS.load = function(tag_id, path_config_json, callback){
+export function particlesJSLoad(tag_id, path_config_json, callback){
 
   /* load json config */
   var xhr = new XMLHttpRequest();
@@ -1528,7 +1575,7 @@ window.particlesJS.load = function(tag_id, path_config_json, callback){
     if(xhr.readyState == 4){
       if(xhr.status == 200){
         var params = JSON.parse(data.currentTarget.response);
-        window.particlesJS(tag_id, params);
+        particlesJS(tag_id, params);
         if(callback) callback();
       }else{
         console.log('Error pJS - XMLHttpRequest status: '+xhr.status);
