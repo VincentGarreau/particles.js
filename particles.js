@@ -7,9 +7,9 @@
 /* v2.0.0
 /* ----------------------------------------------- */
 
-var pJS = function(tag_id, params){
+let pJS = function(tag_id, params){
 
-  var canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
+  let canvas_el = document.querySelector('#'+tag_id+' > .particles-js-canvas-el');
 
   /* particles.js variables with default values */
   this.pJS = {
@@ -134,7 +134,7 @@ var pJS = function(tag_id, params){
     tmp: {}
   };
 
-  var pJS = this.pJS;
+  let pJS = this.pJS;
 
   /* params settings */
   if(params){
@@ -270,7 +270,7 @@ var pJS = function(tag_id, params){
     if(typeof(color.value) == 'object'){
 
       if(color.value instanceof Array){
-        var color_selected = color.value[Math.floor(Math.random() * pJS.particles.color.value.length)];
+        let color_selected = color.value[Math.floor(Math.random() * pJS.particles.color.value.length)];
         this.color.rgb = hexToRgb(color_selected);
       }else{
         if(color.value.r != undefined && color.value.g != undefined && color.value.b != undefined){
@@ -313,7 +313,7 @@ var pJS = function(tag_id, params){
     }
 
     /* animation - velocity for speed */
-    var velbase = {}
+    let velbase = {}
     switch(pJS.particles.move.direction){
       case 'top':
         velbase = { x:0, y:-1 };
@@ -367,7 +367,7 @@ var pJS = function(tag_id, params){
 
     /* if shape is image */
 
-    var shape_type = pJS.particles.shape.type;
+    let shape_type = pJS.particles.shape.type;
     if(typeof(shape_type) == 'object'){
       if(shape_type instanceof Array){
         var shape_selected = shape_type[Math.floor(Math.random() * shape_type.length)];
@@ -378,7 +378,7 @@ var pJS = function(tag_id, params){
     }
 
     if(this.shape == 'image'){
-      var sh = pJS.particles.shape;
+      let sh = pJS.particles.shape;
       this.img = {
         src: sh.image.src,
         ratio: sh.image.width / sh.image.height
@@ -399,24 +399,24 @@ var pJS = function(tag_id, params){
 
   pJS.fn.particle.prototype.draw = function() {
 
-    var p = this;
+    let p = this;
 
     if(p.radius_bubble != undefined){
-      var radius = p.radius_bubble; 
+      let radius = p.radius_bubble; 
     }else{
-      var radius = p.radius;
+      let radius = p.radius;
     }
 
     if(p.opacity_bubble != undefined){
-      var opacity = p.opacity_bubble;
+      let opacity = p.opacity_bubble;
     }else{
-      var opacity = p.opacity;
+      let opacity = p.opacity;
     }
 
     if(p.color.rgb){
-      var color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+opacity+')';
+      let color_value = 'rgba('+p.color.rgb.r+','+p.color.rgb.g+','+p.color.rgb.b+','+opacity+')';
     }else{
-      var color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+opacity+')';
+      let color_value = 'hsla('+p.color.hsl.h+','+p.color.hsl.s+'%,'+p.color.hsl.l+'%,'+opacity+')';
     }
 
     pJS.canvas.ctx.fillStyle = color_value;
@@ -471,9 +471,9 @@ var pJS = function(tag_id, params){
         }
 
         if(pJS.tmp.img_type == 'svg'){
-          var img_obj = p.img.obj;
+          let img_obj = p.img.obj;
         }else{
-          var img_obj = pJS.tmp.img_obj;
+          let img_obj = pJS.tmp.img_obj;
         }
 
         if(img_obj){
@@ -508,7 +508,7 @@ var pJS = function(tag_id, params){
     for(var i = 0; i < pJS.particles.array.length; i++){
 
       /* the particle */
-      var p = pJS.particles.array[i];
+      let p = pJS.particles.array[i];
 
       // var d = ( dx = pJS.interactivity.mouse.click_pos_x - p.x ) * dx + ( dy = pJS.interactivity.mouse.click_pos_y - p.y ) * dy;
       // var f = -BANG_SIZE / d;
@@ -520,7 +520,7 @@ var pJS = function(tag_id, params){
 
       /* move the particle */
       if(pJS.particles.move.enable){
-        var ms = pJS.particles.move.speed/2;
+        let ms = pJS.particles.move.speed/2;
         p.x += p.vx * ms;
         p.y += p.vy * ms;
       }
@@ -551,14 +551,14 @@ var pJS = function(tag_id, params){
 
       /* change particle position if it is out of canvas */
       if(pJS.particles.move.out_mode == 'bounce'){
-        var new_pos = {
+        let new_pos = {
           x_left: p.radius,
           x_right:  pJS.canvas.w,
           y_top: p.radius,
           y_bottom: pJS.canvas.h
         }
       }else{
-        var new_pos = {
+        let new_pos = {
           x_left: -p.radius,
           x_right: pJS.canvas.w + p.radius,
           y_top: -p.radius,
@@ -608,8 +608,8 @@ var pJS = function(tag_id, params){
 
       /* interaction auto between particles */
       if(pJS.particles.line_linked.enable || pJS.particles.move.attract.enable){
-        for(var j = i + 1; j < pJS.particles.array.length; j++){
-          var p2 = pJS.particles.array[j];
+        for(let j = i + 1; j < pJS.particles.array.length; j++){
+          let p2 = pJS.particles.array[j];
 
           /* link particles */
           if(pJS.particles.line_linked.enable){
@@ -643,8 +643,8 @@ var pJS = function(tag_id, params){
     pJS.fn.particlesUpdate();
 
     /* draw each particle */
-    for(var i = 0; i < pJS.particles.array.length; i++){
-      var p = pJS.particles.array[i];
+    for(let i = 0; i < pJS.particles.array.length; i++){
+      let p = pJS.particles.array[i];
       p.draw();
     }
 
@@ -675,19 +675,19 @@ var pJS = function(tag_id, params){
 
   pJS.fn.interact.linkParticles = function(p1, p2){
 
-    var dx = p1.x - p2.x,
+    let dx = p1.x - p2.x,
         dy = p1.y - p2.y,
         dist = Math.sqrt(dx*dx + dy*dy);
 
     /* draw a line between p1 and p2 if the distance between them is under the config distance */
     if(dist <= pJS.particles.line_linked.distance){
 
-      var opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
+      let opacity_line = pJS.particles.line_linked.opacity - (dist / (1/pJS.particles.line_linked.opacity)) / pJS.particles.line_linked.distance;
 
       if(opacity_line > 0){        
         
         /* style */
-        var color_line = pJS.particles.line_linked.color_rgb_line;
+        let color_line = pJS.particles.line_linked.color_rgb_line;
         pJS.canvas.ctx.strokeStyle = 'rgba('+color_line.r+','+color_line.g+','+color_line.b+','+opacity_line+')';
         pJS.canvas.ctx.lineWidth = pJS.particles.line_linked.width;
         //pJS.canvas.ctx.lineCap = 'round'; /* performance issue */
@@ -709,13 +709,13 @@ var pJS = function(tag_id, params){
   pJS.fn.interact.attractParticles  = function(p1, p2){
 
     /* condensed particles */
-    var dx = p1.x - p2.x,
+    let dx = p1.x - p2.x,
         dy = p1.y - p2.y,
         dist = Math.sqrt(dx*dx + dy*dy);
 
     if(dist <= pJS.particles.line_linked.distance){
 
-      var ax = dx/(pJS.particles.move.attract.rotateX*1000),
+      let ax = dx/(pJS.particles.move.attract.rotateX*1000),
           ay = dy/(pJS.particles.move.attract.rotateY*1000);
 
       p1.vx -= ax;
@@ -732,7 +732,7 @@ var pJS = function(tag_id, params){
 
   pJS.fn.interact.bounceParticles = function(p1, p2){
 
-    var dx = p1.x - p2.x,
+    let dx = p1.x - p2.x,
         dy = p1.y - p2.y,
         dist = Math.sqrt(dx*dx + dy*dy),
         dist_p = p1.radius+p2.radius;
